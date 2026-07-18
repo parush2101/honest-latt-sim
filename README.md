@@ -62,3 +62,18 @@ decision), and the full ARP/FLCI Layer 2 machinery.
 - Roth, Sant'Anna, Bilinski & Poe (2023), *What's trending in difference-in-differences?*
 - Rambachan & Roth (2023), *A More Credible Approach to Parallel Trends* (HonestDiD).
 - Callaway & Sant'Anna (2021), *Difference-in-Differences with multiple time periods*.
+
+## Layer 1 keep/cut race (inconclusive on selective, decisive on the decision)
+
+`race.py` / `race2.py` / `race3.py`. Findings:
+- Selection distortion is small: naive coverage stays ~94% even in an adversarial
+  near-threshold, identification-free design (confirmed across all tiers).
+- Sample-splitting restores ~95% coverage at a ~30-55% interval-length premium.
+- CAVEAT: the exact polyhedral (Lee-Sun-Sun-Taylor) selective CI here is NOT reliable
+  — it fails the single-cohort sanity check (63.9% coverage, should be ~95%), so its
+  length numbers are not trustworthy. Separately, ~10-23% of aggregate selective
+  intervals blow up to infinite length (the known non-randomized pathology, not a bug).
+
+Provisional verdict: CUT Layer 1, default to sample-splitting. Resurrect selective
+inference only in its hybrid/randomized (data-carving) form, and only if target
+applications are small-sample enough that splitting's ~50% width premium bites.
