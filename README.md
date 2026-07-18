@@ -43,6 +43,18 @@ event**, and we provide inference valid conditional on it.
   selection-induced variance the conditional SE ignores — independent validation of why
   Layer 1 / sample-splitting is needed.
 
+- **`layer2_full.py` / `layer2_full_figure.py` / `layer2_full.png`** — the full Layer 2
+  machinery (load-bearing contribution). HonestDiD-style FLCI for the smoothness class
+  SD(M): a linear-extrapolation estimator + the max-bias LP + the folded-normal critical
+  value cv_{1-alpha}(bbar/sigma). VALIDATED by coverage simulation (covers iff M >= true
+  curvature; both point estimates collapse to 0% once any curvature appears). Headline:
+  the FLCI restores honest coverage where the point estimate collapses, pays with width
+  set by the assumed M, and yields an interpretable breakdown value. Because SD keys off
+  smoothness STRUCTURE (not pre-trend magnitude), it escapes the relative-magnitudes
+  informativeness trap documented in the Layer 2 prototype. Reduced-form normal model
+  (known Sigma); integration with multi-cohort selection/aggregation and estimated Sigma
+  is the next step.
+
 ## Priority ordering of contributions (as the sims revealed)
 
 1. Estimand choice + reweighted LATT point estimate — the spine.
