@@ -34,6 +34,15 @@ event**, and we provide inference valid conditional on it.
   at the cost of requiring external knowledge. Through-line: when pre-trends can't carry
   the credibility, the economics has to.
 
+- **`tier2.py` / `tier2_figure.py` / `tier2.png`** — full staggered PANEL micro-simulation.
+  Generates individual panel data, estimates cohort-level pre/post coefficients with real
+  DiD contrasts vs a shared never-treated control, and estimates the covariance Sigma_hat
+  FROM THE DATA. The spine survives: CS bias flat at +0.30, LATT bias falls to ~0, same
+  scope pattern as Tier 1. Sigma_hat is verified calibrated where selection is deterministic
+  (coverage 94-95% at high info); the SE gap at moderate info (est 0.079 vs MC 0.119) is the
+  selection-induced variance the conditional SE ignores — independent validation of why
+  Layer 1 / sample-splitting is needed.
+
 ## Priority ordering of contributions (as the sims revealed)
 
 1. Estimand choice + reweighted LATT point estimate — the spine.
@@ -43,9 +52,10 @@ event**, and we provide inference valid conditional on it.
 
 ## Status
 
-All results are **Tier 1** (reduced-form normal model), the clean-lab setting where the
-underlying theory is exact. Tier 2 (full panel micro-simulation with the actual CS
-estimator) is not yet built.
+**Tier 1** (reduced-form normal model) and **Tier 2** (full panel micro-simulation with
+real DiD estimation and an estimated covariance) both confirm the spine. Still open:
+the selective (truncated-normal) CI vs sample-splitting length race (Layer 1 keep/cut
+decision), and the full ARP/FLCI Layer 2 machinery.
 
 ## Reference papers
 
