@@ -106,3 +106,16 @@ Findings (reduced-form normal, tau_3 target, strong pre/post correlation):
   selected composition (max, not mean, residual curvature) to guarantee coverage. A mean-
   calibrated M undercovers -- for BOTH full-data and split. Remedy: conservative M, or a
   selection rule that caps per-cohort curvature. Not fixed by splitting.
+
+## Fine M-sweep: calibrating M to the random selected set (m_sweep.py)
+
+Refines the composition-randomness finding. Coverage vs M, full-data vs split, with the
+residual-curvature distribution of the (random) selected set:
+- Mean-calibrated M UNDERCOVERS: mean residual curvature 0.031 -> ~88% coverage.
+- 95% coverage reached at M~0.039 -- ABOVE the mean, but BELOW the strict max (0.050):
+  the FLCI's sampling slack buys some buffer, so M need not reach the worst case, but it
+  must clearly exceed the mean.
+- full-data and split cross 95% at the SAME M (0.039) -> splitting is not the remedy;
+  the calibration issue is about M vs the random selected composition, not selection
+  sampling distortion. Confirms: integrated procedure valid without splitting, but M must
+  be set above the mean residual curvature of the selected set.
