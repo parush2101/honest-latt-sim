@@ -89,3 +89,20 @@ decision), and the full ARP/FLCI Layer 2 machinery.
 Provisional verdict: CUT Layer 1, default to sample-splitting. Resurrect selective
 inference only in its hybrid/randomized (data-carving) form, and only if target
 applications are small-sample enough that splitting's ~50% width premium bites.
+
+## Focused core: does selection distort the Layer 2 FLCI? (selection_flci_core.py)
+
+The one genuinely untested question: applying HonestDiD to a data-DEPENDENT selected set.
+full-data (select+FLCI on same draw) vs split (select on half 1, FLCI on half 2).
+
+Findings (reduced-form normal, tau_3 target, strong pre/post correlation):
+- NO systematic full-vs-split coverage gap (<=3pp, inconsistent sign). The feared
+  selection-sampling distortion of the FLCI is not supported, and splitting is NOT the
+  remedy. Selection distortion on the estimator center is small (0.02-0.09) and, where
+  present, makes full-data LESS biased than split -- so splitting would slightly hurt.
+  => The integrated procedure is valid WITHOUT splitting (simpler than feared).
+- REAL issue surfaced instead: because the selected set is random, its residual violation
+  (curvature) is random, so a fixed smoothness bound M must be set to the WORST-CASE
+  selected composition (max, not mean, residual curvature) to guarantee coverage. A mean-
+  calibrated M undercovers -- for BOTH full-data and split. Remedy: conservative M, or a
+  selection rule that caps per-cohort curvature. Not fixed by splitting.
