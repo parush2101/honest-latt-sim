@@ -75,11 +75,12 @@ that concerns us.
 
 The first front has nothing to do with parallel trends failing; it concerns the interpretation of
 conventional two-way fixed effects regressions under staggered adoption. When treatment effects are heterogeneous, such regressions make
-``forbidden comparisons'' between units that have both already been treated, with the consequence that
-the estimand is a weighted average of underlying group-time effects whose weights need not be positive
-and need not correspond to any quantity of economic interest
-\citep{goodmanbacon2021, dechaisemartin2020, sun2021}. The heterogeneity-robust estimators developed in
-response \citep{callaway2021, sun2021, borusyak2024, dechaisemartin2020} recover interpretable
+``forbidden comparisons'' between units that have both already been treated. The resulting estimand is
+a weighted average of underlying group-time effects, but its weights need not be positive, and need not
+correspond to any quantity of economic interest
+\citep{goodmanbacon2021, dechaisemartin2020, sun2021}.
+
+The heterogeneity-robust estimators developed in response \citep{callaway2021, sun2021, borusyak2024, dechaisemartin2020} recover interpretable
 aggregations of group-time effects with transparent comparison groups. It is worth being clear that
 this is an aggregation problem rather than an identification one, and the distinction matters for what
 follows: these estimators \emph{maintain} a parallel trends assumption, in one form or another, and are
@@ -114,11 +115,12 @@ so that the reweighting is a data-dependent selection, and we treat inference on
 the sensitivity machinery of \citet{rambachan2023}.
 
 Our contribution is therefore primarily one of framing and estimand choice rather than of new
-estimation or inference technology, and we are deliberate about this. The method occupies a distinct
-point on a credibility--precision--scope frontier: relative to a heterogeneity-robust point estimate
-of the ATT it gives up scope (it targets a subpopulation) to buy back credibility; relative to a
-HonestDiD set for the ATT it gives up nothing in honesty but recovers a sharper, point-identified
-answer to a narrower question. We are equally explicit about the method's limits. Its advantage is
+estimation or inference technology, and we are deliberate about this. The method occupies a distinct point on a credibility--precision--scope frontier. Relative to a
+heterogeneity-robust point estimate of the ATT, it gives up scope---it targets a subpopulation---to buy
+back credibility. Relative to a HonestDiD set for the ATT, it gives up nothing in honesty, but recovers
+a sharper, point-identified answer to a narrower question.
+
+We are equally explicit about the method's limits. Its advantage is
 governed by how informative pre-trends are about post-treatment violations; when they are
 uninformative, selecting on them buys nothing, and the identifying assumption must be carried by
 economic context rather than by the data. We show, moreover, that the natural relative-magnitudes
@@ -296,9 +298,10 @@ guarantees \citep{leeb2008}. It is worth being precise about what is and is not 
 impossibility result, which is easily overread. \citet{leeb2005} show
 that the distribution of a post-model-selection estimator cannot be estimated uniformly consistently,
 so that naive post-selection confidence intervals lack \emph{uniform} asymptotic validity: formally,
-the supremum of the coverage error over the parameter space does not vanish. This is an existence
-statement about the worst case, not a claim that coverage fails at a typical parameter value. The
-obstruction is concentrated in \emph{local-to-threshold} configurations, in which the parameter
+the supremum of the coverage error over the parameter space does not vanish.
+
+This is an existence statement about the worst case, not a claim that coverage fails at a typical
+parameter value. The obstruction is concentrated in \emph{local-to-threshold} configurations, in which the parameter
 governing selection drifts toward the decision boundary of the selection rule at the sampling rate; in
 that region the selection probability is asymptotically interior, the post-selection distribution is
 non-normal and depends on the drift, and no plug-in can track it. Away from the boundary, at a fixed
@@ -308,7 +311,9 @@ asymptotically deterministic and post-selection inference behaves conventionally
 This resolves what would otherwise appear to be a tension with our simulation evidence. The simulations
 of Section~\ref{sec:sim} are pointwise experiments---they fix a data-generating process and vary the
 sampling noise---and in that regime we find no material coverage distortion, with full-data and split
-implementations crossing nominal coverage at the same sensitivity bound. But the simulations also
+implementations crossing nominal coverage at the same sensitivity bound.
+
+But the simulations also
 exhibit the \citet{leeb2005} phenomenon exactly where the theory locates it. When cohorts are placed at
 the selection threshold, naive coverage does deteriorate relative to splitting; and in the panel
 simulation the estimated standard error of the LATT falls materially short of its Monte Carlo
@@ -317,13 +322,12 @@ genuinely stochastic. The honest summary is therefore not that data-dependent se
 but that its distortion arises where theory predicts and is small in magnitude in the configurations we
 examine.
 
-Two features of the present setting further mute the effect. The estimand is an aggregate over many
-cohorts, so the distortion contributed by a borderline cohort is diluted by averaging over the cohorts
-whose selection is not in doubt, in contrast to the leading cases of the model-selection literature in
-which the inclusion of the parameter of interest is itself the decision. And the interval we recommend
-has width governed principally by the identification allowance $\Delta$ rather than by sampling
-variability, so a modest selection-induced perturbation of the sampling distribution is absorbed by an
-interval that is already wide for identification reasons.
+Two features of the present setting further mute the effect. The estimand is an aggregate over many cohorts, so the distortion contributed by a borderline cohort
+is diluted by averaging over the cohorts whose selection is not in doubt. This contrasts with the
+leading cases of the model-selection literature, in which the inclusion of the parameter of interest is
+itself the decision. And the interval we recommend has width governed principally by the identification
+allowance $\Delta$ rather than by sampling variability, so a modest selection-induced perturbation of
+the sampling distribution is absorbed by an interval that is already wide for identification reasons.
 
 We therefore do not read \citet{leeb2005} as an argument against the data-driven procedure, but as a
 statement about the kind of guarantee it can carry: pointwise validity in regimes away from the
@@ -339,10 +343,11 @@ rely on \emph{independence} between selection and estimation rather than on \emp
 and they therefore remain valid precisely in the configurations that Proposition~\ref{prop:oracle}
 assumes away, at the cost of some efficiency. Since one cannot test which regime one is in, we regard
 this fallback as a necessary complement to the proposition rather than a redundant alternative to it.
+
 We would add that sample-splitting earns its place in this paper as much as a diagnostic device as a
-procedure: because it removes selection distortion by construction, the simulations of
+procedure. Because it removes selection distortion by construction, the simulations of
 Section~\ref{sec:sim} use it to establish that the coverage failures documented there are failures of
-identification rather than artifacts of data-dependent selection.
+identification, not artifacts of data-dependent selection.
 
 A further subtlety arises because the selected set is random. The FLCI at bound $M$ is valid for a
 given selected set only if that set's residual differential trend lies in $\Delta^{SD}(M)$; since the
@@ -382,7 +387,9 @@ about post-treatment violations. When they are informative, selecting on them is
 cohorts and the LATT recovers a clean effect while the ATT estimator remains biased. When they are
 uninformative, selection is uninformative about the post-period, the residual violation of the selected
 set is as large as for any set, and the method offers no advantage over the ATT---there is no free
-lunch, and the identifying assumption must be defended from economic context. We regard a formal
+lunch, and the identifying assumption must be defended from economic context.
+
+We regard a formal
 decision-theoretic characterization of the region in which the point-identified LATT dominates the
 set-valued ATT, in the sense of \citet{armstrong2018}, as the principal open theoretical question; the
 simulations below map its empirical shadow.
@@ -476,7 +483,9 @@ how informative they are. The LATT's bias begins on top of that line at $\textit
 zero as pre-trends become informative. The vertical gap between the two curves is therefore exactly the
 method's advantage, and reading it off from left to right gives the scope condition: the advantage is
 nil when pre-trends carry no information about post-treatment violations, and maximal when they carry a
-great deal. That the two curves coincide at the left edge is not a defect but an honest reflection of
+great deal.
+
+That the two curves coincide at the left edge is not a defect but an honest reflection of
 the fact, argued in Section~\ref{sec:approach}, that selecting on uninformative pre-trends buys nothing.
 
 The upper-right panel explains \emph{why} the LATT's bias falls, by plotting the identification gap of
@@ -494,9 +503,11 @@ removes any contamination from data-dependent selection by construction, so the 
 just as badly establishes that the failure is \emph{not} selection distortion but the identification gap
 of the upper-right panel---the surviving cohorts genuinely still violate parallel trends. This is what
 motivates the sensitivity bounds of the next subsection, since no purely inferential fix can repair a
-violation of the identifying assumption. (At the right edge the naive interval slightly outperforms the
-split one, simply because splitting discards half the data once selection has become nearly
-deterministic and there is no contamination left to correct.)
+violation of the identifying assumption.
+
+(At the right edge the naive interval slightly outperforms the split one. This is simply because
+splitting discards half the data, and by that point selection is nearly deterministic, so there is no
+contamination left to correct.)
 
 \begin{figure}[t]
 \centering
@@ -514,12 +525,13 @@ We now validate the smoothness-class FLCI of Section~\ref{sec:approach} applied 
 aggregate, using the curved differential trend of Section~\ref{sec:design} whose curvature $C$ is
 directly comparable to the assumed bound $M$.
 
-Table~\ref{tab:flci} is the validity check. Reading down the rows, when the assumed bound equals the
-true curvature ($C=M$) the FLCI covers at $94.7\%$ and $95.2\%$, that is, at its nominal level; when
-the bound is generous ($M>C$) it covers conservatively at $100\%$; and when the bound is violated
-($M<C$) coverage falls to zero. This is precisely the behavior an honest sensitivity interval should
+Table~\ref{tab:flci} is the validity check. Read down the rows. When the assumed bound equals the true curvature ($C=M$) the FLCI covers at
+$94.7\%$ and $95.2\%$, that is, at its nominal level. When the bound is generous ($M>C$) it covers
+conservatively at $100\%$. When the bound is violated ($M<C$) coverage falls to zero. This is precisely the behavior an honest sensitivity interval should
 display---it is valid exactly on the range of violations it claims to accommodate, and it fails
-visibly outside it, rather than failing silently. The final column records that both point-based
+visibly outside it, rather than failing silently.
+
+The final column records that both point-based
 intervals, the naive one and the one that linearly extrapolates the pre-trend, collapse to zero
 coverage the instant any curvature is present, because each is centered on a biased estimate with a
 width reflecting sampling noise alone.
@@ -583,11 +595,12 @@ $M$ must dominate is not a constant but a random variable, and a bound chosen to
 be exceeded in a substantial share of samples.
 
 The left panel confirms the consequence and settles the distortion question. Coverage is plotted
-against $M$ for the full-data procedure and for sample-splitting. The two curves lie almost on top of
-one another and cross the nominal level at the same bound, $M\approx0.039$, which establishes that
-data-dependent selection introduces no systematic distortion of the FLCI here; splitting buys nothing
-on this account, consistent with the pointwise---as opposed to worst-case---reading of \citet{leeb2005}
-discussed in Section~\ref{sec:approach}. Turning to calibration, the vertical reference lines mark the
+against $M$ for the full-data procedure and for sample-splitting. The two curves lie almost on top of one another and cross the nominal level at the same bound,
+$M\approx0.039$. Data-dependent selection therefore introduces no systematic distortion of the FLCI
+here, and splitting buys nothing on this account. This is consistent with the pointwise---as opposed to
+worst-case---reading of \citet{leeb2005} discussed in Section~\ref{sec:approach}.
+
+Turning to calibration, the vertical reference lines mark the
 mean, the ninety-fifth percentile and the maximum of the residual-curvature distribution. Setting $M$
 at the mean, $0.031$, yields only about $88\%$ coverage; nominal coverage requires $M\approx0.039$,
 comfortably above the mean though still below the strict maximum of $0.050$, the shortfall being
@@ -644,18 +657,19 @@ of limited overlap.
 We have been explicit about the method's advantages and its weaknesses. Its advantage over the ATT is
 that it delivers a sharp, credibly-identified answer where the ATT estimator is biased and the
 ATT sensitivity set is wide; its transparency about which comparisons identify the effect is inherited
-from \citet{callaway2021}. Its weaknesses are equally concrete. The estimand is a subpopulation effect
+from \citet{callaway2021}.
+
+Its weaknesses are equally concrete. The estimand is a subpopulation effect
 and must be interpreted as such, with the composition of the credible set described rather than assumed
 away. Its advantage is contingent on pre-trends being informative about post-treatment violations, and
-when they are not, only economic context can carry the identifying assumption. Under data-driven
-selection the estimator carries a vanishing pre-test bias, and the guarantee we can offer is pointwise
-rather than uniform: it rests on a separation condition that is itself untestable, and it is
+when they are not, only economic context can carry the identifying assumption.
+
+Under data-driven selection the estimator carries a vanishing pre-test bias, and the guarantee we can
+offer is pointwise rather than uniform. It rests on a separation condition that is itself untestable,
 supplemented by simulation evidence that the distortion is small in plausible configurations and arises
 where theory predicts. A researcher unwilling to maintain that condition can fall back on ex-ante
 selection, sample-splitting, or randomization, which purchase validity without it at some cost in
-efficiency. The sensitivity bound must be calibrated to the typical selected set, and the
-relative-magnitudes restriction should be avoided in favor of a structural one, since the former is
-self-undermining under uninformative pre-trends.
+efficiency.
 
 The principal open question is theoretical: a decision-theoretic characterization of the region in
 which the point-identified LATT dominates the set-valued ATT would convert the empirical scope
