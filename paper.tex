@@ -44,15 +44,20 @@ pre-trends while a smoothness restriction is not.
 \section{Introduction}
 
 Difference-in-differences is among the most widely used research designs in empirical economics, and
-a large recent literature has clarified both its assumptions and its failure modes
-\citep{roth2023trending}. The design's credibility rests on the parallel trends assumption: absent
-treatment, the average outcomes of treated and comparison units would have evolved in parallel. In
-practice researchers are rarely certain this holds, and it has become standard to assess it by
-testing for pre-treatment differences in trends. As \citet{roth2023trending} synthesize, this
-pre-testing practice is fragile: pre-trends tests are often underpowered against economically
-meaningful violations \citep{kahnlang2020, roth2022pretrends}, conditioning on passing them induces a
-pre-test selection bias \citep{roth2022pretrends}, and even a clean pre-period does not guarantee a
-clean post-period \citep{kahnlang2020}.
+a large recent literature has clarified both its assumptions and its failure modes. That literature
+spans the reliability of conventional inference \citep{bertrand2004}, the behavior of two-way fixed
+effects estimators under heterogeneous effects and staggered timing
+\citep{goodmanbacon2021, dechaisemartin2020, sun2021}, the content of the parallel trends assumption
+itself and its sensitivity to functional form \citep{marcus2021, rothsantanna2023}, and is synthesized
+in two recent surveys \citep{roth2023trending, dechaisemartin2023survey}. The design's credibility
+rests on the parallel trends assumption: absent treatment, the average outcomes of treated and
+comparison units would have evolved in parallel. In practice researchers are rarely certain this holds,
+and it has become standard to assess it by testing for pre-treatment differences in trends. As
+\citet{roth2023trending} synthesize, this pre-testing practice is fragile: pre-trends tests are often
+underpowered against economically meaningful violations
+\citep{bilinski2020, freyaldenhoven2019, kahnlang2020, roth2022pretrends}, conditioning on passing them
+induces a pre-test selection bias \citep{roth2022pretrends}, and even a clean pre-period does not
+guarantee a clean post-period \citep{kahnlang2020}.
 
 Two strands of methodology respond to this concern, and both retain the ATT as the estimand. The
 first develops heterogeneity-robust estimators for staggered adoption
