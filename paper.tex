@@ -23,10 +23,11 @@
 
 \begin{abstract}
 \noindent Difference-in-differences (DiD) practitioners routinely confront the possibility that
-the parallel trends assumption fails for some treated cohorts but not others. The dominant
-responses keep the average treatment effect on the treated (ATT) as the target: heterogeneity-robust
-estimators point-identify it under parallel trends, while sensitivity methods such as HonestDiD
-report a set for it under bounded violations. Both inherit the problem that the ATT may be either
+the parallel trends assumption fails for some treated cohorts but not others. Existing
+methods keep the average treatment effect on the treated (ATT) as the target: heterogeneity-robust
+estimators for staggered adoption point-identify it while \emph{maintaining} parallel trends, having
+been designed to repair the aggregation failures of two-way fixed effects rather than to relax
+identification, and sensitivity methods such as HonestDiD report a set for it under bounded violations. Both inherit the problem that the ATT may be either
 biased or only weakly set-identified when some cohorts violate parallel trends. We propose a
 different response: change the estimand. We define a \emph{credible-subpopulation local ATT} (LATT),
 the treatment effect for the subpopulation of cohorts whose parallel trends assumption is credible,
@@ -67,17 +68,32 @@ underpowered against economically meaningful violations
 induces a pre-test selection bias \citep{roth2022pretrends}, and even a clean pre-period does not
 guarantee a clean post-period \citep{kahnlang2020}.
 
-Two strands of methodology respond to this concern, and both retain the ATT as the estimand. The
-first develops heterogeneity-robust estimators for staggered adoption
-\citep{callaway2021, sun2021, borusyak2024, dechaisemartin2020, goodmanbacon2021}, which point-identify
-interpretable aggregations of group-time effects under a suitable parallel trends assumption but remain
-biased if that assumption fails. The second, exemplified by \citet{rambachan2023}, abandons exact
-parallel trends and instead bounds how different post-treatment violations can be from the observed
-pre-trends, reporting a uniformly valid confidence \emph{set} for the ATT. This is a substantial
-advance, but it inherits a structural limitation: when parallel trends fails for some cohorts, the
-ATT---an average over \emph{all} treated cohorts, including the offending ones---is precisely the
-object that is hard to recover. The heterogeneity-robust point estimate is then biased, and the
-HonestDiD set can be wide and uninformative, because it must accommodate the worst offenders.
+The recent literature has advanced on two fronts. They respond to quite different problems, but they
+share an estimand, and it is the shared estimand that concerns us. The first front has nothing to do
+with parallel trends failing; it concerns the interpretation of conventional two-way fixed effects
+regressions under staggered adoption. When treatment effects are heterogeneous, such regressions make
+``forbidden comparisons'' between units that have both already been treated, with the consequence that
+the estimand is a weighted average of underlying group-time effects whose weights need not be positive
+and need not correspond to any quantity of economic interest
+\citep{goodmanbacon2021, dechaisemartin2020, sun2021}. The heterogeneity-robust estimators developed in
+response \citep{callaway2021, sun2021, borusyak2024, dechaisemartin2020} recover interpretable
+aggregations of group-time effects with transparent comparison groups. It is worth being clear that
+this is an aggregation problem rather than an identification one, and the distinction matters for what
+follows: these estimators \emph{maintain} a parallel trends assumption, in one form or another, and are
+biased if it fails.
+
+The second front addresses parallel trends itself. Building on \citet{manski2018},
+\citet{rambachan2023} abandon exact parallel trends and instead bound how different the post-treatment
+violations can be from the observed pre-trends, reporting a uniformly valid confidence \emph{set} for
+the ATT in place of a point estimate.
+
+What the two fronts share is the ATT as the target, and this is where a structural limitation appears.
+When parallel trends fails for some cohorts but holds for others, the ATT---an average over \emph{all}
+treated cohorts, including the offending ones---is precisely the object that is hard to recover. A
+heterogeneity-robust point estimate is then biased, not because those methods are deficient but because
+they were designed to solve a different problem and take parallel trends as given; and the sensitivity
+set, though honest, can be wide and uninformative, because it must accommodate the worst offenders in
+the average.
 
 This paper takes a different route, familiar from other corners of causal inference: when the
 population target is not credibly identified, retreat to a subpopulation where it is. This is the
