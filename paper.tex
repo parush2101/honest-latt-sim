@@ -52,26 +52,29 @@ pre-trends while a smoothness restriction is not.
 
 \section{Introduction}
 
-Difference-in-differences is among the most widely used research designs in empirical economics, and
-a large recent literature has clarified both its assumptions and its failure modes. That literature
-spans the reliability of conventional inference \citep{bertrand2004}, the behavior of two-way fixed
-effects estimators under heterogeneous effects and staggered timing
-\citep{goodmanbacon2021, dechaisemartin2020, sun2021}, the content of the parallel trends assumption
-itself and its sensitivity to functional form \citep{marcus2021, rothsantanna2023}, and is synthesized
-in two recent surveys \citep{roth2023trending, dechaisemartin2023survey}. The design's credibility
-rests on the parallel trends assumption: absent treatment, the average outcomes of treated and
-comparison units would have evolved in parallel. In practice researchers are rarely certain this holds,
-and it has become standard to assess it by testing for pre-treatment differences in trends. As
-\citet{roth2023trending} synthesize, this pre-testing practice is fragile: pre-trends tests are often
-underpowered against economically meaningful violations
-\citep{bilinski2020, freyaldenhoven2019, kahnlang2020, roth2022pretrends}, conditioning on passing them
-induces a pre-test selection bias \citep{roth2022pretrends}, and even a clean pre-period does not
-guarantee a clean post-period \citep{kahnlang2020}.
+Difference-in-differences is among the most widely used research designs in empirical economics. Its
+credibility rests on the parallel trends assumption: absent treatment, the average outcomes of treated
+and comparison units would have evolved in parallel. Researchers are rarely certain that this holds,
+and it has become standard practice to assess it by testing for pre-treatment differences in trends.
 
-The recent literature has advanced on two fronts. They respond to quite different problems, but they
-share an estimand, and it is the shared estimand that concerns us. The first front has nothing to do
-with parallel trends failing; it concerns the interpretation of conventional two-way fixed effects
-regressions under staggered adoption. When treatment effects are heterogeneous, such regressions make
+That practice is fragile. Pre-trends tests are often underpowered against economically meaningful
+violations \citep{bilinski2020, freyaldenhoven2019, kahnlang2020, roth2022pretrends}; conditioning the
+analysis on passing them induces a pre-test selection bias \citep{roth2022pretrends}; and even a clean
+pre-period does not guarantee a clean post-period, since nothing prevents a confound from arriving at
+the moment of treatment \citep{kahnlang2020}.
+
+These issues, and the interpretation of difference-in-differences estimators more generally, have been
+the subject of a large recent econometrics literature. It spans the reliability of conventional
+inference \citep{bertrand2004}, the behavior of two-way fixed effects estimators under heterogeneous
+effects and staggered timing \citep{goodmanbacon2021, dechaisemartin2020, sun2021}, and the content of
+the parallel trends assumption itself together with its sensitivity to functional form
+\citep{marcus2021, rothsantanna2023}; it is synthesized in two recent surveys
+\citep{roth2023trending, dechaisemartin2023survey}. Its methodological advances have come on two
+fronts, which respond to quite different problems but share an estimand, and it is the shared estimand
+that concerns us.
+
+The first front has nothing to do with parallel trends failing; it concerns the interpretation of
+conventional two-way fixed effects regressions under staggered adoption. When treatment effects are heterogeneous, such regressions make
 ``forbidden comparisons'' between units that have both already been treated, with the consequence that
 the estimand is a weighted average of underlying group-time effects whose weights need not be positive
 and need not correspond to any quantity of economic interest
@@ -100,12 +103,13 @@ population target is not credibly identified, retreat to a subpopulation where i
 logic of the local average treatment effect \citep{imbens1994}, of the optimal-subpopulation average
 treatment effect under limited overlap \citep{crump2009}, and of overlap weighting \citep{li2018}. In
 each case one trades the original estimand for a credibly-identified effect on a selected
-subpopulation, and defends the trade by characterizing whom the subpopulation comprises. We develop
-the staggered-DiD instance of this principle. We define the credible-subpopulation LATT---the
+subpopulation, and defends the trade by characterizing whom the subpopulation comprises.
+
+We develop the staggered-DiD instance of this principle. We define the credible-subpopulation LATT---the
 weighted average of group-time effects restricted to cohorts whose parallel trends assumption is
 credible---and show that it is point-identified even when the full ATT is not, because the violations
 of the excluded cohorts do not enter it. Estimation is a transparent reweighting of the
-\citet{callaway2021} group-time effects; the credibility of a cohort is assessed from its pre-trends,
+\citet{callaway2021} group-time effects. The credibility of a cohort is assessed from its pre-trends,
 so that the reweighting is a data-dependent selection, and we treat inference on the selected set with
 the sensitivity machinery of \citet{rambachan2023}.
 
