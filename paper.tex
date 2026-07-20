@@ -294,10 +294,22 @@ interval that is already wide for identification reasons.
 
 We therefore do not read \citet{leeb2005} as an argument against the data-driven procedure, but as a
 statement about the kind of guarantee it can carry: pointwise validity in regimes away from the
-selection boundary, established here by simulation, rather than a worst-case uniform guarantee. A
-researcher who requires the latter can obtain it cheaply by selecting on pre-determined information, by
-splitting the sample, or by randomized (data-carving) selection in the sense of \citet{fithian2014},
-each of which restores the independence that the ex-ante case enjoys, at the cost of some efficiency.
+selection boundary, established here by simulation, rather than a worst-case uniform guarantee.
+
+The two routes are best understood as complementary rather than competing.
+Proposition~\ref{prop:oracle} covers the case in which cohorts are well separated from the selection
+threshold. Where that separation is doubtful---and, as noted, it cannot be verified from the data,
+since verifying it is close to the parallel trends question itself---a researcher can obtain validity
+without it by selecting on pre-determined information, by splitting the sample, or by randomized
+(data-carving) selection in the sense of \citet{fithian2014}. What these have in common is that they
+rely on \emph{independence} between selection and estimation rather than on \emph{correct} selection,
+and they therefore remain valid precisely in the configurations that Proposition~\ref{prop:oracle}
+assumes away, at the cost of some efficiency. Since one cannot test which regime one is in, we regard
+this fallback as a necessary complement to the proposition rather than a redundant alternative to it.
+We would add that sample-splitting earns its place in this paper as much as a diagnostic device as a
+procedure: because it removes selection distortion by construction, the simulations of
+Section~\ref{sec:sim} use it to establish that the coverage failures documented there are failures of
+identification rather than artifacts of data-dependent selection.
 
 A further subtlety arises because the selected set is random. The FLCI at bound $M$ is valid for a
 given selected set only if that set's residual differential trend lies in $\Delta^{SD}(M)$; since the
@@ -603,10 +615,12 @@ from \citet{callaway2021}. Its weaknesses are equally concrete. The estimand is 
 and must be interpreted as such, with the composition of the credible set described rather than assumed
 away. Its advantage is contingent on pre-trends being informative about post-treatment violations, and
 when they are not, only economic context can carry the identifying assumption. Under data-driven
-selection the estimator carries a vanishing pre-test bias, and a worst-case uniform guarantee is
-unavailable without ex-ante selection, sample-splitting, or randomization; what we can offer is
-pointwise validity away from the selection boundary, together with simulation evidence that the
-distortion is small in plausible configurations and arises where theory predicts. The sensitivity bound must be calibrated to the typical selected set, and the
+selection the estimator carries a vanishing pre-test bias, and the guarantee we can offer is pointwise
+rather than uniform: it rests on a separation condition that is itself untestable, and it is
+supplemented by simulation evidence that the distortion is small in plausible configurations and arises
+where theory predicts. A researcher unwilling to maintain that condition can fall back on ex-ante
+selection, sample-splitting, or randomization, which purchase validity without it at some cost in
+efficiency. The sensitivity bound must be calibrated to the typical selected set, and the
 relative-magnitudes restriction should be avoided in favor of a structural one, since the former is
 self-undermining under uninformative pre-trends.
 
