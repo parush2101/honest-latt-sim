@@ -221,8 +221,46 @@ The validity of this step depends on the selection regime. Under ex-ante selecti
 independent of $\hat\beta$, so the uniform validity results of \citet{rambachan2023} apply verbatim to
 the selected-cohort event study, and no new inference theory is required.
 
-Under data-driven selection the situation is more delicate, and it is worth being precise about what is
-and is not implied, since the relevant impossibility result is easily overread. \citet{leeb2005} show
+Under data-driven selection something can nonetheless be established, provided one is willing to assume
+that the selection problem is not close to a knife edge.
+
+\begin{proposition}[Selection consistency and oracle coverage]\label{prop:oracle}
+Suppose the statistic on which selection is based is consistent for its population counterpart, and that
+the following separation condition holds: there exists $\epsilon>0$ such that, for every cohort, the
+population value of that statistic lies at distance at least $\epsilon$ from the threshold $c$. Then
+$P(\hat S = S^\ast)\to 1$, where $S^\ast$ denotes the population credible set, and the FLCI computed on
+the estimated set $\hat S$ has the same asymptotic coverage as the oracle interval computed on $S^\ast$;
+in particular it attains its nominal level.
+\end{proposition}
+
+\begin{proof}
+By consistency of the selection statistic together with the separation condition, the probability that
+any given cohort is misclassified tends to zero; since the number of cohorts is finite, a union bound
+gives $P(\hat S\neq S^\ast)\to 0$. On the complementary event the estimator, its covariance estimate and
+the resulting interval coincide exactly with their oracle counterparts computed on the non-random set
+$S^\ast$. The two sequences therefore share a limiting distribution, and the coverage of the interval
+computed on $\hat S$ converges to that of the oracle interval, which is nominal by the validity of
+\citet{rambachan2023} applied to a fixed set.
+\end{proof}
+
+Proposition~\ref{prop:oracle} is the formal content of the informal claim that when cohorts are plainly
+credible or plainly not, data-dependent selection is asymptotically harmless. It is the
+difference-in-differences analogue of the oracle property established for penalized model selection by
+\citet{fanli2001} and \citet{zou2006}, and its proof is correspondingly elementary. Two caveats attach
+to it, and we state them plainly.
+
+The first is that the separation condition is untestable, and is very nearly the parallel trends
+question in disguise: to assert that every cohort is plainly credible or plainly not is close to
+asserting that one already knows which cohorts are credible. The proposition therefore relocates the
+identifying content rather than supplying it, which is consistent with our broader position that where
+the data cannot carry the assumption, economic context must. It is also why the modern econometric
+literature on inference after selection, notably \citet{belloni2014}, is deliberately constructed so as
+not to rely on correct selection.
+
+The second and more consequential caveat is that Proposition~\ref{prop:oracle} is a pointwise
+statement, and that oracle properties of this kind are known to be pointwise artifacts rather than
+guarantees \citep{leeb2008}. It is worth being precise about what is and is not implied by the relevant
+impossibility result, which is easily overread. \citet{leeb2005} show
 that the distribution of a post-model-selection estimator cannot be estimated uniformly consistently,
 so that naive post-selection confidence intervals lack \emph{uniform} asymptotic validity: formally,
 the supremum of the coverage error over the parameter space does not vanish. This is an existence
@@ -584,6 +622,10 @@ accompanying honesty about scope as inseparable from it.
 \bibitem[Armstrong and Koles\'ar(2018)]{armstrong2018} Armstrong, T.~B. and M.~Koles\'ar (2018).
 Optimal inference in a class of regression models. \emph{Econometrica} 86(2), 655--683.
 
+\bibitem[Belloni et~al.(2014)]{belloni2014} Belloni, A., V.~Chernozhukov, and C.~Hansen (2014).
+Inference on treatment effects after selection among high-dimensional controls. \emph{Review of
+Economic Studies} 81(2), 608--650.
+
 \bibitem[Borusyak et~al.(2024)]{borusyak2024} Borusyak, K., X.~Jaravel, and J.~Spiess (2024).
 Revisiting event-study designs: robust and efficient estimation. \emph{Review of Economic Studies},
 forthcoming.
@@ -598,6 +640,10 @@ Difference-in-differences with multiple time periods. \emph{Journal of Econometr
 \bibitem[de Chaisemartin and D'Haultf\oe uille(2020)]{dechaisemartin2020} de Chaisemartin, C. and
 X.~D'Haultf\oe uille (2020). Two-way fixed effects estimators with heterogeneous treatment effects.
 \emph{American Economic Review} 110(9), 2964--2996.
+
+\bibitem[Fan and Li(2001)]{fanli2001} Fan, J. and R.~Li (2001). Variable selection via nonconcave
+penalized likelihood and its oracle properties. \emph{Journal of the American Statistical Association}
+96(456), 1348--1360.
 
 \bibitem[Fithian et~al.(2014)]{fithian2014} Fithian, W., D.~Sun, and J.~Taylor (2014). Optimal
 inference after model selection. \emph{arXiv:1410.2597}.
@@ -614,6 +660,10 @@ pitfalls of differences-in-differences. \emph{Journal of Business \& Economic St
 
 \bibitem[Leeb and P\"otscher(2005)]{leeb2005} Leeb, H. and B.~M. P\"otscher (2005). Model selection and
 inference: facts and fiction. \emph{Econometric Theory} 21(1), 21--59.
+
+\bibitem[Leeb and P\"otscher(2008)]{leeb2008} Leeb, H. and B.~M. P\"otscher (2008). Sparse estimators
+and the oracle property, or the return of Hodges' estimator. \emph{Journal of Econometrics} 142(1),
+201--211.
 
 \bibitem[Li et~al.(2018)]{li2018} Li, F., K.~L. Morgan, and A.~M. Zaslavsky (2018). Balancing
 covariates via propensity score weighting. \emph{Journal of the American Statistical Association}
@@ -636,6 +686,9 @@ literature. \emph{Journal of Econometrics} 235(2), 2218--2244.
 \bibitem[Sun and Abraham(2021)]{sun2021} Sun, L. and S.~Abraham (2021). Estimating dynamic treatment
 effects in event studies with heterogeneous treatment effects. \emph{Journal of Econometrics} 225(2),
 175--199.
+
+\bibitem[Zou(2006)]{zou2006} Zou, H. (2006). The adaptive lasso and its oracle properties.
+\emph{Journal of the American Statistical Association} 101(476), 1418--1429.
 \end{thebibliography}
 
 \end{document}
