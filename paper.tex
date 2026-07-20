@@ -219,17 +219,47 @@ centrosymmetric restrictions and which we adopt.
 
 The validity of this step depends on the selection regime. Under ex-ante selection the selected set is
 independent of $\hat\beta$, so the uniform validity results of \citet{rambachan2023} apply verbatim to
-the selected-cohort event study, and no new inference theory is required. Under data-driven selection
-the situation is more delicate: the selection is a function of $\hat\beta_{\mathrm{pre}}$, and a
-classical impossibility result of \citet{leeb2005} precludes uniformly valid inference from the naive
-post-selection estimator without conditioning, sample-splitting, or randomization. Our simulations
-(Section~\ref{sec:sim}) find that in practice the data-driven procedure exhibits no systematic
-coverage distortion---full-data and split implementations cover almost identically---so that the naive
-procedure is typically valid; but this is a pointwise, not a worst-case uniform, statement, and we are
-explicit about the distinction. A researcher who requires a worst-case guarantee can obtain it cheaply
-by selecting on pre-determined information, by splitting the sample, or by randomized (data-carving)
-selection in the sense of \citet{fithian2014}, all of which restore the independence that
-Proposition~\ref{prop:id}'s inferential counterpart needs.
+the selected-cohort event study, and no new inference theory is required.
+
+Under data-driven selection the situation is more delicate, and it is worth being precise about what is
+and is not implied, since the relevant impossibility result is easily overread. \citet{leeb2005} show
+that the distribution of a post-model-selection estimator cannot be estimated uniformly consistently,
+so that naive post-selection confidence intervals lack \emph{uniform} asymptotic validity: formally,
+the supremum of the coverage error over the parameter space does not vanish. This is an existence
+statement about the worst case, not a claim that coverage fails at a typical parameter value. The
+obstruction is concentrated in \emph{local-to-threshold} configurations, in which the parameter
+governing selection drifts toward the decision boundary of the selection rule at the sampling rate; in
+that region the selection probability is asymptotically interior, the post-selection distribution is
+non-normal and depends on the drift, and no plug-in can track it. Away from the boundary, at a fixed
+data-generating process in which cohorts are either clearly credible or clearly not, selection becomes
+asymptotically deterministic and post-selection inference behaves conventionally.
+
+This resolves what would otherwise appear to be a tension with our simulation evidence. The simulations
+of Section~\ref{sec:sim} are pointwise experiments---they fix a data-generating process and vary the
+sampling noise---and in that regime we find no material coverage distortion, with full-data and split
+implementations crossing nominal coverage at the same sensitivity bound. But the simulations also
+exhibit the \citet{leeb2005} phenomenon exactly where the theory locates it. When cohorts are placed at
+the selection threshold, naive coverage does deteriorate relative to splitting; and in the panel
+simulation the estimated standard error of the LATT falls materially short of its Monte Carlo
+counterpart at \emph{intermediate} informativeness, which is precisely the regime in which selection is
+genuinely stochastic. The honest summary is therefore not that data-dependent selection is innocuous,
+but that its distortion arises where theory predicts and is small in magnitude in the configurations we
+examine.
+
+Two features of the present setting further mute the effect. The estimand is an aggregate over many
+cohorts, so the distortion contributed by a borderline cohort is diluted by averaging over the cohorts
+whose selection is not in doubt, in contrast to the leading cases of the model-selection literature in
+which the inclusion of the parameter of interest is itself the decision. And the interval we recommend
+has width governed principally by the identification allowance $\Delta$ rather than by sampling
+variability, so a modest selection-induced perturbation of the sampling distribution is absorbed by an
+interval that is already wide for identification reasons.
+
+We therefore do not read \citet{leeb2005} as an argument against the data-driven procedure, but as a
+statement about the kind of guarantee it can carry: pointwise validity in regimes away from the
+selection boundary, established here by simulation, rather than a worst-case uniform guarantee. A
+researcher who requires the latter can obtain it cheaply by selecting on pre-determined information, by
+splitting the sample, or by randomized (data-carving) selection in the sense of \citet{fithian2014},
+each of which restores the independence that the ex-ante case enjoys, at the cost of some efficiency.
 
 A further subtlety arises because the selected set is random. The FLCI at bound $M$ is valid for a
 given selected set only if that set's residual differential trend lies in $\Delta^{SD}(M)$; since the
@@ -535,9 +565,10 @@ from \citet{callaway2021}. Its weaknesses are equally concrete. The estimand is 
 and must be interpreted as such, with the composition of the credible set described rather than assumed
 away. Its advantage is contingent on pre-trends being informative about post-treatment violations, and
 when they are not, only economic context can carry the identifying assumption. Under data-driven
-selection the estimator carries a vanishing pre-test bias, and worst-case uniform inference is
-precluded without ex-ante selection, sample-splitting, or randomization---though we find no systematic
-distortion in practice. The sensitivity bound must be calibrated to the typical selected set, and the
+selection the estimator carries a vanishing pre-test bias, and a worst-case uniform guarantee is
+unavailable without ex-ante selection, sample-splitting, or randomization; what we can offer is
+pointwise validity away from the selection boundary, together with simulation evidence that the
+distortion is small in plausible configurations and arises where theory predicts. The sensitivity bound must be calibrated to the typical selected set, and the
 relative-magnitudes restriction should be avoided in favor of a structural one, since the former is
 self-undermining under uninformative pre-trends.
 
