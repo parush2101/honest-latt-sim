@@ -644,6 +644,58 @@ selection understates uncertainty, which is precisely why the honest object to r
 sensitivity interval of Section~\ref{sec:flci} rather than a conventional confidence interval around
 the point estimate.
 
+\section{Empirical application: Community Health Centers}\label{sec:app}
+
+We illustrate the method on the staggered establishment of the first Community Health Centers (CHCs)
+under the War on Poverty, using the data of \citet{bailey2015}, who study the effect of CHCs on the
+mortality of older Americans. Between 1965 and 1974, federal grants established CHCs in counties at
+different times, and \citet{bailey2015} compare the age-adjusted elderly mortality rate of counties
+that received a CHC to those that did not. The design is well suited to our method for a reason the
+staggered-adoption literature makes central: treatment is assigned at the \emph{county} level and its
+timing was not random, so the credibility of parallel trends plausibly varies across adoption cohorts.
+Crucially, it does so at a geographic resolution---roughly $120$ treated counties in the 1965--74
+window against more than $2{,}400$ never-treated counties---where the credible subpopulation remains
+large enough to estimate, in contrast to state-level designs in which dropping cohorts quickly exhausts
+the treated sample.
+
+The left panel of Figure~\ref{fig:chc} reports the credibility diagnostic: the differential
+pre-treatment trend of each cohort's log mortality rate against the never-treated counties. Most
+cohorts have nearly flat pre-trends, but three---those first treated in 1965, 1970, and 1973---exhibit
+differential pre-trends an order of magnitude larger, and we flag them as suspect. The remaining panels
+contrast the event study for the full ATT with that for the credible-subpopulation LATT that excludes
+the flagged cohorts. The credible LATT traces a cleaner path---a flat pre-treatment differential
+followed by a mortality decline reaching about $-2\%$, consistent with the reduction reported by
+\citet{bailey2015}---while the pooled ATT is attenuated toward zero, because the suspect cohorts'
+declining pre-trends pull the average up.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{chc_diagnostic.png}
+\caption{Community Health Centers \citep{bailey2015}. Left: the cohort credibility map (differential
+pre-trend slope by cohort; the three red cohorts are flagged as suspect and dropped). Center and right:
+the ATT and credible-subpopulation LATT event studies under equal and population weighting. The
+credible LATT recovers a larger, less-attenuated mortality reduction than the pooled ATT.}
+\label{fig:chc}
+\end{figure}
+
+The comparison also makes concrete a theme of the paper: how much the correction matters depends on the
+weights defining the estimand. Under equal weights the suspect cohorts enter the average on the same
+footing as the rest, and the attenuation is pronounced---the average post-treatment effect over the
+first five years is $-1.1\%$ for the ATT against $-2.0\%$ for the credible LATT. Under population
+weights the suspect cohorts, which happen to be small-population counties, are already downweighted, so
+the ATT is less attenuated ($-1.6\%$) and the LATT ($-2.0\%$) adds less. The credible-subpopulation
+estimate is stable across the two weightings, whereas the pooled estimate is not; the method is most
+valuable precisely when suspect cohorts carry weight in the target, exactly as
+Proposition~\ref{prop:id} would suggest.
+
+We are candid about the limits of what the data can bear here. With roughly one hundred treated
+counties in the 1965--74 window, the effect is modest relative to sampling uncertainty, and under a
+stringent smoothness restriction the confidence set for the LATT includes zero; the honest object to
+report is therefore the sensitivity of the conclusion to the assumed bound, not a claim of robust
+significance. The application's value is as the paper intends it: a transparent diagnosis of
+\emph{which} cohorts threaten the pooled estimate, and a demonstration that restricting to the credible
+subpopulation yields a sharper, less-attenuated estimate of a real effect.
+
 \section{Conclusion}\label{sec:conc}
 
 We have argued that when parallel trends fails for some treated cohorts, a productive response is to
