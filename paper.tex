@@ -39,7 +39,9 @@ vanishes when they are uninformative, where only economic context can carry the 
 assumption. A reduced-form and a panel simulation study confirm that the LATT recovers a clean effect
 where the ATT estimator is biased, that the sensitivity bounds restore honest coverage where point
 estimates collapse, and that a relative-magnitudes restriction is self-undermining under uninformative
-pre-trends while a smoothness restriction is not.
+pre-trends while a smoothness restriction is not. We apply the method to the staggered rollout of
+Community Health Centers, where restricting to the credible cohorts recovers a less-attenuated estimate
+of the program's effect on elderly mortality than the pooled ATT.
 \end{abstract}
 
 \medskip
@@ -133,7 +135,10 @@ setup and the decomposition of event-study coefficients into a causal and a diff
 component. Section~\ref{sec:approach} defines the credible-subpopulation LATT, states its
 identification and the properties of its estimator, and gives our recommended sensitivity-based
 inference together with an honest account of what is provable and what is not.
-Section~\ref{sec:sim} reports the simulation study. Section~\ref{sec:conc} concludes.
+Section~\ref{sec:sim} reports the simulation study. Section~\ref{sec:app} applies the method to the
+staggered rollout of Community Health Centers \citep{bailey2015}, where it diagnoses which adoption
+cohorts threaten the pooled estimate and recovers a less-attenuated effect on elderly mortality.
+Section~\ref{sec:conc} concludes.
 
 \section{Setup}\label{sec:setup}
 

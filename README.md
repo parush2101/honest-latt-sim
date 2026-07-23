@@ -119,3 +119,18 @@ residual-curvature distribution of the (random) selected set:
   the calibration issue is about M vs the random selected composition, not selection
   sampling distortion. Confirms: integrated procedure valid without splitting, but M must
   be set above the mean residual curvature of the selected set.
+
+## Empirical application: Community Health Centers (chc_figure.py)
+
+The paper's empirical application uses the county-level staggered rollout of Community
+Health Centers from Bailey & Goodman-Bacon (2015), "The War on Poverty's Experiment in
+Public Medicine," *American Economic Review* 105(3). The method flags three suspect
+adoption cohorts (1965, 1970, 1973) with large differential pre-trends and shows that the
+credible-subpopulation LATT recovers a less-attenuated elderly-mortality effect (~-2%)
+than the pooled ATT; the correction is largest under equal weighting (the suspect cohorts
+are small-population counties). `chc_figure.py` reproduces the diagnostic figure.
+
+DATA NOTE: the raw data is not redistributed here (it carries the openICPSR license).
+Download the replication package from openICPSR project 112871
+(https://doi.org/10.3886/E112871V1); the script reads a slim county-year extract
+(fips, year, chc_year_exp, copop, amr_eld) built from its aer_data.dta.
