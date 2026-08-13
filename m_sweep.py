@@ -22,7 +22,10 @@ def cohort_delta(C): return np.array([0.5*C*(e**2) for e in np.concatenate([pre_
 def within_cov(sigma, rho, n):
     idx=np.arange(n); R=rho**np.abs(idx[:,None]-idx[None,:]); return (sigma**2)*R
 
-C_marg, C_dirty, sigma, rho, c_sel = 0.10, 0.35, 0.10, 0.5, 0.80
+# Curvature screen: a second difference is a noisier functional than a level, so the screen
+# needs more per-cohort precision than the old level screen to select reliably (sigma 0.10 -> 0.07);
+# at sigma=0.07 the degenerate "no cohort passes" guard never fires. c_sel is on the curvature scale.
+C_marg, C_dirty, sigma, rho, c_sel = 0.10, 0.35, 0.07, 0.5, 0.22
 G = 12
 curv = np.array([0]*4 + [C_marg]*4 + [C_dirty]*4, float)
 tau = np.concatenate([np.zeros(npre), np.ones(npost)])
@@ -30,7 +33,7 @@ means = np.array([tau + cohort_delta(c) for c in curv])
 Sc = within_cov(sigma, rho, npre+npost); Lc = np.linalg.cholesky(Sc)
 rng = np.random.default_rng(5)
 
-M_grid = np.linspace(0.0, 0.09, 31)
+M_grid = np.linspace(0.0, 0.13, 31)   # extended: curvature screen admits a higher residual-curvature tail
 n_reps = 10000
 
 # pre-draw selections to also collect residual-curvature distribution
@@ -38,14 +41,16 @@ resid_list = []
 cov_full = {M:0 for M in M_grid}; cov_split = {M:0 for M in M_grid}
 for _ in range(n_reps):
     B = means + (Lc @ rng.standard_normal((npre+npost, G))).T
-    sel = np.max(np.abs(B[:, :npre]), axis=1) <= c_sel
-    if sel.sum()==0: sel = np.ones(G, bool)
+    stat = L2.max_abs_second_diff(B[:, :npre])           # curvature screen: same functional SD(M) bounds
+    sel = stat <= c_sel
+    if sel.sum()==0: sel = (stat == stat.min())          # degenerate: keep the single most credible cohort
     resid_list.append(curv[sel].mean())
     agg = B[sel].mean(0); sv = np.sqrt(L2.V_VEC @ (Sc/sel.sum()) @ L2.V_VEC); c = float(L2.V_VEC@agg)
     B1 = means + (Lc @ rng.standard_normal((npre+npost, G))).T*np.sqrt(2)
     B2 = means + (Lc @ rng.standard_normal((npre+npost, G))).T*np.sqrt(2)
-    s2 = np.max(np.abs(B1[:, :npre]), axis=1) <= c_sel
-    if s2.sum()==0: s2 = np.ones(G, bool)
+    stat2 = L2.max_abs_second_diff(B1[:, :npre])         # curvature screen (split half)
+    s2 = stat2 <= c_sel
+    if s2.sum()==0: s2 = (stat2 == stat2.min())
     agg2 = B2[s2].mean(0); sv2 = np.sqrt(L2.V_VEC @ (2*Sc/s2.sum()) @ L2.V_VEC); c2 = float(L2.V_VEC@agg2)
     for M in M_grid:
         h = L2.cv((M*bbar1)/sv)*sv;  cov_full[M]  += (c-h <= 1.0 <= c+h)

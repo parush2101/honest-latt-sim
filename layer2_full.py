@@ -122,6 +122,24 @@ def delta_quadratic(C):
     return np.array([0.5 * C * (e ** 2) for e in np.concatenate([pre_e, post_e])])
 
 
+def max_abs_second_diff(B_pre):
+    """
+    Curvature screen statistic: max_e |b(e-1) - 2 b(e) + b(e+1)| over the pre-period.
+
+    This is the pre-period restriction of the SD(M) second-difference operator that the
+    FLCI bounds, so selecting on it matches the object honest inference must dominate
+    (unlike a level screen). The pre path is [b(-K),...,b(-1)] with the reference e=0
+    normalized to 0 appended, giving interior second differences at e=-K+1..-1
+    (the e=-1 one uses the reference). Accepts B_pre of shape (..., npre); reduces the
+    last axis and returns shape (...).
+    """
+    B_pre = np.asarray(B_pre, float)
+    ref = np.zeros(B_pre.shape[:-1] + (1,))
+    path = np.concatenate([B_pre, ref], axis=-1)          # e=-K..-1, then 0
+    sd = path[..., :-2] - 2.0 * path[..., 1:-1] + path[..., 2:]
+    return np.max(np.abs(sd), axis=-1)
+
+
 rng = np.random.default_rng(11)
 
 if __name__ == "__main__":
