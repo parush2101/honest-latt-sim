@@ -620,23 +620,26 @@ $M\approx0$; the level screen keeps it, needs $M\approx0.035$, and drops the ben
 The exercises above all draw coefficients from their asymptotic distribution with a known covariance,
 which is the right setting in which to check identification and inference mechanics but is not the
 setting a practitioner faces. We therefore repeat the estimand demonstration on generated panel data.
-Individual outcomes are simulated for a staggered adoption design with unit and period effects and
-idiosyncratic noise. Cohort-level pre- and post-treatment coefficients are then estimated from genuine
-difference-in-differences contrasts against a common never-treated comparison group, and the covariance
-matrix is estimated from the data rather than supplied.
+Individual outcomes are simulated for a staggered adoption design with a curved confound and
+idiosyncratic noise. Cohort-level event-study coefficients are then estimated from genuine
+difference-in-differences contrasts against a common never-treated comparison group, screened on
+curvature exactly as in the reduced-form model, and their covariance is estimated from the data rather
+than supplied.
 
 The conclusions are unchanged. Across the informativeness axis the ATT estimator's bias remains flat
-while the LATT's bias falls toward zero, reproducing the upper-left panel of
+near $+0.66$ while the LATT's bias falls toward zero, reproducing the upper-left panel of
 Figure~\ref{fig:scope} with estimated rather than known quantities. The estimated covariance is well
-calibrated in the region where selection is effectively deterministic, with coverage of $94$ to $95\%$
-at high informativeness, which confirms that the inference machinery is not being flattered by the
-reduced-form assumption of a known $\Sigma$.
+calibrated in the region where selection is effectively deterministic, with the estimated standard error
+matching its Monte Carlo counterpart and coverage near $95\%$ at high informativeness, which confirms
+that the inference machinery is not being flattered by the reduced-form assumption of a known $\Sigma$.
 
 One discrepancy is worth reporting because it is informative rather than incidental. At intermediate
 informativeness, where selection is genuinely stochastic, the estimated standard error of the LATT
-($0.079$) falls short of its Monte Carlo counterpart ($0.119$). The gap is the component of variance
-induced by the randomness of the selection itself, which a standard error computed conditional on the
-realized selected set does not capture. This is an independent confirmation, from the panel side, of
+understates its Monte Carlo counterpart by an order of magnitude (about $0.015$ against $0.19$ at
+$\phi=0.5$). The gap is the component of variance induced by the randomness of the selection itself: a
+confounded cohort slips into the selected set in about half the samples, shifting the estimate by the
+full violation, and a standard error computed conditional on the realized selected set does not capture
+this. This is an independent confirmation, from the panel side, of
 the inferential issues discussed in Section~\ref{sec:approach}: conditioning on a data-dependent
 selection understates uncertainty, which is precisely why the honest object to report is the
 sensitivity interval of Section~\ref{sec:flci} rather than a conventional confidence interval around
