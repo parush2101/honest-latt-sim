@@ -1,149 +1,155 @@
 """
-Tier 1 simulation (clean-lab / reduced-form normal model)
-----------------------------------------------------------
-Question the paper makes: when some cohorts violate parallel trends,
+Tier 1 simulation (reduced-form normal model, 4+4 event study)
+--------------------------------------------------------------
+The estimand demonstration. When some cohorts violate parallel trends,
   - the CS estimator aims at the full ATT and MISSES (biased point estimate),
   - our reweighted LATT aims at the credible-subpopulation effect and HITS it.
 
-We build a known world (so the truth is known), draw the event-study
-coefficients directly from a normal model, and compare the two POINT ESTIMATES
-against the two true targets. Interval behaviour is a secondary panel.
+Unified with the inference tier: a full event study (4 pre, 4 post, reference
+e=0), a curved differential trend, and the CURVATURE screen (max |pre-period
+second difference|, via L2.max_abs_second_diff), the same functional the SD(M)
+FLCI bounds. A confounded cohort has a curved trend with pre-period curvature
+phi*C and post-period curvature C (phi = informativeness). At phi=1 the confound
+is fully foreshadowed in the pre-period, so the screen can detect it.
 
-Per cohort g we use a 2-vector (one summary pre coefficient, one summary post
-coefficient), the RR "three-period" reduced form:
-    beta_g = tau_g + delta_g
-    tau_g  = (0, theta_g)                      # no anticipation; theta_g = true effect
-    delta_g= (d_g, link*d_g)                    # pre & post violation (strong link)
-Clean cohort: d_g = 0  -> beta_g = (0, theta_g)
-Dirty cohort: d_g > 0  -> beta_g = (d_g, theta_g + link*d_g)
+Per cohort g, coefficients beta_g = tau_g + delta_g drawn ~ N(., Sigma) with a
+within-cohort AR(1) covariance:
+    tau_g   = (0_pre, 1_post)                 # no anticipation; true effect = 1
+    delta_g = curved confound (clean: 0)
+Target aggregation = average post-treatment effect (l_post uniform), so the true
+ATT and true LATT are both 1 and any departure is a parallel-trends violation.
 
-Observed: beta_hat_g ~ N(beta_g, Sigma_g), Sigma_g has pre/post correlation rho.
-Selection rule (polyhedral box): include cohort g iff |beta_hat_g,pre| <= c.
-CS  point estimate  = mean of beta_hat_g,post over ALL cohorts      (targets ATT)
-LATT point estimate = mean of beta_hat_g,post over SELECTED cohorts (targets LATT)
+CS  point estimate  = mean post-effect over ALL cohorts      (targets ATT)
+LATT point estimate = mean post-effect over SELECTED cohorts (targets LATT)
+
+Note the curvature screen needs more per-cohort precision than the old level
+screen (a second difference is a noisier functional), so the design uses a
+tighter sigma; the sample-size sweep spans useless-screen to precise-screen.
 """
 
 import numpy as np
-from scipy.stats import norm
+import layer2_full as L2
 
 rng = np.random.default_rng(12345)
 
+pre_e, post_e = L2.pre_e, L2.post_e          # [-4..-1], [1..4]
+npre, npost = L2.npre, L2.npost
+l_post = np.ones(npost) / npost              # target: average post-treatment effect
 
-def run_scenario(theta, d, link, s_pre, s_post, rho, c, n_reps, label):
+
+def confound(C, phi):
+    """Curved differential trend: pre curvature phi*C, post curvature C, delta_0=0."""
+    dpre = 0.5 * (phi * C) * (pre_e ** 2)
+    dpost = 0.5 * C * (post_e ** 2)
+    return np.concatenate([dpre, dpost])
+
+
+def within_cov(sigma, rho, n):
+    idx = np.arange(n)
+    R = rho ** np.abs(idx[:, None] - idx[None, :])
+    return (sigma ** 2) * R
+
+
+def run_scenario(theta, C, phi, sigma, rho, c, n_reps, label):
+    """theta: per-cohort true effect; confounded cohorts have C>0."""
     G = len(theta)
     theta = np.asarray(theta, float)
-    d = np.asarray(d, float)
-    clean_mask = (d == 0.0)
+    Cvec = np.asarray(C, float)
+    clean_mask = (Cvec == 0.0)
 
-    # True reduced-form means
-    beta_pre = d.copy()                     # tau_pre = 0
-    beta_post = theta + link * d            # tau_post + delta_post
-    delta_post = link * d
+    tau = np.concatenate([np.zeros(npre), np.ones(npost)])
+    # per-cohort mean: tau scaled to the cohort's true effect on the post block, plus confound
+    means = np.array([
+        np.concatenate([np.zeros(npre), np.full(npost, theta[g])]) + confound(Cvec[g], phi)
+        for g in range(G)
+    ])
+    # post-effect violation actually carried into the average-post aggregation
+    post_viol = np.array([confound(Cvec[g], phi)[npre:] @ l_post for g in range(G)])
 
-    # --- true targets (known because we built the world) ---
-    true_ATT = theta.mean()                         # avg causal effect over ALL cohorts
-    true_LATT_clean = theta[clean_mask].mean()      # avg causal effect over CLEAN cohorts
+    true_ATT = theta.mean()
+    true_LATT_clean = theta[clean_mask].mean()
 
-    # per-cohort 2x2 covariance (pre, post) with correlation rho
-    cov = np.array([[s_pre**2, rho * s_pre * s_post],
-                    [rho * s_pre * s_post, s_post**2]])
-    L = np.linalg.cholesky(cov)
+    Sig = within_cov(sigma, rho, npre + npost)
+    Lc = np.linalg.cholesky(Sig)
 
     cs_est = np.empty(n_reps)
     latt_est = np.empty(n_reps)
-    n_selected = np.empty(n_reps, int)
-    sel_LATT_true = np.empty(n_reps)        # realized selected causal target per rep
-    naive_cover = np.zeros(n_reps, bool)    # naive CI coverage of selected LATT
-    dirty_included = np.zeros(n_reps, int)
-    clean_excluded = np.zeros(n_reps, int)
+    n_sel = np.empty(n_reps, int)
+    dirty_in = np.zeros(n_reps, int)
+    clean_out = np.zeros(n_reps, int)
 
-    z = norm.ppf(0.975)
     for r in range(n_reps):
-        noise = (L @ rng.standard_normal((2, G))).T          # (G,2)
-        bhat = np.column_stack([beta_pre, beta_post]) + noise
-        bpre, bpost = bhat[:, 0], bhat[:, 1]
-
-        sel = np.abs(bpre) <= c
+        B = means + (Lc @ rng.standard_normal((npre + npost, G))).T   # (G, 8)
+        post_eff = B[:, npre:] @ l_post                               # avg post effect per cohort
+        stat = L2.max_abs_second_diff(B[:, :npre])                    # curvature screen statistic
+        sel = stat <= c
         if sel.sum() == 0:
-            sel = np.ones(G, bool)                            # degenerate guard
+            sel = (stat == stat.min())                               # keep single most credible cohort
+        cs_est[r] = post_eff.mean()
+        latt_est[r] = post_eff[sel].mean()
+        n_sel[r] = sel.sum()
+        dirty_in[r] = np.sum(sel & ~clean_mask)
+        clean_out[r] = np.sum(~sel & clean_mask)
 
-        cs_est[r] = bpost.mean()
-        latt_est[r] = bpost[sel].mean()
-        n_selected[r] = sel.sum()
-        # realized selected causal target = mean true effect over selected cohorts
-        sel_LATT_true[r] = theta[sel].mean()
-        dirty_included[r] = np.sum(sel & ~clean_mask)
-        clean_excluded[r] = np.sum(~sel & clean_mask)
-
-        # NAIVE CI for the selected LATT (ignores that selection happened)
-        se_naive = s_post / np.sqrt(sel.sum())
-        lo, hi = latt_est[r] - z * se_naive, latt_est[r] + z * se_naive
-        naive_cover[r] = (lo <= sel_LATT_true[r] <= hi)
-
-    print(f"\n===== {label} =====")
-    print(f"  cohorts: {G}  ({clean_mask.sum()} clean, {(~clean_mask).sum()} dirty),"
-          f"  link={link}, c={c}, s_post={s_post}, rho={rho}, reps={n_reps}")
-    print(f"  TRUE  ATT (all cohorts)   = {true_ATT:.4f}   <- what CS targets")
-    print(f"  TRUE  LATT (clean cohorts)= {true_LATT_clean:.4f}   <- what WE target")
-    print("  ----------------------------------------------------------------")
-    print(f"  CS  estimate:  mean={cs_est.mean():.4f}  bias vs true ATT ={cs_est.mean()-true_ATT:+.4f}")
-    print(f"                                 bias vs true LATT={cs_est.mean()-true_LATT_clean:+.4f}")
-    print(f"  LATT estimate: mean={latt_est.mean():.4f}  bias vs true LATT={latt_est.mean()-true_LATT_clean:+.4f}")
-    print(f"                                 bias vs true ATT ={latt_est.mean()-true_ATT:+.4f}")
-    print("  ----------------------------------------------------------------")
-    print(f"  avg # selected = {n_selected.mean():.2f} / {G}"
-          f"   (dirty wrongly included: {dirty_included.mean():.3f},"
-          f"  clean wrongly excluded: {clean_excluded.mean():.3f})")
-    print(f"  NAIVE 95% CI coverage of the (realized) selected LATT = {naive_cover.mean()*100:.1f}%"
-          f"   (should be ~95% if honest)")
-    return dict(true_ATT=true_ATT, true_LATT=true_LATT_clean,
-                cs=cs_est, latt=latt_est)
+    if label is not None:
+        print(f"\n===== {label} =====")
+        print(f"  cohorts: {G} ({clean_mask.sum()} clean, {(~clean_mask).sum()} confounded), "
+              f"C={Cvec[~clean_mask][:1]}, phi={phi}, c={c}, sigma={sigma}, rho={rho}, reps={n_reps}")
+        print(f"  post-effect violation per confounded cohort = {post_viol[~clean_mask][:1]}")
+        print(f"  TRUE ATT (all)    = {true_ATT:.4f}   <- CS targets")
+        print(f"  TRUE LATT (clean) = {true_LATT_clean:.4f}   <- we target")
+        print("  ----------------------------------------------------------------")
+        print(f"  CS  estimate: mean={cs_est.mean():.4f}  bias vs ATT ={cs_est.mean()-true_ATT:+.4f}")
+        print(f"  LATT estimate: mean={latt_est.mean():.4f}  bias vs LATT={latt_est.mean()-true_LATT_clean:+.4f}")
+        print("  ----------------------------------------------------------------")
+        print(f"  avg # selected = {n_sel.mean():.2f}/{G}  "
+              f"(confounded wrongly kept: {dirty_in.mean():.3f}, clean wrongly dropped: {clean_out.mean():.3f})")
+    return dict(true_ATT=true_ATT, true_LATT=true_LATT_clean, cs=cs_est, latt=latt_est)
 
 
 # ---------------- Scenario A: isolate the violation bias ----------------
-# All cohorts share the SAME true effect (theta=1). So true ATT == true LATT == 1.
-# The ONLY reason CS moves off 1 is the parallel-trends VIOLATION in the dirty cohorts.
+# All cohorts share the SAME true effect (1). true ATT == true LATT == 1.
+# CS moves off 1 only because of the parallel-trends VIOLATION in the confounded cohorts.
+C_DIRTY = 0.35        # confounded post-curvature (matches inference-tier "dirty")
 resA = run_scenario(
-    theta=[1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
-    d    =[0.0, 0.0, 0.0, 0.0, 0.8, 0.8],   # last two dirty
-    link=1.0, s_pre=0.25, s_post=0.25, rho=0.5, c=0.4,
-    n_reps=20000, label="Scenario A - violation bias isolated (true ATT = true LATT = 1.0)")
+    theta=[1, 1, 1, 1, 1, 1],
+    C=[0, 0, 0, 0, C_DIRTY, C_DIRTY], phi=1.0,
+    sigma=0.07, rho=0.5, c=0.22, n_reps=20000,
+    label="Scenario A - violation bias isolated (true ATT = true LATT = 1.0)")
 
 # ---------------- Scenario B: estimand divergence ----------------
-# Dirty cohorts ALSO have a different true effect (1.6). Now true ATT != true LATT,
-# AND CS is further corrupted by the violation. Shows the full estimand-choice story.
+# Confounded cohorts ALSO have a different true effect (1.6): true ATT != true LATT.
 resB = run_scenario(
-    theta=[1.0, 1.0, 1.0, 1.0, 1.6, 1.6],
-    d    =[0.0, 0.0, 0.0, 0.0, 0.8, 0.8],
-    link=1.0, s_pre=0.25, s_post=0.25, rho=0.5, c=0.4,
-    n_reps=20000, label="Scenario B - estimand divergence (true ATT != true LATT)")
+    theta=[1, 1, 1, 1, 1.6, 1.6],
+    C=[0, 0, 0, 0, C_DIRTY, C_DIRTY], phi=1.0,
+    sigma=0.07, rho=0.5, c=0.22, n_reps=20000,
+    label="Scenario B - estimand divergence (true ATT != true LATT)")
 
 
 # ---------------- Sample-size sweep (Scenario A) ----------------
-# Prediction: LATT bias -> 0 as precision grows (pre-test bias vanishes),
+# Prediction: LATT bias -> 0 as precision grows (pre-test bias vanishes, screen sharpens),
 #             while CS bias PERSISTS (wrong target, not a noise problem).
-print("\n\n===== Sample-size sweep (Scenario A): does LATT bias vanish, CS bias persist? =====")
-print(f"  {'s_post=s_pre':>12} | {'CS mean':>8} {'CS bias':>8} | {'LATT mean':>9} {'LATT bias':>9}")
-for s in [0.40, 0.30, 0.20, 0.12, 0.07, 0.03]:
-    r = run_scenario(theta=[1,1,1,1,1,1], d=[0,0,0,0,0.8,0.8], link=1.0,
-                     s_pre=s, s_post=s, rho=0.5, c=0.4, n_reps=20000,
-                     label=None) if False else None
-    # inline compute to avoid huge printout
+print("\n\n===== Sample-size sweep (Scenario A): LATT bias vanishes, CS bias persists? =====")
+print(f"  {'sigma':>8} | {'CS mean':>8} {'CS bias':>8} | {'LATT mean':>9} {'LATT bias':>9} | {'avg#sel':>7}")
+for s in [0.30, 0.20, 0.12, 0.07, 0.04, 0.02]:
     G = 6
-    theta = np.ones(G); d = np.array([0,0,0,0,0.8,0.8]); link = 1.0
-    clean = d == 0
-    beta_pre = d; beta_post = theta + link*d
-    cov = np.array([[s**2, 0.5*s*s],[0.5*s*s, s**2]]); L = np.linalg.cholesky(cov)
+    theta = np.ones(G)
+    Cvec = np.array([0, 0, 0, 0, C_DIRTY, C_DIRTY], float)
+    clean_mask = (Cvec == 0.0)
+    means = np.array([
+        np.concatenate([np.zeros(npre), np.full(npost, theta[g])]) + confound(Cvec[g], 1.0)
+        for g in range(G)])
+    Lc = np.linalg.cholesky(within_cov(s, 0.5, npre + npost))
     NR = 20000
-    cs = np.empty(NR); la = np.empty(NR)
+    cs = np.empty(NR); la = np.empty(NR); nsel = np.empty(NR)
     for i in range(NR):
-        noise = (L @ rng.standard_normal((2,G))).T
-        bh = np.column_stack([beta_pre, beta_post]) + noise
-        sel = np.abs(bh[:,0]) <= 0.4
-        if sel.sum()==0: sel = np.ones(G,bool)
-        cs[i] = bh[:,1].mean(); la[i] = bh[:,1][sel].mean()
-    true_ATT = 1.0; true_LATT = 1.0
-    print(f"  {s:12.2f} | {cs.mean():8.4f} {cs.mean()-true_ATT:+8.4f} | "
-          f"{la.mean():9.4f} {la.mean()-true_LATT:+9.4f}")
+        B = means + (Lc @ rng.standard_normal((npre + npost, G))).T
+        post_eff = B[:, npre:] @ l_post
+        stat = L2.max_abs_second_diff(B[:, :npre])
+        sel = stat <= 0.22
+        if sel.sum() == 0: sel = (stat == stat.min())
+        cs[i] = post_eff.mean(); la[i] = post_eff[sel].mean(); nsel[i] = sel.sum()
+    print(f"  {s:8.2f} | {cs.mean():8.4f} {cs.mean()-1.0:+8.4f} | "
+          f"{la.mean():9.4f} {la.mean()-1.0:+9.4f} | {nsel.mean():7.2f}")
 
 print("\nDone.")
