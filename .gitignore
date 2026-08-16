@@ -9,3 +9,9 @@ __pycache__/
 *.bbl
 *.blg
 *.synctex.gz
+
+# Large raw data (reproducible from scripts / public sources)
+walmart/CAINC1_*.csv
+walmart/CAINC1.zip
+data/*.csv
+shale/shale_panel.csv
