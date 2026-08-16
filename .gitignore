@@ -16,3 +16,4 @@ walmart/CAINC1.zip
 data/*.csv
 shale/shale_panel.csv
 covid/*.xlsx
+housing/fhfa_county.xlsx
