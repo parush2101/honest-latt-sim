@@ -33,9 +33,10 @@ ATT is not. Estimation is a reweighting of standard group-time effects toward cr
 combined with honest sensitivity bounds on the residual violation of the selected set. The method's
 advantage over the ATT grows with how informative pre-trends are about post-treatment violations.
 Simulations confirm that the LATT recovers a clean effect where the ATT estimator is biased and that
-honest sensitivity bounds restore coverage where point estimates collapse. Two staggered applications, Medicaid expansion and Walmart
-entry, show the method recovering a point-identified effect that survives honest sensitivity analysis
-and de-attenuating a pooled estimate biased by endogenous adoption.
+honest sensitivity bounds restore coverage where point estimates collapse. An application to the
+local house-price effect of the shale boom illustrates the method: a significantly positive pooled
+estimate is shown to rest entirely on cohorts whose prices were already trending before onset, and the
+credible subpopulation reveals no house-price effect once these are set aside.
 \end{abstract}
 
 \medskip
@@ -112,7 +113,7 @@ a fixed restriction, whose bound is set by the researcher rather than read off t
 The remainder of the paper is organized as follows. Section~\ref{sec:approach} fixes the staggered-DiD
 setup, defines the credible-subpopulation LATT, and develops its identification, estimation, and
 sensitivity-based inference. Section~\ref{sec:sim} reports the simulation study,
-Section~\ref{sec:app} applies the method to Medicaid expansion and Walmart entry, and
+Section~\ref{sec:app} applies the method to the local house-price effect of the shale boom, and
 Section~\ref{sec:conc} concludes.
 
 \section{The credible-subpopulation LATT}\label{sec:approach}
@@ -253,7 +254,7 @@ then sees the scope-credibility-precision frontier directly and need not trust a
 single value is nonetheless wanted, we recommend calibrating it to negligibility rather than to
 significance: set $c$ to the largest pre-trend that would bias $\theta_S$ by less than a stated
 tolerance, in the spirit of the non-inferiority tests of \citet{bilinski2020}, rather than to a critical
-value of a pre-trends test, which would reinherit the low power that motivates the paper. The Walmart
+value of a pre-trends test, which would reinherit the low power that motivates the paper. The
 application of Section~\ref{sec:app} reports such a path.
 
 \subsection{Estimation}
@@ -608,62 +609,51 @@ selection understates uncertainty, which is precisely why the honest object to r
 sensitivity interval of Section~\ref{sec:flci} rather than a conventional confidence interval around
 the point estimate.
 
-\section{Empirical applications}\label{sec:app}
+\section{Empirical application}\label{sec:app}
 
-We illustrate the method on two staggered designs with many units per cohort, chosen so that the two
-roles of the credible subpopulation appear separately: surviving honest inference, and correcting a
-biased ATT. In each case we estimate \citet{callaway2021} group-time effects against a
-not-yet-treated comparison group, screen cohorts on the magnitude of their estimated pre-trend, and
-report the smoothness-class FLCI of Section~\ref{sec:approach} for the selected aggregate.
+We illustrate the method with the local effect of the shale boom on house prices, a staggered design
+with many counties per cohort. The treatment date is the year a county's oil and gas production first
+rises sharply, from county production records \citep{ers2015}, which sorts the boom counties into
+onset cohorts; the outcome is the log county house-price index \citep{bogin2019}, over 1998--2019. We
+estimate \citet{callaway2021} group-time effects against never-treated counties, those with negligible
+production, screen cohorts on the flatness of their estimated pre-trend, and report the level bound of
+Section~\ref{sec:approach} for the selected aggregate.
 
-\paragraph{Medicaid expansion.} States expanded Medicaid eligibility on a staggered schedule; we take
-the treatment year as the state's expansion year, the unit as the county, and the outcome as the
-county uninsured rate (Census SAHIE, 2008--2019). Cohorts run from the 2014 mass expansion
-($1{,}190$ counties) to later adopters. Figure~\ref{fig:medicaid} (left) shows the credibility screen:
-the large 2014 cohort has a flat pre-trend and is retained, while the small 2016 cohort has a
-pre-treatment violation an order of magnitude larger and is dropped. The credible LATT is a $2.3$
-percentage-point reduction in the uninsured rate ($t=-23$), with an event study that is flat before
-expansion and declines afterward (center). Under the smoothness class it stays bounded away from zero
-up to a breakdown value $M^\ast=0.24$ (right), larger than the observed pre-period curvature, so the
-effect is robust to a smooth differential trend rather than merely point-significant. Selection here
-removes a confounded cohort without moving the aggregate much, since the retained 2014 cohort
-dominates; its value is a point-identified effect that survives honest sensitivity analysis.
+Onset is gradual and partly endogenous, which is what makes the setting instructive. A county's
+production ramps up over several years, and where it does so during a regional housing upswing its
+prices are already climbing before the boom is dated. Figure~\ref{fig:frack}(a) shows the result: the
+early cohorts have flat pre-trends and are retained, while the later cohorts, whose onset coincides
+with the mid-2000s house-price run-up, carry pre-treatment trends several times larger and are dropped.
 
-\begin{figure}[t]
-\centering
-\includegraphics[width=\textwidth]{medicaid_diagnostic.png}
-\caption{Medicaid expansion. Left: cohort credibility map (maximum pre-treatment violation; the 2016
-cohort is dropped). Center: event study, ATT versus credible LATT. Right: the LATT confidence band as
-the smoothness bound $M$ is relaxed, with breakdown value $M^\ast=0.24$.}
-\label{fig:medicaid}
-\end{figure}
-
-\paragraph{Walmart entry.} We take the treatment year as the year a county's first Walmart store opens
-\citep{holmes2011}, and the outcome as county retail-trade earnings (BEA, 1975--2000). Entry is
-endogenous: Walmart opens where retail demand is rising, so treated counties are on an upward
-trajectory before entry \citep{basker2005}. The pooled event study makes this visible: retail earnings
-climb steadily for eight years before entry and jump afterward (Figure~\ref{fig:walmart}, center), so
-the pooled ATT ($+0.11$) conflates the treatment effect with the pre-existing trend. The pre-trend is
-present in every cohort but varies in steepness, and the screen retains those with the flattest
-pre-trends (left). Restricting to them raises the honest, de-trended estimate from $+0.020$ (pooled) to
-$+0.035$ (credible): pooling the steep-pre-trend cohorts over-corrects the linear de-trend, and the
-credible subpopulation recovers more of the true effect. The right panel traces this estimate as the
-screen threshold is relaxed, the credibility path recommended in Section~\ref{sec:select}, and its
-near-flatness shows the finding does not rest on a particular cutoff. The effect survives only a small
-departure from linearity ($M^\ast=0.005$), a limit the sensitivity analysis makes explicit.
+The two aggregates part ways (Figure~\ref{fig:frack}b). Pooled across all cohorts, the event study
+climbs through the onset date to a house-price effect of $+6.7$ log points ($t=8$), the kind of estimate
+a practitioner would report as a clear positive effect of the boom. But the pooled path is already
+trending before treatment, and the effect is inherited from the dropped cohorts: restricted to the
+credible subpopulation, the event study is flat both before and after onset, and the LATT is $-0.2$ log
+points, indistinguishable from zero. The gap between the two, $+6.9$ log points, is itself sharply
+estimated ($t=5$). Panel (c) traces the estimate as the screen is relaxed, the credibility path of
+Section~\ref{sec:select}: it rises from zero toward the pooled value as the trending cohorts are
+readmitted, so the positive pooled figure is precisely the contribution of the cohorts whose pre-trends
+make them least credible. The level bound confirms that this is not a knife-edge of the threshold; the
+credible estimate stays bounded near zero across it, and the pooled figure cannot be restored without
+readmitting the non-credible cohorts rather than by positing a residual violation.
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\textwidth]{walmart_diagnostic.png}
-\caption{Walmart entry. Left: cohort credibility map (pre-trend slope; steep-pre-trend cohorts are
-dropped). Center: event study, with the endogenous upward pre-trend before entry. Right: the honest
-de-trended LATT exceeds the pooled ATT across screen thresholds (de-attenuation).}
-\label{fig:walmart}
+\includegraphics[width=\textwidth]{fracking_diagnostic.png}
+\caption{The shale boom and county house prices. (a) Cohort credibility map: maximum pre-treatment
+violation by onset cohort, with the flatness screen; the later, trending cohorts are dropped. (b) Event
+study, all cohorts (pooled ATT) versus the credible subpopulation (LATT), with $95\%$ bands. (c) The
+credibility path: the LATT as the screen threshold $c$ is relaxed, rising from zero toward the pooled ATT.}
+\label{fig:frack}
 \end{figure}
 
-Together the applications trace the method's two margins: Medicaid, where the credible LATT is robustly
-identified; and Walmart, where restricting to credible cohorts de-attenuates a pooled estimate that
-endogenous adoption has biased.
+The reading is that the boom's apparent effect on house prices is a pre-existing trend in the counties
+that adopt late, not a causal effect, and a near-zero net effect is what the offsetting amenity and
+disamenity channels of local energy development would predict \citep{muehlenbachs2015}. The application
+shows the method working in the direction opposite to point-identification: not recovering an effect the
+pooled estimate misses, but withdrawing one it spuriously reports, and locating that withdrawal exactly
+in the cohorts the screen flags.
 
 \section{Conclusion}\label{sec:conc}
 
