@@ -381,25 +381,20 @@ attributable to a violation of parallel trends rather than to treatment-effect h
 therefore isolates the identification problem that the paper is about.
 
 Throughout, each cohort carries a four-period pre-treatment and four-period post-treatment event study
-with the reference period normalized to zero. A confounded cohort carries a curved differential trend:
-its post-treatment curvature is $C>0$, the maximal second difference of $\delta_{g,\mathrm{post}}$, and
-its pre-treatment curvature is $\phi C$, for a scalar $\phi\ge 0$ we call the informativeness parameter
-and that is the master axis of the study. Concretely $\delta_e=(\phi C/2)e^2$ before treatment and
-$(C/2)e^2$ after, so the post-period bend is foreshadowed in the pre-period to the degree $\phi$. When
-$\phi=0$ the confound is flat before treatment and no pre-trend rule can detect it; as $\phi$ grows it
-announces itself and becomes detectable. Because $C$ is the post-treatment curvature it is directly
-comparable to the smoothness bound $M$ of $\Delta^{SD}(M)$, which makes the validity statement ``covers
-if and only if $M\ge C$'' checkable, and it makes $\phi$ the operational version of the informativeness
-of pre-trends discussed in Section~\ref{sec:approach}.
+with the reference period normalized to zero. A confounded cohort carries a level violation: its
+treated-comparison difference shifts by $V>0$ in the post-period and by $\phi V$ in the pre-period, for
+a scalar $\phi\ge 0$ we call the informativeness parameter and that is the master axis of the study. When
+$\phi=0$ the confound is flat before treatment and no pre-trend rule can detect it; as $\phi$ grows the
+pre-period shift announces it and it becomes detectable. Because $V$ is the post-treatment violation it
+is directly comparable to the level bound $M$ of $\Delta^{\mathrm{Level}}(M)$, which makes the validity
+statement ``covers if and only if $M\ge V$'' checkable, and it makes $\phi$ the operational version of
+the informativeness of pre-trends discussed in Section~\ref{sec:approach}.
 
-The selection rule is data-driven and posed in the same curvature currency as the honest inference:
-cohort $g$ is retained if its estimated pre-trend has small curvature,
-$\max_e\lvert\hat\beta_{g,\mathrm{pre}}(e{+}1)-2\hat\beta_{g,\mathrm{pre}}(e)+\hat\beta_{g,\mathrm{pre}}(e{-}1)\rvert\le c$.
-Because a second difference is a noisier functional than a level, this screen needs more per-cohort
-precision than a magnitude screen to select as reliably, a cost we make explicit below. The estimator
-of the ATT averages the post-treatment effect over all cohorts, as a heterogeneity-robust estimator
-would, and the LATT averages it over the selected cohorts only. Because the sampling errors of a
-cohort's pre- and post-treatment coefficients are correlated, the selection is genuinely data-dependent
+The selection rule is the flatness screen, posed in the same currency as the honest inference: cohort
+$g$ is retained if its estimated pre-trend is close to flat, $\max_e\lvert\hat\beta_{g,\mathrm{pre}}(e)\rvert\le c$.
+The estimator of the ATT averages the post-treatment effect over all cohorts, as a heterogeneity-robust
+estimator would, and the LATT averages it over the selected cohorts only. Because the sampling errors of
+a cohort's pre- and post-treatment coefficients are correlated, the selection is genuinely data-dependent
 in the sense of Section~\ref{sec:approach}, and the pre-test bias of Proposition~\ref{prop:pretest} is
 operative.
 
@@ -407,16 +402,16 @@ operative.
 
 We first illustrate Proposition~\ref{prop:id} in the simplest configuration, with a subset of cohorts
 violating parallel trends in the post-period. Table~\ref{tab:tier1} reports the result. The estimator
-of the ATT is biased by $+0.438$: it averages over all cohorts, so the offending cohorts' differential
+of the ATT is biased by $+0.267$: it averages over all cohorts, so the offending cohorts' differential
 trends enter it directly. The LATT lands at $1.000$, on the truth, because the selection
 removes those cohorts from the average and, by Proposition~\ref{prop:id}, their violations then do not
 enter the estimand at all.
 
 The lower panel of the table sweeps the sampling noise $s$, and is the more informative comparison.
-As precision improves the LATT's bias falls monotonically from $+0.137$ to zero: this residual is the
+As precision improves the LATT's bias falls monotonically from $+0.015$ to zero: this residual is the
 pre-test bias of Proposition~\ref{prop:pretest}, which arises because the selection is made on the same
 noisy pre-trends used for estimation, and it vanishes as the selection rule becomes reliable. The ATT
-estimator's bias, by contrast, is frozen at $+0.438$ regardless of precision. The contrast is the
+estimator's bias, by contrast, is frozen at $+0.267$ regardless of precision. The contrast is the
 paper's basic point in miniature: the LATT faces a noise problem, which more data cures, whereas the
 ATT estimator faces a wrong-target problem, which no amount of data cures.
 
@@ -428,14 +423,14 @@ ATT estimator faces a wrong-target problem, which no amount of data cures.
 \toprule
 & ATT & LATT \\
 \midrule
-Point estimate & $1.438$ & $1.000$ \\
-Bias vs.\ truth & $+0.438$ & $+0.000$ \\
+Point estimate & $1.267$ & $1.000$ \\
+Bias vs.\ truth & $+0.267$ & $+0.000$ \\
 \midrule
 \multicolumn{3}{l}{Bias as sampling noise $s$ falls:}\\
-$s=0.30$ & $+0.437$ & $+0.137$ \\
-$s=0.20$ & $+0.437$ & $+0.036$ \\
-$s=0.12$ & $+0.437$ & $+0.001$ \\
-$s=0.04$ & $+0.438$ & $+0.000$ \\
+$s=0.40$ & $+0.266$ & $+0.015$ \\
+$s=0.20$ & $+0.266$ & $+0.001$ \\
+$s=0.12$ & $+0.267$ & $-0.000$ \\
+$s=0.03$ & $+0.267$ & $-0.000$ \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -446,7 +441,7 @@ Figure~\ref{fig:scope} traces the method across the informativeness axis $\phi$ 
 Section~\ref{sec:design}, and its four panels should be read together.
 
 The upper-left panel plots the bias of the two point estimators against the truth. The bias of the ATT
-estimator is a flat line at $+0.66$: it never consults pre-trends, so its performance cannot depend on
+estimator is a flat line at $+0.30$: it never consults pre-trends, so its performance cannot depend on
 how informative they are. The LATT's bias begins on top of that line at $\phi=0$ and falls to
 zero as pre-trends become informative. The vertical gap between the two curves is therefore exactly the
 method's advantage, and reading it off from left to right gives the scope condition: the advantage is
@@ -458,10 +453,10 @@ the fact, argued in Section~\ref{sec:approach}, that selecting on uninformative 
 
 The upper-right panel explains why the LATT's bias falls, by plotting the identification gap of
 the selected set, the average post-treatment violation among the cohorts that survive selection. It
-tracks the LATT's bias almost exactly, falling from $0.66$ to essentially zero. This confirms that the
+tracks the LATT's bias almost exactly, falling from $0.30$ to essentially zero. This confirms that the
 LATT's remaining bias is not an artifact of the estimator but simply the residual violation that
 selection has failed to remove. The lower-right panel gives the mechanism behind both: the average
-number of confounded cohorts that slip through the screen falls from $5.16$ of six when the confound is
+number of confounded cohorts that slip through the screen falls from $5.09$ of six when the confound is
 invisible to essentially zero when it is plainly visible.
 
 The lower-left panel turns to inference and reports the coverage of a point-based confidence interval
@@ -489,52 +484,49 @@ selection distortion, since sample-splitting collapses identically.}
 
 \subsection{Honest inference restores coverage}\label{sec:flci}
 
-We now validate the smoothness-class FLCI of Section~\ref{sec:approach} applied to the selected-cohort
-aggregate, using the curved differential trend of Section~\ref{sec:design} whose curvature $C$ is
-directly comparable to the assumed bound $M$.
+We now validate the level-bound FLCI of Section~\ref{sec:approach} applied to the selected-cohort
+aggregate, using the level violation of Section~\ref{sec:design} whose size $V$ is directly comparable
+to the assumed bound $M$.
 
-Table~\ref{tab:flci} is the validity check. Read down the rows. When the assumed bound equals the true curvature ($C=M$) the FLCI covers at
-$94.7\%$ and $95.2\%$, that is, at its nominal level. When the bound is generous ($M>C$) it covers
-conservatively at $100\%$. When the bound is violated ($M<C$) coverage falls to zero. This is precisely the behavior an honest sensitivity interval should
-display. It is valid exactly on the range of violations it claims to accommodate, and it fails
-visibly outside it, rather than failing silently.
+Table~\ref{tab:flci} is the validity check. Read down the rows. When the assumed bound equals the true
+violation ($V=M$) the FLCI covers at $95.0\%$, that is, at its nominal level. When the bound is generous
+($M>V$) it covers conservatively at $100\%$. When the bound is violated ($M<V$) coverage collapses. This
+is precisely the behavior an honest sensitivity interval should display. It is valid exactly on the range
+of violations it claims to accommodate, and it fails visibly outside it, rather than failing silently.
 
-The final column records that both point-based
-intervals, the naive one and the one that linearly extrapolates the pre-trend, collapse to zero
-coverage the instant any curvature is present, because each is centered on a biased estimate with a
-width reflecting sampling noise alone.
+The final column records that the naive point interval collapses to near-zero coverage the instant any
+violation is present, because it is centered on a biased estimate with a width reflecting sampling noise
+alone.
 
-Figure~\ref{fig:layer2} repeats the exercise across a continuum of curvature and adds the practical
-output. In the left panel the two point-based intervals fall away rapidly as the confound curves, while
-each FLCI holds its nominal level until the true curvature reaches its own assumed bound, marked by
-the vertical dotted lines at $M=0.10$ and $M=0.20$, and declines thereafter. The middle panel records
-the price: interval half-width is governed by the assumed $M$ rather than by the realized curvature,
-which is why the curves are flat in $C$ and why the more permissive bound is roughly $75\%$ wider.
-Honesty about a wider class of possible violations is paid for in width, immediately and
-proportionately.
+Figure~\ref{fig:layer2} repeats the exercise across a continuum of violation sizes and adds the practical
+output. In the left panel the point interval falls away rapidly as the violation grows, while each FLCI
+holds its nominal level until the true violation reaches its own assumed bound, marked by the vertical
+dotted lines, and declines thereafter. The middle panel records the price: interval half-width is
+governed by the assumed $M$ rather than by the realized violation, so honesty about a wider class of
+violations is paid for in width, immediately and proportionately.
 
-The right panel is what a practitioner would actually report. Holding the data fixed at a curvature of
-$0.10$, it traces the confidence band as the assumed bound is relaxed and identifies the breakdown
-value $M^\ast\approx0.077$ at which the band first admits the truth. Reported alongside an estimate,
-this quantity answers the question a reader of a DiD paper wants answered: how much departure from a
-linear differential trend must one be willing to countenance before the stated conclusion no longer
-follows. Because $\Delta^{SD}(M)$ keys off smoothness rather than pre-trend magnitude, this exercise
-remains informative even when pre-trends are uninformative, in direct contrast to the
-relative-magnitudes restriction of Proposition~\ref{prop:rm}, whose bounds would shrink toward zero in
-exactly that case and deliver false precision.
+The right panel is what a practitioner would actually report. Holding the data fixed, it traces the
+confidence band as the assumed bound is relaxed and identifies the breakdown value $M^\ast$ at which the
+band first admits the truth. Because $M$ is in the outcome's own units, this quantity answers the
+question a reader of a DiD paper wants answered directly: how large a post-treatment parallel-trends
+violation one must be willing to countenance before the stated conclusion no longer follows. And because
+the bound is fixed by the researcher rather than read off the pre-trends, the exercise remains
+informative even when pre-trends are uninformative, in direct contrast to the relative-magnitudes
+restriction of Proposition~\ref{prop:rm}, whose bounds would shrink toward zero in exactly that case and
+deliver false precision.
 
 \begin{table}[t]
 \centering
-\caption{FLCI coverage of the causal target (reduced-form model): valid iff $M\ge C$.}
+\caption{FLCI coverage of the causal target (reduced-form model): valid iff $M\ge V$.}
 \label{tab:flci}
 \begin{tabular}{cccc}
 \toprule
-True curvature $C$ & Assumed $M$ & FLCI coverage & Point-estimate coverage \\
+True violation $V$ & Assumed $M$ & FLCI coverage & Point-estimate coverage \\
 \midrule
-$0.5$ & $0.5\ (=C)$ & $94.7\%$ & $0.0\%$ \\
-$0.5$ & $1.0\ (>C)$ & $100\%$ & $0.0\%$ \\
-$1.0$ & $0.5\ (<C)$ & $0.0\%$ & $0.0\%$ \\
-$1.0$ & $1.0\ (=C)$ & $95.2\%$ & $0.0\%$ \\
+$0.30$ & $0.30\ (=V)$ & $95.0\%$ & $15.9\%$ \\
+$0.30$ & $0.60\ (>V)$ & $100\%$ & $14.9\%$ \\
+$0.60$ & $0.30\ (<V)$ & $9.3\%$ & $0.0\%$ \\
+$0.60$ & $0.60\ (=V)$ & $95.0\%$ & $0.0\%$ \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -542,9 +534,9 @@ $1.0$ & $1.0\ (=C)$ & $95.2\%$ & $0.0\%$ \\
 \begin{figure}[t]
 \centering
 \includegraphics[width=\textwidth]{layer2_full.png}
-\caption{Sensitivity bounds restore honest coverage. Point estimates collapse as the confound curves.
-The FLCI is honest exactly while $M\ge C$. Interval width is the price of honesty, set by $M$. The
-right panel is the sensitivity/breakdown curve.}
+\caption{Sensitivity bounds restore honest coverage. The point estimate collapses as the violation grows.
+The FLCI is honest exactly while $M\ge V$. Interval width is the price of honesty, set by $M$. The right
+panel is the sensitivity/breakdown curve, with $M^\ast$ in outcome units.}
 \label{fig:layer2}
 \end{figure}
 
@@ -555,26 +547,26 @@ the same data distort the sensitivity interval, and how should the bound $M$ be 
 selected set, and hence its residual violation, is random? Figure~\ref{fig:calib} answers both, and its
 two panels are best read in reverse order.
 
-The right panel displays the distribution of the residual curvature of the selected aggregate across
+The right panel displays the distribution of the residual violation of the selected aggregate across
 replications. It is visibly spread and multi-modal, its mass running from zero to about $0.06$ with a
-thin tail out to $0.10$. Each mode corresponds to a different number of borderline cohorts surviving the
+thin tail out to $0.11$. Each mode corresponds to a different number of borderline cohorts surviving the
 screen in that replication. This is the concrete content of Lemma~\ref{lem:calib}: the object that a fixed bound
 $M$ must dominate is not a constant but a random variable, and a bound chosen to sit at its mean will
 be exceeded in a substantial share of samples.
 
 The left panel confirms the consequence and settles the distortion question. Coverage is plotted
 against $M$ for the full-data procedure and for sample-splitting. The two curves lie close to one another
-and cross the nominal level at nearly the same bound, the full-data procedure at $M\approx0.052$ and the
-split at $M\approx0.061$. Data-dependent selection therefore introduces no gross distortion of the FLCI
-here, and splitting buys little on this account. The small residual gap is the curvature screen's greater
-noise-sensitivity, which half-sample splitting mildly amplifies, and it is consistent with the pointwise,
-as opposed to worst-case, reading of \citet{leeb2005} discussed in Section~\ref{sec:approach}.
+and cross the nominal level at nearly the same bound, the full-data procedure at $M\approx0.048$ and the
+split at $M\approx0.056$. Data-dependent selection therefore introduces no gross distortion of the FLCI
+here, and splitting buys little on this account. The small residual gap reflects splitting's use of half
+the data, and it is consistent with the pointwise, as opposed to worst-case, reading of \citet{leeb2005}
+discussed in Section~\ref{sec:approach}.
 
 Turning to calibration, the vertical reference lines mark the
-mean, the ninety-fifth percentile and the maximum of the residual-curvature distribution. Setting $M$
-at the mean, $0.039$, yields only about $86\%$ coverage. Nominal coverage requires $M\approx0.052$,
-above the mean and near the ninety-fifth percentile $0.057$, still well below the maximum $0.100$, the
-shortfall being absorbed by the sampling slack already built into the interval. The practical recommendation follows
+mean, the ninety-fifth percentile and the maximum of the residual-violation distribution. Setting $M$
+at the mean, $0.043$, leaves coverage below nominal; reaching $95\%$ requires $M\approx0.048$, near the
+ninety-fifth percentile $0.057$ and well below the maximum $0.112$, the shortfall being absorbed by the
+sampling slack already built into the interval. The practical recommendation follows
 directly: calibrate the sensitivity bound to the residual violation of a typical selected set,
 not to its average, and treat the resulting bound as a floor rather than a target.
 
@@ -583,39 +575,8 @@ not to its average, and treat the resulting bound as a floor rather than a targe
 \includegraphics[width=\textwidth]{m_sweep.png}
 \caption{Calibrating the sensitivity bound to the random selected set. Full-data and split coverage
 cross nominal at nearly the same $M$ (no gross selection distortion). A mean-calibrated $M$ undercovers,
-with nominal coverage reached near the ninety-fifth percentile of the residual curvature.}
+with nominal coverage reached near the ninety-fifth percentile of the residual violation.}
 \label{fig:calib}
-\end{figure}
-
-\subsection{The screen must match the sensitivity class}\label{sec:divergence}
-
-A curvature screen is not interchangeable with the magnitude screen it replaces, and the difference is
-not cosmetic. Figure~\ref{fig:divergence} constructs the case where the two disagree. A ``linear'' cohort
-has a steep but straight pre-trend, large in level and zero in curvature; a ``curved'' cohort has a
-smaller level but genuine curvature. Under $\Delta^{SD}(M)$ the linear cohort is benign, since the
-interval extrapolates its line and removes it, so its honest bias is zero, while the curved cohort is a
-threat, since curvature is the one feature the interval cannot absorb. A level screen ranks the linear
-cohort as the worse offender and the curvature screen ranks the curved one, so the two screens select
-opposite sets.
-
-The consequence appears in the right panel, which plots honest coverage of the LATT against the assumed
-bound $M$ under each screen. The curvature screen drops the curved cohort, leaving an aggregate with no
-residual curvature, so the FLCI is honest from $M\approx0$. The level screen keeps the curved cohort and
-drops the benign linear one, so its aggregate carries curvature the interval must accommodate: coverage
-is reached only at $M\approx0.035$, a wider and less precise interval, and the benign cohort's scope is
-lost for nothing. Screening on level therefore pays twice, in precision and in scope, for measuring the
-pre-trend in a currency the honest inference does not use. This is the finite-sample face of the
-principle of Section~\ref{sec:select}: the screen should be posed in the same functional the restriction
-class bounds.
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=\textwidth]{curvature_screen.png}
-\caption{The screen must match the sensitivity class. Left: a steep-but-straight pre-trend (large level,
-zero curvature) is benign under $\Delta^{SD}(M)$, while a gentler curved pre-trend is the threat. Right:
-honest LATT coverage versus $M$. The curvature screen drops the curved cohort and is honest at
-$M\approx0$; the level screen keeps it, needs $M\approx0.035$, and drops the benign linear cohort.}
-\label{fig:divergence}
 \end{figure}
 
 \subsection{Panel confirmation}
@@ -623,14 +584,14 @@ $M\approx0$; the level screen keeps it, needs $M\approx0.035$, and drops the ben
 The exercises above all draw coefficients from their asymptotic distribution with a known covariance,
 which is the right setting in which to check identification and inference mechanics but is not the
 setting a practitioner faces. We therefore repeat the estimand demonstration on generated panel data.
-Individual outcomes are simulated for a staggered adoption design with a curved confound and
+Individual outcomes are simulated for a staggered adoption design with a level confound and
 idiosyncratic noise. Cohort-level event-study coefficients are then estimated from genuine
 difference-in-differences contrasts against a common never-treated comparison group, screened on
-curvature exactly as in the reduced-form model, and their covariance is estimated from the data rather
+flatness exactly as in the reduced-form model, and their covariance is estimated from the data rather
 than supplied.
 
 The conclusions are unchanged. Across the informativeness axis the ATT estimator's bias remains flat
-near $+0.66$ while the LATT's bias falls toward zero, reproducing the upper-left panel of
+near $+0.30$ while the LATT's bias falls toward zero, reproducing the upper-left panel of
 Figure~\ref{fig:scope} with estimated rather than known quantities. The estimated covariance is well
 calibrated in the region where selection is effectively deterministic, with the estimated standard error
 matching its Monte Carlo counterpart and coverage near $95\%$ at high informativeness, which confirms
@@ -638,11 +599,10 @@ that the inference machinery is not being flattered by the reduced-form assumpti
 
 One discrepancy is worth reporting because it is informative rather than incidental. At intermediate
 informativeness, where selection is genuinely stochastic, the estimated standard error of the LATT
-understates its Monte Carlo counterpart by an order of magnitude (about $0.015$ against $0.19$ at
-$\phi=0.5$). The gap is the component of variance induced by the randomness of the selection itself: a
-confounded cohort slips into the selected set in about half the samples, shifting the estimate by the
-full violation, and a standard error computed conditional on the realized selected set does not capture
-this. This is an independent confirmation, from the panel side, of
+understates its Monte Carlo counterpart (about $0.016$ against $0.024$ at $\phi=0.75$). The gap is the
+component of variance induced by the randomness of the selection itself, which a standard error computed
+conditional on the realized selected set does not capture. This is an independent confirmation, from the
+panel side, of
 the inferential issues discussed in Section~\ref{sec:approach}: conditioning on a data-dependent
 selection understates uncertainty, which is precisely why the honest object to report is the
 sensitivity interval of Section~\ref{sec:flci} rather than a conventional confidence interval around
@@ -723,6 +683,46 @@ researcher can trade for uniform validity by selecting on independent informatio
 question is a decision-theoretic characterization of the region in which the point-identified LATT
 dominates the set-valued ATT, which would turn the scope condition documented here into a formal
 recommendation.
+
+\appendix
+\section{The curvature refinement}\label{app:curvature}
+
+The main text defines a credible cohort as one with a flat pre-trend and bounds the residual violation by
+its level. A researcher willing to make a stronger assumption can keep more cohorts. Suppose one is
+prepared to trust that a differential trend which is a straight line before treatment would have continued
+as a straight line afterward. Then a cohort whose pre-trend drifts steadily but does not bend is no longer
+disqualified: the drift can be extrapolated and removed, and only the departure from linearity, the
+curvature, threatens the estimate. This pairs the smoothness class
+$\Delta^{SD}(M)=\{\delta:\lvert\delta(e{+}1)-2\delta(e)+\delta(e{-}1)\rvert\le M\}$ of \citet{rambachan2023}
+with a curvature screen,
+$\max_e\lvert\hat\beta_{g,\mathrm{pre}}(e{+}1)-2\hat\beta_{g,\mathrm{pre}}(e)+\hat\beta_{g,\mathrm{pre}}(e{-}1)\rvert\le c$,
+and replaces the raw post-average with the minimum-variance affine estimator that differences out a linear
+pre-trend before extrapolating it \citep{armstrong2018}. The trade is explicit: one buys scope, the
+steep-but-straight cohorts the flatness screen discards, at the cost of the linear-extrapolation
+assumption and a modest variance premium on the estimator.
+
+The same principle that fixes the level screen to the level bound fixes this curvature screen to the
+smoothness class: the screen should be posed in the same functional the sensitivity class bounds. Level
+and curvature are not interchangeable, and Figure~\ref{fig:divergence} makes the difference concrete. A
+``linear'' cohort has a steep but straight pre-trend, large in level and zero in curvature, while a
+``curved'' cohort has a smaller level but genuine curvature. Under $\Delta^{SD}(M)$ the linear cohort is benign,
+since the interval extrapolates its line and removes it, while the curved cohort is the threat. A level
+screen ranks the linear cohort as the worse offender and the curvature screen ranks the curved one, so
+the two screens select opposite sets. The right panel plots honest coverage under each: the curvature
+screen drops the curved cohort and is honest from $M\approx0$, while the level screen keeps it, needs
+$M\approx0.035$, and drops the benign linear cohort for nothing. Screening in the wrong currency pays
+twice, in precision and in scope. The lesson is symmetric: under the smoothness class one screens on
+curvature, exactly as, under the level bound of the main text, one screens on flatness.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{curvature_screen.png}
+\caption{Level and curvature select opposite sets. Left: a steep-but-straight pre-trend (large level,
+zero curvature) is benign under $\Delta^{SD}(M)$, while a gentler curved pre-trend is the threat. Right:
+honest LATT coverage versus the assumed bound. The curvature screen drops the curved cohort and is honest
+at $M\approx0$, while the level screen keeps it, needs $M\approx0.035$, and drops the benign linear cohort.}
+\label{fig:divergence}
+\end{figure}
 
 \bibliographystyle{aer}
 \bibliography{refs}
