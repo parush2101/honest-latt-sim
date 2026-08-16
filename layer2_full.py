@@ -122,6 +122,14 @@ def delta_quadratic(C):
     return np.array([0.5 * C * (e ** 2) for e in np.concatenate([pre_e, post_e])])
 
 
+def flci_level(post_avg, sigma_agg, M, alpha=0.05):
+    """Level-bound FLCI. Estimator = raw post-treatment average (no extrapolation). Under
+    Delta_Level(M)={|delta_post(e)|<=M} the max bias of the post-average is exactly M, so the
+    half-length is cv(M/sigma)*sigma. Returns (center, half). M is in outcome units."""
+    half = cv(M / sigma_agg, alpha) * sigma_agg
+    return post_avg, half
+
+
 def max_abs_second_diff(B_pre):
     """
     Curvature screen statistic: max_e |b(e-1) - 2 b(e) + b(e+1)| over the pre-period.
