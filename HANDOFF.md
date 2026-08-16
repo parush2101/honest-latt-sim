@@ -86,36 +86,50 @@ Nelder-Mead search fails (flat landscape). See `medicaid/medicaid_build.py` for 
   (which already flags uniform-confounding fragility) and the per-cohort event-study plots (which show
   heterogeneous vs uniform confounding by eye). Adding it would also read as defensive. "Less is more."
 
-## Curvature-screen edit — DONE (branch `curvature-screen`)
-**Aligned the screen to curvature.** The screen now keys off the pre-trend's **maximal second
-difference** (`max_e |b(e+1) - 2b(e) + b(e-1)| <= c`, via `layer2_full.max_abs_second_diff`), the same
-functional SD(M) bounds, so selection and inference test the same object. Shipped in Sec 2 and Sec 3.
-- **Sec 2.3:** eq (4) is the second-difference rule; added a principle paragraph (screen must be posed
-  in the same functional the sensitivity class bounds; level and slope are absorbed, curvature is the
-  one feature the FLCI cannot absorb). No application references (per request).
-- **Sec 3 (all sims rebuilt on a unified 4+4 curved event study, curvature screen):**
-  - `tier1.py` (Table 1): ATT bias +0.438, LATT +0.000; sweep 0.137 -> 0.
-  - `master_axis.py` (scope fig): CS flat +0.66, LATT 0.66 -> 0, slipping 5.16 -> 0.
-  - `selection_flci_core.py` + `m_sweep.py`: full vs split cross at nearly the same M (0.052 vs 0.061);
-    residual mean 0.039 / p95 0.057 / max 0.100; mean-calibrated M undercovers (~86%).
-  - `curvature_screen.py` (NEW, Sec 3.6 divergence subsection): level and curvature select opposite
-    sets; curvature honest at M~0, level needs M~0.035 and drops the benign linear cohort.
-  - `tier2.py` (panel confirmation, redesigned to cohorts {6..11} at T=14 for 4 pre-periods): CS flat
-    +0.656, LATT -> 0; Sigma_hat calibrated at high phi; selection-variance understatement now vivid
-    (est SE ~0.015 vs MC sd ~0.19 at phi=0.5).
-- **Key finding baked into the write-up:** a second difference is a noisier functional than a level, so
-  the curvature screen needs more per-cohort precision than the old level screen (sim sigma lowered
-  accordingly). This is the honest cost of aligning the screen to the FLCI.
-- Degenerate guard changed from "keep all" to "keep the single most-credible cohort" (argmin statistic).
+## CURRENT FRAMEWORK — the level bound (branch `curvature-screen`)
+**Definition of PT = flat pre-difference; honest band = level bound.** After building and comparing the
+curvature version (see history below), the author chose the **level/flatness** framing as the main paper.
+- **Screen (Sec 2.3):** flatness, `max_e |beta_pre(e)| <= c` (eq 4). "PT defensible = flat pre-difference,"
+  the direct reading of parallel trends. A footnote points to the appendix for the curvature refinement.
+- **Honest band (Sec 2.4):** the **level bound** `Delta_Level(M) = {|delta_post(e)| <= M}`, estimator =
+  raw post-average (no extrapolation), via `layer2_full.flci_level` (half = cv(M/sigma)*sigma, max bias
+  = M). **M is in outcome units**, so `M*` reads directly as "the size of post-treatment PT violation
+  that would overturn the conclusion." Prop 7 reframed: a FIXED level bound (researcher-set, not anchored
+  to observed pre-trends) is what sidesteps the RM self-undermining.
+- **Sec 3 sims (all on flatness screen + level confound; numbers revert to the paper's originals):**
+  - `tier1.py` (Table 1): ATT +0.267, LATT +0.000; sweep 0.015 -> 0.
+  - `master_axis.py` (scope): CS flat +0.30, LATT 0.30 -> 0, slipping 5.09 -> 0.
+  - Validity (Table 2): level FLCI covers **iff M >= V** (95% at M=V, ~100% above, ~9% below).
+  - `layer2_level_figure.py` -> `layer2_full.png` (Sec 3.4): coverage vs V, width vs M, breakdown
+    `M*=0.84` (outcome units).
+  - `m_sweep.py` (Sec 3.5 calibration): residual violation mean 0.043 / p95 0.057 / max 0.112; full~split
+    cross at M~0.048/0.056; calibrate to worst case not mean.
+  - `tier2.py` (panel): CS flat +0.30, LATT -> 0; Sigma_hat calibrated at high phi; SE understatement
+    est 0.016 vs MC sd 0.024 at phi=0.75 (modest, matches the original).
+- **Nice consequence:** the flatness screen is NOT a noisier functional, so the "curvature screen needs
+  more precision" caveat disappears; sims use normal noise and match the originals.
+- **Appendix A (`app:curvature`, "The curvature refinement"):** the SD(M)/curvature version as an OPT-IN
+  refinement (trust linear extrapolation -> keep drifting cohorts -> screen on curvature, min-variance
+  affine estimator, ~30% wider than the level band on flat cohorts). Houses the level-vs-curvature
+  divergence figure (`curvature_screen.py` -> `curvature_screen.png`).
+
+### History: the curvature version (now demoted to the appendix)
+Earlier this branch made curvature the MAIN screen (eq 4 = second difference, `max_abs_second_diff`),
+rebuilt all sims on a 4+4 curved world (ATT +0.438, scope +0.66), and added the divergence cell as a
+main-text subsection. That is preserved as the appendix refinement. Decision-support prototype
+`level_vs_sd.py` (level band vs min-variance SD) drove the switch: level M* in outcome units (0.83) vs SD
+curvature units (0.09), level ~30% tighter on flat cohorts, both honest.
 
 ## OPEN SEAM — applications (Sec 4) not yet reconciled
-Sec 2/Sec 3 now use the **curvature** screen, but Sec 4 still describes/computes **magnitude** (Medicaid,
-`medicaid_build.py` `maxpre`) and **slope** (Walmart, `walmart_build.py` `preslope`) screens. Deferred
-per user ("will revisit apps"). Reconciling them is the next task. Note the likely Walmart wrinkle: its
-confound is a roughly *linear* endogenous trend, which a curvature screen would NOT flag (linear has zero
-curvature), so Walmart may need a slope-penalizing sensitivity class + slope screen (an instance of the
-"match the screen to the class" principle) rather than a mechanical curvature swap. Inspect before
-committing a narrative.
+Sec 2/Sec 3 now use the **flatness** screen + **level bound**, but Sec 4 still describes the
+**smoothness-class FLCI** and reports `M*=0.24` in curvature units (Medicaid) and the Walmart slope
+screen. Deferred per user ("will revisit apps"). To reconcile: Medicaid/Walmart should report a level-band
+`M*` in outcome units (pp of uninsured; log retail earnings). NOTE Medicaid's `maxpre`/`medicaid_build.py`
+flatness screen already matches; only the FLCI/band and `M*` units change. Walmart's endogenous *linear*
+drift is the awkward case: the level bound would charge the full drift as a violation (large `M*`-killing
+bias), so Walmart may genuinely need the curvature refinement (appendix) or a slope-penalizing band.
+Inspect before committing a narrative. The `did::att_gt` covariance fix (`V_analytical/n_units`) still
+applies to any app re-run.
 
 ## Open / possible future (not committed)
 - Applications may be revisited or changed later (user's call).
