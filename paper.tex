@@ -107,7 +107,7 @@ Its advantage is governed by how informative pre-trends are about post-treatment
 are uninformative, selecting on them buys nothing and the identifying assumption must rest on economic
 context. In that regime the natural relative-magnitudes sensitivity restriction is self-undermining.
 Anchoring its bounds to the observed pre-trends, it reports false precision when those are flat, whereas
-a smoothness restriction, keyed to structure rather than magnitude, is not.
+a fixed restriction, whose bound is set by the researcher rather than read off the pre-trends, is not.
 
 The remainder of the paper is organized as follows. Section~\ref{sec:approach} fixes the staggered-DiD
 setup, defines the credible-subpopulation LATT, and develops its identification, estimation, and
@@ -219,24 +219,23 @@ $\theta_S$ describes and the inferential guarantees available. It takes two form
 regimes of Section~\ref{sec:setup}. Under ex-ante selection, $S$ is fixed before estimation from
 pre-determined covariates, institutional knowledge of which cohorts were plausibly confounded, or an
 independent data split. Under data-driven selection, credibility is read from the estimated
-pre-trends: a cohort enters $S$ when its estimated pre-trend has small curvature,
+pre-trends: a cohort enters $S$ when its estimated pre-trend is close to flat,
 \begin{equation}
-S \;=\; \Big\{\, g : \max_{e<0}\, \big\lvert \hat\beta_{g,\mathrm{pre}}(e{+}1) - 2\,\hat\beta_{g,\mathrm{pre}}(e)
-        + \hat\beta_{g,\mathrm{pre}}(e{-}1)\big\rvert \le c \,\Big\},
+S \;=\; \big\{\, g : \max_{e<0}\, \lvert \hat\beta_{g,\mathrm{pre}}(e)\rvert \le c \,\big\},
 \label{eq:rule}
 \end{equation}
-for a threshold $c$, with the reference period $\hat\beta_{g}(0)=0$ supplying the boundary term.
+for a threshold $c$.
 
-The choice of statistic is not incidental. It is dictated by the honest sensitivity analysis of the next
-subsection, which bounds the residual violation by its curvature, the second difference of the differential
-trend, so the screen is posed in the same currency: it drops cohorts whose pre-trend bends rather than
-those whose pre-trend is merely large or steeply sloped. Under $\Delta^{SD}(M)$ a level shift or a linear
-drift is harmless, since the class constrains only the second difference and the associated interval
-extrapolates a linear pre-trend before differencing it out, so neither survives into the honest bound on
-$\theta_S$. Curvature is the one feature the interval cannot absorb, which is why the screen is keyed to it,
-and keying selection to the same functional the restriction class bounds makes the two stages consistent:
-a stricter $c$ then removes exactly the residual curvature that a smaller $M$ must later dominate, and a
-class built to treat a different feature as the violation would call for a correspondingly different screen.
+This is the direct reading of parallel trends. The assumption is that the treated-comparison difference
+would have stayed constant absent treatment, so a cohort is credible when its pre-treatment difference
+is close to constant, and the screen keeps exactly those. It is posed in the same currency as the honest
+inference of the next subsection, which bounds how far the post-treatment difference could have wandered
+from flat, so selection and inference test one object: the level of the parallel-trends
+violation.\footnote{A researcher willing to trust that a straight pre-trend would have continued linearly
+can relax flatness to approximate linearity, keeping cohorts whose pre-difference drifts steadily but
+does not bend and screening on the pre-trend's curvature, its second difference, instead. This buys scope
+at the cost of the extrapolation assumption, and it pairs with the smoothness sensitivity class rather
+than the level bound below. We develop this refinement in Appendix~\ref{app:curvature}.}
 
 The threshold trades scope
 against credibility: a lax $c$ retains more cohorts but admits larger residual violations, a strict $c$
@@ -282,14 +281,18 @@ vanishes and $\hat\theta_S$ is consistent for $\theta_S$, though not finite-samp
 
 \subsection{Honest inference on the selected set}
 
-Selecting credible cohorts does not by itself deliver parallel trends: a cohort with flat pre-trends
+Selecting credible cohorts does not by itself deliver parallel trends: a cohort with a flat pre-trend
 may still have a nonzero post-treatment differential trend, and selection removes gross offenders but
 not subtle residual violations. We therefore accompany the point estimate with the sensitivity analysis
-of \citet{rambachan2023}, applied to the selected-cohort aggregate event study: one imposes a
+of \citet{rambachan2023}, applied to the selected-cohort aggregate: one imposes a
 restriction $\delta_{S,\mathrm{post}}\in\Delta$ on the residual differential trend and reports the
-implied confidence set for $\theta_S$. We adopt the smoothness class
-$\Delta^{SD}(M)=\{\delta:\lvert\delta_{t+1}-2\delta_t+\delta_{t-1}\rvert\le M\ \forall t\}$, which admits
-the near-optimal fixed-length confidence intervals (FLCIs) of \citet{armstrong2018}.
+implied confidence set for $\theta_S$. Matching the flatness criterion of the screen, we adopt the level
+bound $\Delta^{\mathrm{Level}}(M)=\{\delta:\lvert\delta_{\mathrm{post}}(e)\rvert\le M\ \forall e\}$, which
+asks how far the treated-comparison difference could have wandered from its flat pre-treatment level,
+absent treatment. The estimator is then the raw reweighted post-treatment average, with no extrapolation,
+and the associated fixed-length confidence interval (FLCI) is near-optimal \citep{armstrong2018}. Because
+$M$ is measured in the outcome's own units, the breakdown value $M^\ast$ reads directly: it is the size
+of post-treatment parallel-trends violation that would just overturn the stated conclusion.
 
 Validity depends on the selection regime. Under ex-ante selection $S$ is independent of $\hat\beta$, so
 the uniform validity of \citet{rambachan2023} applies verbatim. Under data-driven selection $S$ is
@@ -330,13 +333,13 @@ These buy validity through independence between selection and estimation rather 
 at some cost in efficiency.
 
 The second issue is that the bound $M$ must accommodate a random selected set. The FLCI at $M$ is valid
-only if the selected set's residual curvature lies in $\Delta^{SD}(M)$. Since that curvature is itself
-random, unconditional coverage requires $M$ to dominate it with high probability.
+only if the selected set's residual violation lies in $\Delta^{\mathrm{Level}}(M)$. Since that violation
+is itself random, unconditional coverage requires $M$ to dominate it with high probability.
 
 \begin{lemma}[Calibration to the random selected set]\label{lem:calib}
-Under data-driven selection, choosing $M$ equal to the mean residual curvature of the selected
+Under data-driven selection, choosing $M$ equal to the mean residual violation of the selected
 aggregate undercovers. Unconditional coverage requires $M$ to exceed the mean and to approach an upper
-quantile of the residual-curvature distribution, with the FLCI's sampling slack providing a partial
+quantile of the residual-violation distribution, with the FLCI's sampling slack providing a partial
 buffer.
 \end{lemma}
 
@@ -353,9 +356,9 @@ method's value is in question.
 The identified-set half-width under $\Delta^{RM}(\bar M)$ is proportional to the observed pre-trend
 magnitude. When pre-trends are uninformative about post-treatment violations, the observed pre-trends
 are small while the true violation need not be, so $\Delta^{RM}(\bar M)$ produces intervals whose width
-tends to zero even as the bias does not, yielding undercoverage. A structural restriction such as
-$\Delta^{SD}(M)$ does not share this defect, since its bound keys off smoothness rather than pre-trend
-magnitude.
+tends to zero even as the bias does not, yielding undercoverage. A fixed restriction such as
+$\Delta^{\mathrm{Level}}(M)$, whose bound is set by the researcher rather than read off the observed
+pre-trends, does not share this defect.
 \end{proposition}
 
 \section{Simulation study}\label{sec:sim}
