@@ -22,21 +22,17 @@
 \maketitle
 
 \begin{abstract}
-\noindent Difference-in-differences practitioners routinely confront parallel trends failing for some
-treated cohorts but not others. Existing responses keep the average treatment effect on the treated
-(ATT) as the target. Heterogeneity-robust estimators point-identify it while maintaining parallel
-trends, and sensitivity methods bound it, so both are compromised, through bias or a wide set,
-exactly when some cohorts offend. We propose a different response: change the estimand. We define a
-credible-subpopulation local ATT (LATT), the treatment effect for the subpopulation of cohorts
-whose parallel trends assumption is credible, and show it is point-identified precisely when the full
-ATT is not. Estimation is a reweighting of standard group-time effects toward credible cohorts,
-combined with honest sensitivity bounds on the residual violation of the selected set. The method's
-advantage over the ATT grows with how informative pre-trends are about post-treatment violations.
-Simulations confirm that the LATT recovers a clean effect where the ATT estimator is biased and that
-honest sensitivity bounds restore coverage where point estimates collapse. An application to the
-local house-price effect of the shale boom illustrates the method: a significantly positive pooled
-estimate is shown to rest entirely on cohorts whose prices were already trending before onset, and the
-credible subpopulation reveals no house-price effect once these are set aside.
+\noindent When parallel trends fails for some treated cohorts but not others, the usual responses keep
+the average treatment effect on the treated (ATT) as the target: heterogeneity-robust estimators
+point-identify it and sensitivity methods bound it, but both are compromised, by bias or a wide set,
+exactly when some cohorts offend. We instead change the estimand. The credible-subpopulation local ATT
+(LATT) is the effect for the subpopulation of cohorts whose parallel trends is credible; it is
+point-identified precisely when the ATT is not, estimated by reweighting standard group-time effects
+toward those cohorts, and paired with honest sensitivity bounds on the residual violation of the
+selected set. The method's advantage grows with how informative pre-trends are about post-treatment
+violations, as simulations confirm. In an application, a significantly positive pooled estimate of the
+shale boom's effect on local house prices proves to rest on cohorts already trending before onset; the
+credible subpopulation reveals no effect.
 \end{abstract}
 
 \medskip
@@ -49,18 +45,16 @@ credible subpopulation reveals no house-price effect once these are set aside.
 
 \section{Introduction}
 
-Difference-in-differences is among the most widely used research designs in empirical economics. Its
-credibility rests on the parallel trends assumption: absent treatment, the average outcomes of treated
-and comparison units would have evolved in parallel. Researchers are rarely certain that this holds,
-and it has become standard practice to assess it by testing for pre-treatment differences in trends.
+Difference-in-differences is among the most widely used research designs in empirical economics, and its
+credibility rests on the parallel trends assumption: absent treatment, treated and comparison units would
+have evolved in parallel. Researchers assess it by testing for pre-treatment differences in trends, but
+that practice is fragile. Pre-trends tests are often underpowered against economically meaningful
+violations \citep{bilinski2020, freyaldenhoven2019, kahnlang2020, roth2022pretrends}; conditioning on
+passing them induces a pre-test selection bias \citep{roth2022pretrends}; and even a clean pre-period
+does not guarantee a clean post-period, since nothing prevents a confound from arriving at the moment of
+treatment \citep{kahnlang2020}.
 
-That practice is fragile. Pre-trends tests are often underpowered against economically meaningful
-violations \citep{bilinski2020, freyaldenhoven2019, kahnlang2020, roth2022pretrends}. Conditioning the
-analysis on passing them induces a pre-test selection bias \citep{roth2022pretrends}. And even a clean
-pre-period does not guarantee a clean post-period, since nothing prevents a confound from arriving at
-the moment of treatment \citep{kahnlang2020}.
-
-A large recent literature, surveyed in \citet{roth2023trending} and \citet{dechaisemartin2023survey},
+A growing literature, surveyed in \citet{roth2023trending} and \citet{dechaisemartin2023survey},
 has responded by relaxing parallel trends itself. Building on \citet{manski2018}, \citet{rambachan2023}
 abandon exact parallel trends and instead bound how different the post-treatment violations can be from
 the observed pre-trends, reporting a uniformly valid confidence set for the ATT in place of a point
@@ -83,28 +77,25 @@ treatment effect under limited overlap \citep{crump2009}, and of overlap weighti
 each case one trades the original estimand for a credibly-identified effect on a selected
 subpopulation, and defends the trade by characterizing whom the subpopulation comprises.
 
-We develop the staggered-DiD instance of this principle. We define the credible-subpopulation LATT, the
-weighted average of group-time effects restricted to cohorts whose parallel trends assumption is
-credible, and show that it is point-identified even when the full ATT is not, because the violations
-of the excluded cohorts do not enter it. Estimation is a transparent reweighting of the group-time
-effects of \citet{callaway2021}, which we adopt for concreteness. Because the method only restricts the
-aggregation to a subset of cohorts, it applies to any heterogeneity-robust estimator that delivers
-group-time effects.\footnote{These estimators \citep{callaway2021, sun2021, borusyak2024,
-dechaisemartin2020} repair the aggregation failure of two-way fixed effects under staggered adoption
-\citep{goodmanbacon2021}, whose implicit weights can turn negative under treatment-effect heterogeneity.
-That repair concerns aggregation, not identification: they maintain parallel trends and are biased when
-it fails, which is the failure we address.} The credibility of a cohort is assessed from its pre-trends,
-so that the reweighting is a data-dependent selection, and we treat inference on the selected set with
-the sensitivity machinery of \citet{rambachan2023}.
+We develop the staggered-DiD instance of this principle. The credible-subpopulation LATT is the weighted
+average of group-time effects restricted to cohorts whose parallel trends is credible, and it is
+point-identified even when the full ATT is not, since the excluded cohorts' violations do not enter it.
+Estimation is a transparent reweighting of standard group-time effects \citep{callaway2021}, so the
+method applies to any heterogeneity-robust estimator that delivers them.\footnote{These estimators
+\citep{callaway2021, sun2021, borusyak2024, dechaisemartin2020} repair the aggregation failure of
+two-way fixed effects under staggered adoption \citep{goodmanbacon2021}, whose implicit weights can turn
+negative under treatment-effect heterogeneity. That repair concerns aggregation, not identification:
+they maintain parallel trends and are biased when it fails, which is the failure we address.} Credibility
+is assessed from the pre-trends, making the reweighting a data-dependent selection, whose inference we
+treat with the sensitivity machinery of \citet{rambachan2023}.
 
-The method thus occupies a distinct point on a frontier trading off credibility, precision, and scope:
-relative to a heterogeneity-robust point estimate of the ATT it targets a subpopulation to buy back
-credibility, and relative to a HonestDiD set for the ATT it recovers a sharper, point-identified answer
-to a narrower question. Its advantage is governed by how informative pre-trends are about
-post-treatment violations; when they are uninformative, selecting on them buys nothing and the
-identifying assumption must rest on economic context. In that regime the natural relative-magnitudes
-restriction is self-undermining, reporting false precision when pre-trends are flat, whereas a fixed
-restriction set by the researcher is not.
+The method thus occupies a distinct point on a frontier of credibility, precision, and scope: against a
+point estimate of the ATT it buys credibility by narrowing the target, and against a HonestDiD set for
+the ATT it buys a sharper, point-identified answer. Its advantage is governed by how informative
+pre-trends are about post-treatment violations: when they are uninformative, selection buys nothing and
+the assumption must rest on economic context, and there the relative-magnitudes restriction is
+self-undermining, reporting false precision when pre-trends are flat where a fixed, researcher-set bound
+is not.
 
 The remainder of the paper is organized as follows. Section~\ref{sec:approach} fixes the staggered-DiD
 setup, defines the credible-subpopulation LATT, and develops its identification, estimation, and
@@ -187,29 +178,20 @@ equals the corresponding weighted average of causal effects, which is $\theta_S$
 outside $S$ receive zero weight, so their differential trends do not enter.
 \end{proof}
 
-Proposition~\ref{prop:id} is elementary, but it is the paper's central point. By changing the
-target to the credible subpopulation, one converts a partially-identified problem (the ATT, when some
-cohorts violate parallel trends) into a point-identified one, at the cost of answering a narrower
-question. This is exactly the trade made by \citet{imbens1994}, \citet{crump2009}, and \citet{li2018}
-in other settings, and it carries the same interpretive obligation: one must characterize the
-subpopulation $S$ that the estimand describes.
+Proposition~\ref{prop:id} is elementary, but it is the paper's central point: changing the target to the
+credible subpopulation converts a partially-identified problem into a point-identified one, at the cost
+of a narrower question whose subpopulation $S$ must then be characterized.
 
-The construction uses staggered timing only to supply the groups. What Proposition~\ref{prop:id}
-requires is a partition of the treated population into groups whose parallel trends can each be
-assessed, together with the event-study structure that makes such assessment possible. Adoption cohorts
-are the natural groups under staggered timing, and their credibility heterogeneity comes for free from
-the variation in when and why units adopt. In a non-staggered design, where all treated units share one
-treatment date, the same construction applies with groups defined by covariates or geography, provided
-two conditions that staggering would otherwise supply are argued rather than assumed: the groups must
-differ in the credibility of their parallel trends, and there must be enough pre-periods to estimate
-each group's pre-trend rather than chase noise. The groups should accordingly be subpopulations large
-enough to assess, not individual units, whose pre-trends are too noisy to select on without
-reintroducing the pre-test bias in its most severe form. Read this way, the method is the
-parallel-trends analogue of selecting on overlap \citep{crump2009, li2018}: one trims to the
-subpopulation on which the identifying assumption is credible, using pre-trends in place of the
-propensity score.
+The construction uses staggered timing only to supply the groups; what it requires is a partition of the
+treated population into groups whose parallel trends can each be assessed. Adoption cohorts are the
+natural groups, and their credibility heterogeneity comes for free from the variation in when and why
+units adopt. In a non-staggered design the same construction applies with groups defined by covariates or
+geography, provided the groups differ in credibility and there are enough pre-periods to estimate each
+group's pre-trend rather than chase noise. The groups should accordingly be subpopulations large enough
+to assess, not individual units, whose pre-trends are too noisy to select on without reviving the
+pre-test bias in its most severe form.
 
-\subsection{Selecting the credible cohorts}\label{sec:select}
+\subsection{Selection and estimation}\label{sec:select}
 
 The selection rule $R$ maps the data to the set $S$, and its form fixes both which subpopulation
 $\theta_S$ describes and the inferential guarantees available. It takes two forms, matching the two
@@ -229,10 +211,13 @@ is close to constant, and the screen keeps exactly those. It is posed in the sam
 inference of the next subsection, which bounds how far the post-treatment difference could have wandered
 from flat, so selection and inference test one object: the level of the parallel-trends
 violation.\footnote{A researcher willing to trust that a straight pre-trend would have continued linearly
-can relax flatness to approximate linearity, keeping cohorts whose pre-difference drifts steadily but
-does not bend and screening on the pre-trend's curvature, its second difference, instead. This buys scope
-at the cost of the extrapolation assumption, and it pairs with the smoothness sensitivity class rather
-than the level bound below. We develop this refinement in Appendix~\ref{app:curvature}.}
+can relax flatness to approximate linearity, screening instead on the pre-trend's curvature (its second
+difference) and pairing it with the smoothness sensitivity class of \citet{rambachan2023} and a
+linear-extrapolation estimator \citep{armstrong2018}. This buys the steep-but-straight cohorts that
+flatness discards, at the cost of the extrapolation assumption. The principle is the same in either
+currency: the screen should be posed in whichever functional the sensitivity class bounds, flatness with
+the level bound and curvature with the smoothness class, since level and curvature rank cohorts
+differently and select different sets.}
 
 The threshold trades scope
 against credibility: a lax $c$ retains more cohorts but admits larger residual violations, a strict $c$
@@ -253,15 +238,13 @@ tolerance, in the spirit of the non-inferiority tests of \citet{bilinski2020}, r
 value of a pre-trends test, which would reinherit the low power that motivates the paper. The
 application of Section~\ref{sec:app} reports such a path.
 
-\subsection{Estimation}
-
-The estimator $\hat\theta_S$ replaces population objects by their \citet{callaway2021} sample
-analogues and reweights over the selected cohorts.
+The estimator $\hat\theta_S$ simply reweights, over the selected cohorts, the sample group-time effects
+of whichever heterogeneity-robust estimator one uses; nothing below depends on that choice.
 
 \begin{proposition}[Consistency and efficiency]\label{prop:cons}
-Under ex-ante selection and the regularity conditions of \citet{callaway2021}, $\hat\theta_S$ is
-consistent for $\theta_S$. If parallel trends holds for all cohorts, $\hat\theta_S$ is consistent for
-the ATT, with an efficiency loss relative to estimators that use all cohorts.
+Under ex-ante selection and the regularity conditions of the underlying group-time estimator,
+$\hat\theta_S$ is consistent for $\theta_S$. If parallel trends holds for all cohorts, $\hat\theta_S$ is
+consistent for the ATT, with an efficiency loss relative to estimators that use all cohorts.
 \end{proposition}
 
 Under data-driven selection the rule~\eqref{eq:rule} couples $S$ to the estimation errors: a confounded
@@ -599,12 +582,14 @@ a practitioner would report as a clear positive effect of the boom. But the pool
 trending before treatment, and the effect is inherited from the dropped cohorts: restricted to the
 credible subpopulation, the event study is flat both before and after onset, and the LATT is $-0.2$ log
 points, indistinguishable from zero. The gap between the two, $+6.9$ log points, is itself sharply
-estimated ($t=5$). Panel (c) traces the estimate as the screen is relaxed, the credibility path of
-Section~\ref{sec:select}: it rises from zero toward the pooled value as the trending cohorts are
-readmitted, so the positive pooled figure is precisely the contribution of the cohorts whose pre-trends
-make them least credible. The level bound confirms that this is not a knife-edge of the threshold; the
-credible estimate stays bounded near zero across it, and the pooled figure cannot be restored without
-readmitting the non-credible cohorts rather than by positing a residual violation.
+estimated ($t=5$). The near-zero reading is not an artifact of a hand-picked threshold. Panel (c) traces
+the estimate along the credibility path of Section~\ref{sec:select}: it stays flat and close to zero
+across the whole range of genuinely flat pre-trends, cohorts with $\max_e|\hat\beta_{g,\mathrm{pre}}(e)|$
+below about $0.03$, and climbs toward the pooled $+6.7$ only once the threshold is loosened enough to
+readmit cohorts whose own pre-trends, around $0.07$--$0.08$, are as large as the effect in question.
+Reading the LATT at that lax end simply rebuilds the pooled estimate out of its least credible cohorts;
+the positive figure survives only by abandoning the credibility standard, not by tolerating a residual
+violation of the credible set.
 
 \begin{figure}[t]
 \centering
@@ -641,46 +626,6 @@ researcher can trade for uniform validity by selecting on independent informatio
 question is a decision-theoretic characterization of the region in which the point-identified LATT
 dominates the set-valued ATT, which would turn the scope condition documented here into a formal
 recommendation.
-
-\appendix
-\section{The curvature refinement}\label{app:curvature}
-
-The main text defines a credible cohort as one with a flat pre-trend and bounds the residual violation by
-its level. A researcher willing to make a stronger assumption can keep more cohorts. Suppose one is
-prepared to trust that a differential trend which is a straight line before treatment would have continued
-as a straight line afterward. Then a cohort whose pre-trend drifts steadily but does not bend is no longer
-disqualified: the drift can be extrapolated and removed, and only the departure from linearity, the
-curvature, threatens the estimate. This pairs the smoothness class
-$\Delta^{SD}(M)=\{\delta:\lvert\delta(e{+}1)-2\delta(e)+\delta(e{-}1)\rvert\le M\}$ of \citet{rambachan2023}
-with a curvature screen,
-$\max_e\lvert\hat\beta_{g,\mathrm{pre}}(e{+}1)-2\hat\beta_{g,\mathrm{pre}}(e)+\hat\beta_{g,\mathrm{pre}}(e{-}1)\rvert\le c$,
-and replaces the raw post-average with the minimum-variance affine estimator that differences out a linear
-pre-trend before extrapolating it \citep{armstrong2018}. The trade is explicit: one buys scope, the
-steep-but-straight cohorts the flatness screen discards, at the cost of the linear-extrapolation
-assumption and a modest variance premium on the estimator.
-
-The same principle that fixes the level screen to the level bound fixes this curvature screen to the
-smoothness class: the screen should be posed in the same functional the sensitivity class bounds. Level
-and curvature are not interchangeable, and Figure~\ref{fig:divergence} makes the difference concrete. A
-``linear'' cohort has a steep but straight pre-trend, large in level and zero in curvature, while a
-``curved'' cohort has a smaller level but genuine curvature. Under $\Delta^{SD}(M)$ the linear cohort is benign,
-since the interval extrapolates its line and removes it, while the curved cohort is the threat. A level
-screen ranks the linear cohort as the worse offender and the curvature screen ranks the curved one, so
-the two screens select opposite sets. The right panel plots honest coverage under each: the curvature
-screen drops the curved cohort and is honest from $M\approx0$, while the level screen keeps it, needs
-$M\approx0.035$, and drops the benign linear cohort for nothing. Screening in the wrong currency pays
-twice, in precision and in scope. The lesson is symmetric: under the smoothness class one screens on
-curvature, exactly as, under the level bound of the main text, one screens on flatness.
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=\textwidth]{curvature_screen.png}
-\caption{Level and curvature select opposite sets. Left: a steep-but-straight pre-trend (large level,
-zero curvature) is benign under $\Delta^{SD}(M)$, while a gentler curved pre-trend is the threat. Right:
-honest LATT coverage versus the assumed bound. The curvature screen drops the curved cohort and is honest
-at $M\approx0$, while the level screen keeps it, needs $M\approx0.035$, and drops the benign linear cohort.}
-\label{fig:divergence}
-\end{figure}
 
 \bibliographystyle{aer}
 \bibliography{refs}
