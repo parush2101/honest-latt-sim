@@ -107,8 +107,16 @@ resB = run_scenario(
 
 
 # ---------------- Sample-size sweep (Scenario A) ----------------
+# Two LATT columns separate the two sources of the pre-test residual bias:
+#   LATT (full)  = select on the SAME pre-coefficients used for estimation
+#                  -> carries channel (a) noisy-screen admission of confounded
+#                     cohorts AND channel (b) same-sample pre/post error correlation.
+#   LATT (split) = select on an INDEPENDENT pre-draw (sample splitting / data carving)
+#                  -> pre/post errors are independent, so channel (b) is removed and
+#                     only channel (a) remains.
+# The full-minus-split gap is the channel-(b) conditional-estimation distortion.
 print("\n\n===== Sample-size sweep (Scenario A): LATT bias vanishes, CS bias persists? =====")
-print(f"  {'sigma':>8} | {'CS mean':>8} {'CS bias':>8} | {'LATT mean':>9} {'LATT bias':>9} | {'avg#sel':>7}")
+print(f"  {'sigma':>8} | {'CS bias':>8} | {'LATT full':>9} {'LATT split':>10} {'chan(b)':>8} | {'avg#sel':>7}")
 for s in [0.40, 0.30, 0.20, 0.12, 0.07, 0.03]:
     G = 6
     theta = np.ones(G)
@@ -118,15 +126,21 @@ for s in [0.40, 0.30, 0.20, 0.12, 0.07, 0.03]:
         for g in range(G)])
     Lc = np.linalg.cholesky(within_cov(s, 0.5, npre + npost))
     NR = 20000
-    cs = np.empty(NR); la = np.empty(NR); nsel = np.empty(NR)
+    cs = np.empty(NR); la = np.empty(NR); la_sp = np.empty(NR); nsel = np.empty(NR)
     for i in range(NR):
         B = means + (Lc @ rng.standard_normal((npre + npost, G))).T
+        Bsel = means + (Lc @ rng.standard_normal((npre + npost, G))).T   # independent split-sample draw
         post_eff = B[:, npre:] @ l_post
         stat = np.max(np.abs(B[:, :npre]), axis=1)
+        stat_sp = np.max(np.abs(Bsel[:, :npre]), axis=1)
         sel = stat <= 0.40
         if sel.sum() == 0: sel = (stat == stat.min())
-        cs[i] = post_eff.mean(); la[i] = post_eff[sel].mean(); nsel[i] = sel.sum()
-    print(f"  {s:8.2f} | {cs.mean():8.4f} {cs.mean()-1.0:+8.4f} | "
-          f"{la.mean():9.4f} {la.mean()-1.0:+9.4f} | {nsel.mean():7.2f}")
+        sel_sp = stat_sp <= 0.40
+        if sel_sp.sum() == 0: sel_sp = (stat_sp == stat_sp.min())
+        cs[i] = post_eff.mean(); la[i] = post_eff[sel].mean(); la_sp[i] = post_eff[sel_sp].mean()
+        nsel[i] = sel.sum()
+    bfull = la.mean()-1.0; bsplit = la_sp.mean()-1.0
+    print(f"  {s:8.2f} | {cs.mean()-1.0:+8.4f} | "
+          f"{bfull:+9.4f} {bsplit:+10.4f} {bfull-bsplit:+8.4f} | {nsel.mean():7.2f}")
 
 print("\nDone.")

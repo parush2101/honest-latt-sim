@@ -142,10 +142,15 @@ with a confounding shock.
 Finally, we distinguish two regimes for how cohorts are judged credible, because they carry different
 inferential guarantees. Under ex-ante (or independent) selection, credibility is decided from
 pre-determined covariates, institutional knowledge, or an independent data split, so that the selected
-set is statistically independent of the estimation errors in $\hat\beta$. Under data-driven
+set is a fixed $S$ statistically independent of the estimation errors in $\hat\beta$. Under data-driven
 selection, credibility is assessed from the realized pre-trends $\hat\beta_{\mathrm{pre}}$, so that the
-selected set depends on the estimation sample. The distinction is immaterial for the estimand and its
-identification, but central for inference, and we treat it explicitly below.
+selected set $\hat S$ is random and depends on the estimation sample, with a deterministic population
+counterpart $S^\ast$, the set a population pre-trend statistic would select. The identification argument
+below holds for any set held fixed, and so identifies the random target $\theta_{\hat S}$ conditional on the
+realized $\hat S$. Identifying the fixed population parameter $\theta_{S^\ast}$ instead requires $\hat S$ to
+recover $S^\ast$, a selection-consistency condition we return to under inference
+(Proposition~\ref{prop:oracle}). The distinction is thus minor for identification but central for inference,
+and we treat it explicitly below.
 
 \subsection{Estimand and identification}
 
@@ -153,28 +158,31 @@ Let $S$ denote a set of cohorts judged to have credible parallel trends, produce
 $R$ that we specify below. We define the target as the treatment effect for that subpopulation.
 
 \begin{definition}[Credible-subpopulation LATT]
-For cohort weights $w_g>0$ (e.g.\ proportional to cohort size), the credible-subpopulation local ATT is
+For cohort weights $w_g>0$ (e.g.\ proportional to cohort size) and a within-cohort aggregation $a(\cdot)$, a
+linear functional of a cohort's post-treatment vector (a fixed event-time, selecting one coordinate, or an
+average over post-treatment periods), the credible-subpopulation local ATT is
 \begin{equation}
 \theta_S \;=\; \frac{\sum_{g\in S} w_g\,\mathrm{ATT}(g,\cdot)}{\sum_{g\in S} w_g},
+\qquad \mathrm{ATT}(g,\cdot)\;=\;a\!\left(\tau_{g,\mathrm{post}}\right),
 \end{equation}
-where $\mathrm{ATT}(g,\cdot)$ is any within-cohort aggregation of interest (a fixed event-time, or an
-average over post-treatment periods).
+the aggregated causal effect of cohort $g$.
 \end{definition}
 
 The value of the target is that it is identified under a weaker condition than the ATT.
 
 \begin{proposition}[Identification]\label{prop:id}
 If parallel trends holds for every $g\in S$, i.e.\ $\delta_{g,\mathrm{post}}=0$ for all $g\in S$, then
-$\theta_S$ is point-identified by the reweighted group-time effects,
-$\theta_S = \big(\sum_{g\in S} w_g\,\beta_{g,\mathrm{post}}\big)/\sum_{g\in S} w_g$, and this holds
+$\theta_S$ is point-identified by the reweighted aggregated group-time effects,
+$\theta_S = \big(\sum_{g\in S} w_g\,a(\beta_{g,\mathrm{post}})\big)/\sum_{g\in S} w_g$, and this holds
 irrespective of whether $\delta_{g,\mathrm{post}}\neq 0$ for cohorts $g\notin S$.
 \end{proposition}
 
 \begin{proof}
 For $g\in S$, $\beta_{g,\mathrm{post}} = \tau_{g,\mathrm{post}}+\delta_{g,\mathrm{post}}
-= \tau_{g,\mathrm{post}}$ by the hypothesis and \eqref{eq:decomp}. The reweighted sum over $S$ therefore
-equals the corresponding weighted average of causal effects, which is $\theta_S$ by definition. Cohorts
-outside $S$ receive zero weight, so their differential trends do not enter.
+= \tau_{g,\mathrm{post}}$ by the hypothesis and \eqref{eq:decomp}, so $a(\beta_{g,\mathrm{post}})
+= a(\tau_{g,\mathrm{post}}) = \mathrm{ATT}(g,\cdot)$ by linearity of $a$. The reweighted sum over $S$
+therefore equals the weighted average of the aggregated causal effects, which is $\theta_S$ by definition.
+Cohorts outside $S$ receive zero weight, so their differential trends do not enter.
 \end{proof}
 
 Proposition~\ref{prop:id} is elementary, but it is the paper's central point. Changing the target to the
@@ -233,13 +241,17 @@ strict $c$ the reverse. Because a cohort's pre- and post-treatment coefficient e
 samples, rule~\eqref{eq:rule} makes $S$ random and dependent on the estimation sample, which is the
 source of the pre-test bias below and of the inference subtleties that follow it.
 
-We do not recommend committing to a single $c$. Because the sensitivity interval of
-Section~\ref{sec:approach} is applied to whichever set $c$ selects and must dominate that set's residual
-pre-trend, a stricter $c$ yields a cleaner set that a smaller bound $M$ suffices to cover, while a laxer
-$c$ buys scope at the cost of a larger $M$. The threshold therefore trades scope for precision rather
-than credibility for nothing, and the honest object to report is the estimand together with its interval
-traced as a function of $c$, the selection analogue of the breakdown curve we report for $M$. A reader
-then sees the scope-credibility-precision frontier directly and need not trust a single cutoff. When a
+We do not recommend committing to a single $c$. The sensitivity interval of
+Section~\ref{sec:approach} is applied to whichever set $c$ selects, and its bound $M$ must dominate that
+set's residual \emph{post}-treatment violation, so the effect of $c$ on the required $M$ runs through how
+far screening on flat pre-trends also flattens post-trends. When pre-trends are informative about
+post-treatment violations, a stricter $c$ yields a cleaner set that a smaller $M$ suffices to cover, while
+a laxer $c$ buys scope at the cost of a larger $M$, so the threshold trades scope for precision rather than
+credibility for nothing. When they are not, tightening $c$ need not shrink the post-treatment violation and
+the required $M$ can be nonmonotone in $c$. Either way the honest object to report is the estimand together
+with its interval traced as a function of $c$, the selection analogue of the breakdown curve we report for
+$M$. A reader then sees the scope-credibility-precision frontier directly and need not trust a single
+cutoff or a presumed monotone mapping. When a
 single value is nonetheless wanted, we recommend calibrating it to negligibility rather than to
 significance, setting $c$ to the largest pre-trend that would bias $\theta_S$ by less than a stated
 tolerance, in the spirit of the non-inferiority tests of \citet{bilinski2020}, rather than to a critical
@@ -338,14 +350,17 @@ only if the selected set's residual violation lies in $\Delta^{\mathrm{Level}}(M
 is itself random, unconditional coverage requires $M$ to dominate it with high probability.
 
 \begin{lemma}[Calibration to the random selected set]\label{lem:calib}
-Under data-driven selection, choosing $M$ equal to the mean residual violation of the selected
-aggregate undercovers. Unconditional coverage requires $M$ to exceed the mean and to approach an upper
-quantile of the residual-violation distribution, with the FLCI's sampling slack providing a partial
-buffer.
+Under data-driven selection the selected aggregate's residual violation is random, and the FLCI's
+unconditional coverage is governed by the joint distribution of that violation, the selection event, and
+the sampling error. When the violation's dispersion is non-negligible relative to the FLCI's sampling
+slack, setting $M$ to the mean residual violation undercovers, because the realized violation exceeds $M$
+in a nontrivial fraction of samples, and restoring nominal unconditional coverage requires $M$ to exceed
+the mean and approach an upper quantile of the residual-violation distribution, with the sampling slack
+providing a partial buffer. When the slack instead dominates the dispersion the buffer alone can suffice.
 \end{lemma}
 
-The practical implication is that $M$ should be calibrated to the residual violation of a typical
-selected set, not to its mean.
+The practical implication, in the regime where the violation's spread is the binding consideration, is that
+$M$ should be calibrated to the residual violation of a typical selected set, not to its mean.
 
 Finally, we caution against one otherwise-natural choice of $\Delta$. The relative-magnitudes
 restriction $\Delta^{RM}(\bar M)$ of \citet{rambachan2023}, following \citet{manski2018}, bounds
@@ -369,9 +384,10 @@ design and estimate both the coefficients and their covariance from the data, wh
 conclusions survive realistic estimation. Unless stated otherwise, results are averages over eight to
 twenty thousand replications.
 
-The cohort structure is the same throughout. There are twelve cohorts, of which some are clean,
-with $\delta_g=0$, and the remainder confounded, with a nonzero differential trend. Every cohort
-is given the same true treatment effect, normalized to one. This normalization is deliberate, making
+The cohort structure follows a common template. Some cohorts are clean, with $\delta_g=0$, and the
+remainder confounded, with a nonzero differential trend, and Table~\ref{tab:dgp} gives the count and
+clean-confounded split used in each exercise. Every cohort is given the same true treatment effect,
+normalized to one. This normalization is deliberate, making
 the true ATT and the true LATT both equal to one, so that any departure of an estimator from one is
 attributable to a violation of parallel trends rather than to treatment-effect heterogeneity. It
 therefore isolates the identification problem that the paper is about.
@@ -382,9 +398,13 @@ treated-comparison difference shifting by $V>0$ in the post-period and by $\phi 
 a scalar $\phi\ge 0$ we call the informativeness parameter and that is the master axis of the study. When
 $\phi=0$ the confound is flat before treatment and no pre-trend rule can detect it, and as $\phi$ grows
 the pre-period shift announces it and it becomes detectable. Because $V$ is the post-treatment violation it
-is directly comparable to the level bound $M$ of $\Delta^{\mathrm{Level}}(M)$, which makes the validity
-statement ``covers if and only if $M\ge V$'' checkable, and it makes $\phi$ the operational version of
-the informativeness of pre-trends discussed in Section~\ref{sec:approach}.
+is directly comparable to the level bound $M$ of $\Delta^{\mathrm{Level}}(M)$. In the controlled coverage
+exercise below the aggregate being tested carries this violation exactly, which makes the boundary
+statement ``covers if and only if $M\ge V$'' checkable. More generally, coverage requires only that $M$
+dominate the selected aggregate's violation, which for a set mixing clean and confounded cohorts is weakly
+below the largest single-cohort $V$, so $M\ge V$ is sufficient and is necessary only in the worst case of an
+all-confounded set. This also makes $\phi$ the operational version of the informativeness of pre-trends
+discussed in Section~\ref{sec:approach}.
 
 The selection rule is the flatness screen, posed in the same currency as the honest inference, so cohort
 $g$ is retained if its estimated pre-trend is close to flat, $\max_e\lvert\hat\beta_{g,\mathrm{pre}}(e)\rvert\le c$.
@@ -393,6 +413,32 @@ estimator would, and the LATT averages it over the selected cohorts only. Becaus
 a cohort's pre- and post-treatment coefficients are correlated, the selection is genuinely data-dependent
 in the sense of Section~\ref{sec:approach}, and the pre-test bias of Proposition~\ref{prop:pretest} is
 operative.
+
+\begin{table}[t]
+\centering
+\caption{Simulation parameters. Every exercise uses a four-period pre and four-period post event study with
+reference period zero, equal cohort weights, and true effect one for every cohort. The reduced-form model
+draws coefficients directly, $\hat\beta\sim\mathcal{N}(\tau+\delta,\Sigma)$ with within-cohort AR(1)
+covariance $\Sigma_{ij}=s^2\rho^{|i-j|}$. The panel model draws individual untreated outcomes
+$Y_{it}(0)=\delta_g(e)+\epsilon_{it}$, $\epsilon\sim\mathcal{N}(0,\sigma_\epsilon^2)$, for $500$ treated
+units per cohort and $1500$ shared controls over $T=14$ periods, and estimates the coefficients and their
+covariance from the data.}
+\label{tab:dgp}
+\begin{tabular}{lcccc}
+\toprule
+& Estimand & Scope & Honest cov.\ & Panel \\
+& (Table~\ref{tab:tier1}) & (Fig.~\ref{fig:scope}) & (Table~\ref{tab:flci}, Fig.~\ref{fig:layer2}) & (Sec.~\ref{sec:calib}) \\
+\midrule
+Cohorts (clean/confounded) & $6$ ($4/2$) & $12$ ($6/6$) & --- & $6$ ($3/3$) \\
+Post-treatment violation $V$ & $0.8$ & $0.6$ & $0.3,\ 0.6$ & $0.6$ \\
+Informativeness $\phi$ & $1.0$ & $[0,1.5]$ & --- & $[0,1.5]$ \\
+Screen threshold $c$ & $0.40$ & $0.40$ & --- & $0.40$ \\
+Noise & $s{=}0.03\text{--}0.40$ & $\sigma{=}0.20$ & $\sigma_{\mathrm{agg}}{=}0.10$ & $\sigma_\epsilon{=}0.5$ \\
+Pre/post correlation $\rho$ & $0.5$ & $0.5$ & --- & estimated \\
+Replications & $20{,}000$ & $8{,}000$ & $4{,}000$ & $2000\text{--}3000$ \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \subsection{Recovering a clean effect where the ATT is biased}
 
@@ -404,29 +450,38 @@ removes those cohorts from the average and, by Proposition~\ref{prop:id}, their 
 enter the estimand at all.
 
 The lower panel of the table sweeps the sampling noise $s$, and is the more informative comparison.
-As precision improves the LATT's bias falls monotonically from $+0.015$ to zero, and this residual is the
-pre-test bias of Proposition~\ref{prop:pretest}, which arises because the selection is made on the same
-noisy pre-trends used for estimation, and it vanishes as the selection rule becomes reliable. The ATT
-estimator's bias, by contrast, is frozen at $+0.267$ regardless of precision. The contrast is the
-paper's basic point in miniature, the LATT facing a noise problem, which more data cures, whereas the
-ATT estimator faces a wrong-target problem, which no amount of data cures.
+As precision improves the LATT's bias falls monotonically from $+0.013$ to zero, and this residual is the
+pre-test bias of Proposition~\ref{prop:pretest}, which vanishes as the selection rule becomes reliable.
+Two sources could in principle generate it, a noisy screen that admits genuinely confounded cohorts, which
+would persist even under independent selection, and the correlation between a cohort's pre- and
+post-treatment sampling errors, which distorts the retained cohorts' estimates only under same-sample
+selection. The final column isolates the two by selecting on an independent pre-trend draw. It tracks the
+full-sample column almost exactly, so the residual is the first source, admission of confounded cohorts,
+and the second is negligible here because the two-sided flatness screen conditions the retained estimates
+symmetrically. The ATT estimator's bias, by contrast, is frozen at $+0.267$ regardless of precision. The
+contrast is the paper's basic point in miniature, the LATT facing a noise problem, which more data cures,
+whereas the ATT estimator faces a wrong-target problem, which no amount of data cures.
 
 \begin{table}[t]
 \centering
-\caption{The estimand demonstration (reduced-form model). True effect $=1$ for all cohorts.}
+\caption{The estimand demonstration (reduced-form model). True effect $=1$ for all cohorts. In the lower
+panel LATT (full) selects on the same pre-trends used for estimation, while LATT (split) selects on an
+independent draw. Their near-equality shows the residual bias is admission of confounded cohorts, not
+same-sample conditioning.}
 \label{tab:tier1}
-\begin{tabular}{lcc}
+\begin{tabular}{lccc}
 \toprule
-& ATT & LATT \\
+& ATT & LATT & LATT \\
+& & (full) & (split) \\
 \midrule
-Point estimate & $1.267$ & $1.000$ \\
-Bias vs.\ truth & $+0.267$ & $+0.000$ \\
+Point estimate & $1.267$ & $1.000$ & \\
+Bias vs.\ truth & $+0.267$ & $+0.000$ & \\
 \midrule
-\multicolumn{3}{l}{Bias as sampling noise $s$ falls}\\
-$s=0.40$ & $+0.266$ & $+0.015$ \\
-$s=0.20$ & $+0.266$ & $+0.001$ \\
-$s=0.12$ & $+0.267$ & $-0.000$ \\
-$s=0.03$ & $+0.267$ & $-0.000$ \\
+\multicolumn{4}{l}{Residual LATT bias as sampling noise $s$ falls}\\
+$s=0.40$ & $+0.265$ & $+0.013$ & $+0.014$ \\
+$s=0.20$ & $+0.267$ & $-0.001$ & $-0.000$ \\
+$s=0.12$ & $+0.267$ & $-0.000$ & $-0.000$ \\
+$s=0.03$ & $+0.267$ & $+0.000$ & $+0.000$ \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -513,7 +568,8 @@ restriction, whose bounds would shrink toward zero in exactly that case and deli
 
 \begin{table}[t]
 \centering
-\caption{FLCI coverage of the causal target (reduced-form model), valid iff $M\ge V$.}
+\caption{FLCI coverage of the causal target (reduced-form model), for an aggregate whose violation equals
+$V$, valid iff $M\ge V$.}
 \label{tab:flci}
 \begin{tabular}{cccc}
 \toprule
