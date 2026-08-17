@@ -91,6 +91,24 @@ print(f"LATT(c={C}, cohorts {CRED}, n={sum(len(byco[g]) for g in CRED)})={latt0:
 print(f"Divergence={att0-latt0:.4f} se={divse:.4f} t={(att0-latt0)/divse:.2f}")
 print("maxpre:",{g:round(mps[g],3) for g in cohorts})
 
+# ---- level-bound honest sensitivity on the credible aggregate (Delta_Level(M)) ----
+# FLCI half-width = cv(M/sigma)*sigma, sigma = SE of the selected-aggregate post-average.
+# M and M* are in log-point (outcome) units.
+from scipy.stats import norm as _norm
+from scipy.optimize import brentq as _brentq
+def _cv(t,alpha=0.05):
+    t=abs(t); f=lambda q:(_norm.cdf(q-t)-_norm.cdf(-q-t))-(1-alpha)
+    return _brentq(f,0.0,t+12.0)
+def _flci_half(M,sig,alpha=0.05): return _cv(M/sig,alpha)*sig if sig>0 else float('nan')
+sig_latt=lattse
+half_c=_flci_half(C,sig_latt); lo_c,hi_c=latt0-half_c,latt0+half_c   # FLCI at screen tolerance M=c
+Mg=np.linspace(0,0.25,5001)
+reach=[M for M in Mg if latt0+_flci_half(M,sig_latt)>=att0]          # band upper edge reaches pooled ATT
+Mstar=reach[0] if reach else float('nan')
+print(f"[level] sigma_LATT={sig_latt:.4f}")
+print(f"[level] LATT FLCI at M=c={C}: [{lo_c:.3f},{hi_c:.3f}]  (contains 0, pooled ATT={att0:.3f} outside)")
+print(f"[level] breakdown M*={Mstar:.3f} log pts ({Mstar/C:.1f}x the screen c) to reconcile LATT with pooled ATT")
+
 # ---------- FIGURE ----------
 plt.rcParams.update({'font.size':10,'axes.spines.top':False,'axes.spines.right':False})
 fig,ax=plt.subplots(1,3,figsize=(13,3.9))

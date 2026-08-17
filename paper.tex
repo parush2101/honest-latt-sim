@@ -26,9 +26,9 @@
 effect on the treated (ATT), an average over all of them, is exactly the target that becomes hard to
 recover. We propose changing the estimand rather than defending it. The credible-subpopulation local ATT
 (LATT) is the effect for the subpopulation of cohorts whose parallel trends is credible, and it is
-point-identified precisely when the ATT is not. It is estimated by reweighting standard group-time
-effects toward those cohorts, and paired with honest sensitivity bounds on the residual violation of the
-selected set. The method's advantage grows with how informative pre-trends are about post-treatment
+point-identified under parallel trends for the selected cohorts alone, a weaker requirement that can hold
+when the ATT's fails. It is estimated by reweighting standard group-time effects toward those cohorts, and
+paired with honest sensitivity bounds on the residual violation that a pre-trend screen cannot rule out. The method's advantage grows with how informative pre-trends are about post-treatment
 violations, as simulations confirm. In an application, a significantly positive pooled estimate of the
 shale boom's effect on local house prices proves to rest on cohorts already trending before onset, and
 the credible subpopulation reveals no effect.
@@ -77,7 +77,8 @@ comprises.
 
 We develop the staggered-DiD instance of this principle. The credible-subpopulation LATT is the weighted
 average of group-time effects restricted to cohorts whose parallel trends is credible, and it is
-point-identified even when the full ATT is not, since the excluded cohorts' violations do not enter it.
+point-identified under parallel trends for the selected cohorts alone, a weaker requirement than the ATT's
+that can hold when the latter fails, since the excluded cohorts' violations do not enter it.
 Estimation is a transparent reweighting of standard group-time effects \citep{callaway2021}, so the
 method applies to any heterogeneity-robust estimator that delivers them.\footnote{These estimators
 \citep{callaway2021, sun2021, borusyak2024, dechaisemartin2020} repair the aggregation failure of
@@ -176,9 +177,18 @@ equals the corresponding weighted average of causal effects, which is $\theta_S$
 outside $S$ receive zero weight, so their differential trends do not enter.
 \end{proof}
 
-Proposition~\ref{prop:id} is elementary, but it is the paper's central point: changing the target to the
-credible subpopulation converts a partially-identified problem into a point-identified one, at the cost
-of a narrower question whose subpopulation $S$ must then be characterized.
+Proposition~\ref{prop:id} is elementary, but it is the paper's central point. Changing the target to the
+credible subpopulation weakens the identifying requirement from parallel trends on all cohorts to parallel
+trends on $S$, which can hold when the former fails, at the cost of a narrower question whose subpopulation
+$S$ must then be characterized. The weakening is genuine but conditional, and two things must be kept
+separate. The identifying content is the substantive restriction $\delta_{g,\mathrm{post}}=0$ for $g\in S$,
+an assumption about post-treatment trends. The flatness screen of Section~\ref{sec:select} is a statistical
+classification rule that supplies evidence for that restriction from the pre-period, not the restriction
+itself, since a cohort flat before treatment may still drift after it. Point identification of the causal
+$\theta_S$ thus holds only when the restriction does, and the screen cannot certify it. We therefore treat
+the point-identified $\theta_S$ as a benchmark and pair it with the honest sensitivity bounds developed
+below, which bound the residual post-treatment violation the screen leaves behind and, in doing so,
+return a set rather than a point when that violation is nonzero.
 
 The construction uses staggered timing only to supply the groups. What it requires is a partition of the
 treated population into groups whose parallel trends can each be assessed. Adoption cohorts are the
@@ -241,8 +251,11 @@ of whichever heterogeneity-robust estimator one uses, and nothing below depends 
 
 \begin{proposition}[Consistency and efficiency]\label{prop:cons}
 Under ex-ante selection and the regularity conditions of the underlying group-time estimator,
-$\hat\theta_S$ is consistent for $\theta_S$. If parallel trends holds for all cohorts, $\hat\theta_S$ is
-consistent for the ATT, with an efficiency loss relative to estimators that use all cohorts.
+$\hat\theta_S$ is consistent for $\theta_S$. If in addition parallel trends holds for all cohorts,
+$\hat\theta_S$ is consistent for the ATT when either treatment effects are homogeneous or $S$ comprises all
+cohorts, and otherwise for the selected-cohort LATT, which differs from the ATT by the gap between the
+selected- and full-population weighted averages of the cohort effects. In either case there is an
+efficiency loss relative to estimators that use all cohorts.
 \end{proposition}
 
 Under data-driven selection the rule~\eqref{eq:rule} couples $S$ to the estimation errors: a confounded
@@ -253,8 +266,15 @@ definite source and a definite fate.
 \begin{proposition}[Pre-test bias]\label{prop:pretest}
 Under data-driven selection, $\hat\theta_S$ carries a finite-sample bias equal to the weighted average
 of the admitted confounded cohorts' post-treatment differential trends, times their probability of
-admission. As per-cohort information grows this admission probability tends to zero, so the bias
-vanishes and $\hat\theta_S$ is consistent for $\theta_S$, though not finite-sample unbiased.
+admission. Whether it vanishes turns on detectability. Call a confounded cohort detectable if its
+population pre-trend statistic exceeds the threshold, $\max_{e<0}\lvert\beta_{g,\mathrm{pre}}(e)\rvert>c$,
+and undetectable if it is flat in the pre-period, $\max_{e<0}\lvert\beta_{g,\mathrm{pre}}(e)\rvert\le c$,
+yet violates parallel trends in the post-period. As per-cohort information grows, a detectable cohort's
+admission probability tends to zero and its contribution to the bias vanishes, whereas an undetectable
+cohort's admission probability tends to one and its contribution persists at every sample size. Hence
+$\hat\theta_S$ is consistent for $\theta_S$ if and only if every confounded cohort is detectable, and
+otherwise retains an asymptotic bias equal to the residual violation of the undetectable cohorts, which is
+the identification gap that the honest inference of the next subsection bounds.
 \end{proposition}
 
 \subsection{Honest inference on the selected set}
@@ -278,12 +298,15 @@ random, and two issues arise. The first is post-selection inference. When cohort
 from the threshold, selection is asymptotically harmless.
 
 \begin{proposition}[Selection consistency and oracle coverage]\label{prop:oracle}
-Suppose the statistic on which selection is based is consistent for its population counterpart, and that
+Suppose the statistic on which selection is based is consistent for its population counterpart, that
 the following separation condition holds, that there exists $\epsilon>0$ such that, for every cohort, the
-population value of that statistic lies at distance at least $\epsilon$ from the threshold $c$. Then
-$P(\hat S = S^\ast)\to 1$, where $S^\ast$ denotes the population credible set, and the FLCI computed on
-the estimated set $\hat S$ has the same asymptotic coverage as the oracle interval computed on $S^\ast$,
-and in particular attains its nominal level.
+population value of that statistic lies at distance at least $\epsilon$ from the threshold $c$, and that the
+population credible set's residual violation satisfies the maintained restriction
+$\delta_{S^\ast,\mathrm{post}}\in\Delta^{\mathrm{Level}}(M)$. Then $P(\hat S = S^\ast)\to 1$, where
+$S^\ast$ denotes the population credible set, and the FLCI computed on the estimated set $\hat S$ has the
+same asymptotic coverage as the oracle interval computed on $S^\ast$. Selection consistency delivers this
+equivalence to the oracle interval, and the maintained restriction delivers the oracle interval's nominal
+coverage of the causal target, so the two together give nominal coverage.
 \end{proposition}
 
 \begin{proof}
@@ -293,7 +316,7 @@ gives $P(\hat S\neq S^\ast)\to 0$. On the complementary event the estimator, its
 the resulting interval coincide exactly with their oracle counterparts computed on the non-random set
 $S^\ast$. The two sequences therefore share a limiting distribution, and the coverage of the interval
 computed on $\hat S$ converges to that of the oracle interval, which is nominal by the validity of
-\citet{rambachan2023} applied to a fixed set.
+\citet{rambachan2023} applied to a fixed set whose residual violation lies in $\Delta^{\mathrm{Level}}(M)$.
 \end{proof}
 
 Two caveats attach to Proposition~\ref{prop:oracle}. First, the separation condition is untestable, and
@@ -566,7 +589,14 @@ trending before treatment, and the effect is inherited from the dropped cohorts.
 credible subpopulation, the three cohorts whose pre-trends are essentially flat (the screen at
 $c\approx0.03$), the event study is flat both before and after onset, and the LATT is $-0.2$ log points,
 indistinguishable from zero. The gap between the two, $+6.9$ log points, is itself sharply
-estimated ($t=5$). The near-zero reading is not an artifact of a hand-picked threshold. Panel (c) traces
+estimated ($t=5$). Honest inference confirms the reading rather than resting on the point estimate.
+Applying the level bound of Section~\ref{sec:approach} to the credible aggregate at $M$ equal to the screen
+tolerance $c\approx0.03$, the largest residual post-treatment violation the screen leaves room for, the
+LATT's fixed-length interval runs from $-5.9$ to $+5.5$ log points, which contains zero and excludes the
+pooled $+6.7$. The breakdown value is $M^\ast\approx4.2$ log points, so reconciling the credible near-zero
+reading with the pooled effect would require countenancing a post-treatment violation about $1.4$ times the
+screen tolerance and larger than any retained cohort's own pre-trend. The near-zero reading is not an artifact of a
+hand-picked threshold. Panel (c) traces
 the estimate along the credibility path of Section~\ref{sec:select}, and it stays flat and close to zero
 across the whole range of genuinely flat pre-trends, cohorts with $\max_e|\hat\beta_{g,\mathrm{pre}}(e)|$
 below about $0.03$, and climbs toward the pooled $+6.7$ only once the threshold is loosened enough to
@@ -598,9 +628,10 @@ in the cohorts the screen flags.
 
 We have argued that when parallel trends fails for some treated cohorts, a productive response is to
 change the estimand rather than to defend or bound the ATT. The credible-subpopulation LATT is
-point-identified precisely when the ATT is not, is estimated by a transparent reweighting of standard
-group-time effects, and can be accompanied by honest sensitivity bounds on the residual violation of
-the selected set. This is a specific instance of the general principle, familiar from instrumental
+point-identified under parallel trends for the selected cohorts alone, a condition that can hold when the
+ATT's fails, is estimated by a transparent reweighting of standard group-time effects, and can be
+accompanied by honest sensitivity bounds on the residual violation that the pre-trend screen cannot rule
+out. This is a specific instance of the general principle, familiar from instrumental
 variables and limited overlap, of retreating to a credibly-identified subpopulation.
 
 The method delivers a sharp answer where the ATT estimator is biased and its sensitivity set is wide,
