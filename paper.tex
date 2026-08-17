@@ -53,7 +53,7 @@ passing them induces a pre-test selection bias \citep{roth2022pretrends}, and ev
 does not guarantee a clean post-period, since nothing prevents a confound from arriving at the moment of
 treatment \citep{kahnlang2020}.
 
-A growing literature, surveyed in \citet{roth2023trending} and \citet{dechaisemartin2023survey},
+A growing literature, surveyed in \citet{roth2023trending},
 has responded by relaxing parallel trends itself. Building on \citet{manski2018}, \citet{rambachan2023}
 abandon exact parallel trends and instead bound how different the post-treatment violations can be from
 the observed pre-trends, reporting a uniformly valid confidence set for the ATT in place of a point
@@ -475,7 +475,7 @@ contamination left to correct.)
 \caption{Scope condition. Everything is governed by pre-trend informativeness. The ATT estimator's
 bias is constant, and the LATT's advantage is the gap between the lines. Causal-coverage collapse at low
 informativeness is an identification gap (surviving cohorts still violate parallel trends), not
-selection distortion, since sample-splitting collapses identically.}
+selection distortion, since sample-splitting collapses just as badly.}
 \label{fig:scope}
 \end{figure}
 
@@ -610,9 +610,9 @@ residual violation of the credible set.
 \includegraphics[width=\textwidth]{fracking_diagnostic.png}
 \caption{The shale boom and county house prices. (a) Cohort credibility map, the maximum pre-treatment
 violation by onset cohort with the flatness screen, where the later, trending cohorts are dropped. (b)
-Event study, all cohorts (pooled ATT) versus the credible subpopulation (LATT) at the illustrative
+Event study, all cohorts (pooled estimate) versus the credible subpopulation (LATT) at the illustrative
 threshold $c\approx0.03$, with $95\%$ bands. (c) The credibility path, the LATT as the screen threshold
-$c$ is relaxed, near zero across the flat-pre-trend cohorts and rising toward the pooled ATT only as
+$c$ is relaxed, near zero across the flat-pre-trend cohorts and rising toward the pooled estimate only as
 trending cohorts are readmitted.}
 \label{fig:frack}
 \end{figure}
