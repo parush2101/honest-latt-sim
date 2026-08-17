@@ -524,27 +524,16 @@ panel is the sensitivity/breakdown curve, with $M^\ast$ in outcome units.}
 
 Two questions remain for the data-driven regime: whether choosing the selected set from the same data
 distorts the sensitivity interval, and how to choose $M$ when the selected set, and hence its residual
-violation, is random. Figure~\ref{fig:calib} addresses both. Its right panel shows the residual
-violation of the selected aggregate across replications: it is spread and multi-modal, running from zero
-to about $0.06$ with a thin tail out to $0.11$, each mode a different number of borderline cohorts
-surviving the screen. This is the content of Lemma~\ref{lem:calib}: the object a fixed $M$ must dominate
-is a random variable, so a bound at its mean is exceeded in a substantial share of samples. The left
-panel plots coverage against $M$ for the full-data and sample-splitting procedures; the two cross the
-nominal level at nearly the same bound ($M\approx0.048$ and $0.056$), so data-dependent selection
-introduces no gross distortion and splitting buys little, consistent with the pointwise reading of
-\citet{leeb2005}. Setting $M$ at the mean residual violation ($0.043$) undercovers; nominal coverage is
-reached near the ninety-fifth percentile ($0.057$) and well below the maximum ($0.112$). The
-recommendation follows: calibrate $M$ to the residual violation of a typical selected set, not its
-average, and treat it as a floor.
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=\textwidth]{m_sweep.png}
-\caption{Calibrating the sensitivity bound to the random selected set. Full-data and split coverage
-cross nominal at nearly the same $M$ (no gross selection distortion). A mean-calibrated $M$ undercovers,
-with nominal coverage reached near the ninety-fifth percentile of the residual violation.}
-\label{fig:calib}
-\end{figure}
+violation, is random. On the first, coverage against $M$ for the full-data and sample-splitting
+procedures crosses the nominal level at nearly the same bound ($M\approx0.048$ and $0.056$), so
+data-dependent selection introduces no gross distortion and splitting buys little, consistent with the
+pointwise reading of \citet{leeb2005}. On the second, the residual violation of the selected aggregate is
+not a constant but a spread, multi-modal random variable across replications, running from zero to about
+$0.06$ with a thin tail to $0.11$, each mode a different number of borderline cohorts surviving the
+screen; this is the content of Lemma~\ref{lem:calib}. A fixed $M$ must dominate it: setting $M$ at the
+mean residual violation ($0.043$) undercovers, while nominal coverage is reached near the ninety-fifth
+percentile ($0.057$) and well below the maximum ($0.112$). The recommendation follows: calibrate $M$ to
+the residual violation of a typical selected set, not its average, and treat it as a floor.
 
 Finally, we repeat the estimand demonstration on generated panel data, where individual outcomes are
 simulated for a staggered design with a level confound and idiosyncratic noise, cohort event-study
