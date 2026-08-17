@@ -64,12 +64,11 @@ A large recent literature, surveyed in \citet{roth2023trending} and \citet{decha
 has responded by relaxing parallel trends itself. Building on \citet{manski2018}, \citet{rambachan2023}
 abandon exact parallel trends and instead bound how different the post-treatment violations can be from
 the observed pre-trends, reporting a uniformly valid confidence set for the ATT in place of a point
-estimate. A Bayesian variant \citep{kwonroth2024} instead places a prior on the violation $\delta$,
-calibrated from the pre-trends by empirical Bayes, to sharpen the set into a posterior mean and credible
-interval. Both keep the ATT as the target and use the pre-trends to extrapolate the violation across
-periods. Our method uses them to select across cohorts. In non-staggered designs with a long pre-period,
-\citet{dechaisemartin2026} instead ranks the post-treatment difference-in-differences against the
-distribution of the pre-treatment ones, replacing parallel trends with a stability restriction.
+estimate. A Bayesian variant \citep{kwonroth2024} places an empirical-Bayes prior on the violation $\delta$ to
+sharpen the set into a posterior mean and credible interval, and \citet{dechaisemartin2026} instead
+ranks the post-treatment difference-in-differences against the pre-treatment ones. All keep the ATT as
+the target and use the pre-trends to extrapolate the violation across periods; our method uses them to
+select across cohorts.
 
 The ATT is where a structural limitation appears. When parallel trends
 fails for some cohorts but holds for others, the ATT, an average over all treated cohorts including the
@@ -91,24 +90,21 @@ of the excluded cohorts do not enter it. Estimation is a transparent reweighting
 effects of \citet{callaway2021}, which we adopt for concreteness. Because the method only restricts the
 aggregation to a subset of cohorts, it applies to any heterogeneity-robust estimator that delivers
 group-time effects.\footnote{These estimators \citep{callaway2021, sun2021, borusyak2024,
-dechaisemartin2020} were developed to repair the aggregation failure of two-way fixed effects under
-staggered adoption, whose implicit weights on group-time effects can turn negative when treatment
-effects are heterogeneous \citep{goodmanbacon2021, dechaisemartin2020, sun2021}. That repair concerns
-aggregation rather than identification: these estimators maintain parallel trends and are biased when it
-fails, which is the failure we address.} The credibility of a cohort is assessed from its pre-trends,
+dechaisemartin2020} repair the aggregation failure of two-way fixed effects under staggered adoption
+\citep{goodmanbacon2021}, whose implicit weights can turn negative under treatment-effect heterogeneity.
+That repair concerns aggregation, not identification: they maintain parallel trends and are biased when
+it fails, which is the failure we address.} The credibility of a cohort is assessed from its pre-trends,
 so that the reweighting is a data-dependent selection, and we treat inference on the selected set with
 the sensitivity machinery of \citet{rambachan2023}.
 
-The method thus occupies a distinct point on a frontier trading off credibility, precision, and scope.
-Relative to a heterogeneity-robust point estimate of the ATT, it targets a subpopulation to buy back
-credibility. Relative to a HonestDiD set for the ATT, it recovers a sharper, point-identified answer to
-a narrower question.
-
-Its advantage is governed by how informative pre-trends are about post-treatment violations. When they
-are uninformative, selecting on them buys nothing and the identifying assumption must rest on economic
-context. In that regime the natural relative-magnitudes sensitivity restriction is self-undermining.
-Anchoring its bounds to the observed pre-trends, it reports false precision when those are flat, whereas
-a fixed restriction, whose bound is set by the researcher rather than read off the pre-trends, is not.
+The method thus occupies a distinct point on a frontier trading off credibility, precision, and scope:
+relative to a heterogeneity-robust point estimate of the ATT it targets a subpopulation to buy back
+credibility, and relative to a HonestDiD set for the ATT it recovers a sharper, point-identified answer
+to a narrower question. Its advantage is governed by how informative pre-trends are about
+post-treatment violations; when they are uninformative, selecting on them buys nothing and the
+identifying assumption must rest on economic context. In that regime the natural relative-magnitudes
+restriction is self-undermining, reporting false precision when pre-trends are flat, whereas a fixed
+restriction set by the researcher is not.
 
 The remainder of the paper is organized as follows. Section~\ref{sec:approach} fixes the staggered-DiD
 setup, defines the credible-subpopulation LATT, and develops its identification, estimation, and
@@ -541,35 +537,22 @@ panel is the sensitivity/breakdown curve, with $M^\ast$ in outcome units.}
 \label{fig:layer2}
 \end{figure}
 
-\subsection{Selection does not distort the bounds, but calibration must respect randomness}\label{sec:calib}
+\subsection{Selection, calibration, and panel confirmation}\label{sec:calib}
 
-Two questions remain for the data-driven regime. Does the fact that the selected set was chosen using
-the same data distort the sensitivity interval, and how should the bound $M$ be chosen given that the
-selected set, and hence its residual violation, is random? Figure~\ref{fig:calib} answers both, and its
-two panels are best read in reverse order.
-
-The right panel displays the distribution of the residual violation of the selected aggregate across
-replications. It is visibly spread and multi-modal, its mass running from zero to about $0.06$ with a
-thin tail out to $0.11$. Each mode corresponds to a different number of borderline cohorts surviving the
-screen in that replication. This is the concrete content of Lemma~\ref{lem:calib}: the object that a fixed bound
-$M$ must dominate is not a constant but a random variable, and a bound chosen to sit at its mean will
-be exceeded in a substantial share of samples.
-
-The left panel confirms the consequence and settles the distortion question. Coverage is plotted
-against $M$ for the full-data procedure and for sample-splitting. The two curves lie close to one another
-and cross the nominal level at nearly the same bound, the full-data procedure at $M\approx0.048$ and the
-split at $M\approx0.056$. Data-dependent selection therefore introduces no gross distortion of the FLCI
-here, and splitting buys little on this account. The small residual gap reflects splitting's use of half
-the data, and it is consistent with the pointwise, as opposed to worst-case, reading of \citet{leeb2005}
-discussed in Section~\ref{sec:approach}.
-
-Turning to calibration, the vertical reference lines mark the
-mean, the ninety-fifth percentile and the maximum of the residual-violation distribution. Setting $M$
-at the mean, $0.043$, leaves coverage below nominal; reaching $95\%$ requires $M\approx0.048$, near the
-ninety-fifth percentile $0.057$ and well below the maximum $0.112$, the shortfall being absorbed by the
-sampling slack already built into the interval. The practical recommendation follows
-directly: calibrate the sensitivity bound to the residual violation of a typical selected set,
-not to its average, and treat the resulting bound as a floor rather than a target.
+Two questions remain for the data-driven regime: whether choosing the selected set from the same data
+distorts the sensitivity interval, and how to choose $M$ when the selected set, and hence its residual
+violation, is random. Figure~\ref{fig:calib} addresses both. Its right panel shows the residual
+violation of the selected aggregate across replications: it is spread and multi-modal, running from zero
+to about $0.06$ with a thin tail out to $0.11$, each mode a different number of borderline cohorts
+surviving the screen. This is the content of Lemma~\ref{lem:calib}: the object a fixed $M$ must dominate
+is a random variable, so a bound at its mean is exceeded in a substantial share of samples. The left
+panel plots coverage against $M$ for the full-data and sample-splitting procedures; the two cross the
+nominal level at nearly the same bound ($M\approx0.048$ and $0.056$), so data-dependent selection
+introduces no gross distortion and splitting buys little, consistent with the pointwise reading of
+\citet{leeb2005}. Setting $M$ at the mean residual violation ($0.043$) undercovers; nominal coverage is
+reached near the ninety-fifth percentile ($0.057$) and well below the maximum ($0.112$). The
+recommendation follows: calibrate $M$ to the residual violation of a typical selected set, not its
+average, and treat it as a floor.
 
 \begin{figure}[t]
 \centering
@@ -580,34 +563,19 @@ with nominal coverage reached near the ninety-fifth percentile of the residual v
 \label{fig:calib}
 \end{figure}
 
-\subsection{Panel confirmation}
-
-The exercises above all draw coefficients from their asymptotic distribution with a known covariance,
-which is the right setting in which to check identification and inference mechanics but is not the
-setting a practitioner faces. We therefore repeat the estimand demonstration on generated panel data.
-Individual outcomes are simulated for a staggered adoption design with a level confound and
-idiosyncratic noise. Cohort-level event-study coefficients are then estimated from genuine
-difference-in-differences contrasts against a common never-treated comparison group, screened on
-flatness exactly as in the reduced-form model, and their covariance is estimated from the data rather
-than supplied.
-
-The conclusions are unchanged. Across the informativeness axis the ATT estimator's bias remains flat
-near $+0.30$ while the LATT's bias falls toward zero, reproducing the upper-left panel of
-Figure~\ref{fig:scope} with estimated rather than known quantities. The estimated covariance is well
-calibrated in the region where selection is effectively deterministic, with the estimated standard error
-matching its Monte Carlo counterpart and coverage near $95\%$ at high informativeness, which confirms
-that the inference machinery is not being flattered by the reduced-form assumption of a known $\Sigma$.
-
-One discrepancy is worth reporting because it is informative rather than incidental. At intermediate
-informativeness, where selection is genuinely stochastic, the estimated standard error of the LATT
-understates its Monte Carlo counterpart (about $0.016$ against $0.024$ at $\phi=0.75$). The gap is the
-component of variance induced by the randomness of the selection itself, which a standard error computed
-conditional on the realized selected set does not capture. This is an independent confirmation, from the
-panel side, of
-the inferential issues discussed in Section~\ref{sec:approach}: conditioning on a data-dependent
-selection understates uncertainty, which is precisely why the honest object to report is the
-sensitivity interval of Section~\ref{sec:flci} rather than a conventional confidence interval around
-the point estimate.
+Finally, we repeat the estimand demonstration on generated panel data, where individual outcomes are
+simulated for a staggered design with a level confound and idiosyncratic noise, cohort event-study
+coefficients are estimated from genuine difference-in-differences contrasts against a never-treated
+group, and their covariance is estimated rather than supplied. The conclusions are unchanged: across the
+informativeness axis the ATT estimator's bias stays flat near $+0.30$ while the LATT's falls toward
+zero, reproducing Figure~\ref{fig:scope} with estimated quantities, and the estimated standard error
+matches its Monte Carlo counterpart where selection is effectively deterministic. One discrepancy is
+informative: at intermediate informativeness, where selection is stochastic, the estimated standard
+error understates its Monte Carlo counterpart ($0.016$ against $0.024$ at $\phi=0.75$), the missing
+component being the variance induced by the randomness of selection, which a standard error conditional
+on the realized set does not capture. This confirms, from the panel side, that conditioning on a
+data-dependent selection understates uncertainty, and why the honest object to report is the sensitivity
+interval of Section~\ref{sec:flci} rather than a conventional confidence interval.
 
 \section{Empirical application}\label{sec:app}
 
