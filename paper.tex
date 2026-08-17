@@ -237,9 +237,9 @@ differently and select different sets.}
 
 The threshold trades scope
 against credibility, with a lax $c$ retaining more cohorts but admitting larger residual violations and a
-strict $c$ the reverse. Because a cohort's pre- and post-treatment coefficient errors are correlated in finite
-samples, rule~\eqref{eq:rule} makes $S$ random and dependent on the estimation sample, which is the
-source of the pre-test bias below and of the inference subtleties that follow it.
+strict $c$ the reverse. Because rule~\eqref{eq:rule} reads $S$ off the noisy estimates $\hat\beta_{\mathrm{pre}}$, the selected set
+is random and dependent on the estimation sample, which is the source of the pre-test bias below and of the
+inference subtleties that follow it.
 
 We do not recommend committing to a single $c$. The sensitivity interval of
 Section~\ref{sec:approach} is applied to whichever set $c$ selects, and its bound $M$ must dominate that
@@ -409,8 +409,8 @@ discussed in Section~\ref{sec:approach}.
 The selection rule is the flatness screen, posed in the same currency as the honest inference, so cohort
 $g$ is retained if its estimated pre-trend is close to flat, $\max_e\lvert\hat\beta_{g,\mathrm{pre}}(e)\rvert\le c$.
 The estimator of the ATT averages the post-treatment effect over all cohorts, as a heterogeneity-robust
-estimator would, and the LATT averages it over the selected cohorts only. Because the sampling errors of
-a cohort's pre- and post-treatment coefficients are correlated, the selection is genuinely data-dependent
+estimator would, and the LATT averages it over the selected cohorts only. Because the screen reads the selected
+set off the same noisy pre-trends, the selection is genuinely data-dependent
 in the sense of Section~\ref{sec:approach}, and the pre-test bias of Proposition~\ref{prop:pretest} is
 operative.
 
@@ -694,8 +694,9 @@ The method delivers a sharp answer where the ATT estimator is biased and its sen
 at the price of a narrower, subpopulation target whose composition must be described rather than
 assumed. Its advantage is contingent on pre-trends being informative about post-treatment violations.
 Where they are not, only economic context can carry the assumption. Under data-driven selection the
-estimator carries a vanishing pre-test bias and a pointwise, rather than uniform, guarantee, which a
-researcher can trade for uniform validity by selecting on independent information. The principal open
+estimator carries a pre-test bias that vanishes as pre-trends grow informative and a pointwise, rather than
+uniform, guarantee, which a researcher can trade for uniform validity by selecting on independent
+information. The principal open
 question is a decision-theoretic characterization of the region in which the point-identified LATT
 dominates the set-valued ATT, which would turn the scope condition documented here into a formal
 recommendation.
