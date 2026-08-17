@@ -160,7 +160,7 @@ $R$ that we specify below. We define the target as the treatment effect for that
 \begin{definition}[Credible-subpopulation LATT]
 For cohort weights $w_g>0$ (e.g.\ proportional to cohort size) and a within-cohort aggregation $a(\cdot)$, a
 linear functional of a cohort's post-treatment vector (a fixed event-time, selecting one coordinate, or an
-average over post-treatment periods), the credible-subpopulation local ATT is
+average over post-treatment periods), the credible-subpopulation local ATT, defined for any nonempty $S$, is
 \begin{equation}
 \theta_S \;=\; \frac{\sum_{g\in S} w_g\,\mathrm{ATT}(g,\cdot)}{\sum_{g\in S} w_g},
 \qquad \mathrm{ATT}(g,\cdot)\;=\;a\!\left(\tau_{g,\mathrm{post}}\right),
@@ -673,12 +673,15 @@ trending cohorts are readmitted.}
 \label{fig:frack}
 \end{figure}
 
-The reading is that the boom's apparent effect on house prices is a pre-existing trend in the counties
-that adopt late, not a causal effect, and a near-zero net effect is what the offsetting amenity and
-disamenity channels of local energy development would predict \citep{muehlenbachs2015}. The application
-shows the method working in the direction opposite to point-identification, not recovering an effect the
-pooled estimate misses but withdrawing one it spuriously reports, and locating that withdrawal exactly
-in the cohorts the screen flags.
+The reading is that the pooled effect reflects a pre-existing trend in the counties that adopt late rather
+than a credibly causal effect, and a near-zero net effect for the credible subpopulation is what the
+offsetting amenity and disamenity channels of local energy development would predict
+\citep{muehlenbachs2015}. The method identifies the effect for the credible cohorts alone, and the excess
+in the dropped cohorts blends their steep pre-trends with any genuine difference in their treatment
+effects, a mixture the design cannot separate and need not, since the credible reading stands on the
+retained cohorts. The application thus shows the method working in the direction opposite to
+point-identification, not recovering an effect the pooled estimate misses but withdrawing one it spuriously
+reports, and locating that withdrawal exactly in the cohorts the screen flags.
 
 \section{Conclusion}\label{sec:conc}
 
