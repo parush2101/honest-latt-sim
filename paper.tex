@@ -64,7 +64,7 @@ the target and use the pre-trends to extrapolate the violation across periods.
 
 The ATT is where a structural limitation appears. When parallel trends
 fails for some cohorts but holds for others, the ATT, an average over all treated cohorts including the
-offending ones, is precisely the object that is hard to recover. A point estimate of it is then biased,
+offending ones, is the object that is hard to recover. A point estimate of it is then biased,
 and the sensitivity set, though honest, can be wide and uninformative, because it must accommodate the
 worst offenders in the average.
 
@@ -449,7 +449,7 @@ differential trends enter it directly. The LATT lands at $1.000$, on the truth, 
 removes those cohorts from the average and, by Proposition~\ref{prop:id}, their violations then do not
 enter the estimand at all.
 
-The lower panel of the table sweeps the sampling noise $s$, and is the more informative comparison.
+The lower panel of the table sweeps the sampling noise $s$.
 As precision improves the LATT's bias falls monotonically from $+0.013$ to zero, and this residual is the
 pre-test bias of Proposition~\ref{prop:pretest}, which vanishes as the selection rule becomes reliable.
 Two sources could in principle generate it, a noisy screen that admits genuinely confounded cohorts, which
@@ -459,8 +459,8 @@ selection. The final column isolates the two by selecting on an independent pre-
 full-sample column almost exactly, so the residual is the first source, admission of confounded cohorts,
 and the second is negligible here because the two-sided flatness screen conditions the retained estimates
 symmetrically. The ATT estimator's bias, by contrast, is frozen at $+0.267$ regardless of precision. The
-contrast is the paper's basic point in miniature, the LATT facing a noise problem, which more data cures,
-whereas the ATT estimator faces a wrong-target problem, which no amount of data cures.
+LATT faces a noise problem, which more data cures, whereas the ATT estimator faces a wrong-target problem,
+which no amount of data cures.
 
 \begin{table}[t]
 \centering
@@ -489,7 +489,7 @@ $s=0.03$ & $+0.267$ & $+0.000$ & $+0.000$ \\
 \subsection{The scope condition}
 
 Figure~\ref{fig:scope} traces the method across the informativeness axis $\phi$ described in
-Section~\ref{sec:design}, and its four panels should be read together.
+Section~\ref{sec:design}.
 
 The upper-left panel plots the bias of the two point estimators against the truth. The bias of the ATT
 estimator is a flat line at $+0.30$, since it never consults pre-trends, so its performance cannot depend
@@ -505,7 +505,7 @@ the fact, argued in Section~\ref{sec:approach}, that selecting on uninformative 
 The upper-right panel explains why the LATT's bias falls, by plotting the identification gap of
 the selected set, the average post-treatment violation among the cohorts that survive selection. It
 tracks the LATT's bias almost exactly, falling from $0.30$ to essentially zero. This confirms that the
-LATT's remaining bias is not an artifact of the estimator but simply the residual violation that
+LATT's remaining bias is not an artifact of the estimator but the residual violation that
 selection has failed to remove. The lower-right panel gives the mechanism behind both, the average
 number of confounded cohorts that slip through the screen falling from $5.09$ of six when the confound is
 invisible to essentially zero when it is plainly visible.
@@ -520,7 +520,7 @@ of the upper-right panel, since the surviving cohorts genuinely still violate pa
 motivates the sensitivity bounds of the next subsection, since no purely inferential fix can repair a
 violation of the identifying assumption.
 
-(At the right edge the naive interval slightly outperforms the split one. This is simply because
+(At the right edge the naive interval slightly outperforms the split one. This is because
 splitting discards half the data, and by that point selection is nearly deterministic, so there is no
 contamination left to correct.)
 
@@ -540,10 +540,10 @@ We now validate the level-bound FLCI of Section~\ref{sec:approach} applied to th
 aggregate, using the level violation of Section~\ref{sec:design} whose size $V$ is directly comparable
 to the assumed bound $M$.
 
-Table~\ref{tab:flci} is the validity check. Read down the rows. When the assumed bound equals the true
+Table~\ref{tab:flci} is the validity check. When the assumed bound equals the true
 violation ($V=M$) the FLCI covers at $95.0\%$, that is, at its nominal level. When the bound is generous
 ($M>V$) it covers conservatively at $100\%$. When the bound is violated ($M<V$) coverage collapses. This
-is precisely the behavior an honest sensitivity interval should display. It is valid exactly on the range
+is the behavior an honest sensitivity interval should display. It is valid on the range
 of violations it claims to accommodate, and it fails visibly outside it, rather than failing silently.
 
 The final column records that the naive point interval collapses to near-zero coverage the instant any
