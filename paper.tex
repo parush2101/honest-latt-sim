@@ -271,6 +271,55 @@ selected- and full-population weighted averages of the cohort effects. In either
 efficiency loss relative to estimators that use all cohorts.
 \end{proposition}
 
+The consistency clause of Proposition~\ref{prop:cons} invites a sharper question: when does
+narrowing the target cost nothing, in that the LATT and the ATT are the same object? The answer
+separates equivalence of the two targets from convergence of the two estimators.
+
+\begin{proposition}[Coincidence of the LATT and the ATT]\label{prop:coincide}
+Write $\theta_g:=\mathrm{ATT}(g,\cdot)$ for the cohort-level causal effect, $\mathcal G$ for the full
+set of treated cohorts, and $\theta_{\mathcal G}$ for the ATT, the aggregate over all of $\mathcal G$.
+For a fixed selected set $S$ the two targets coincide, $\theta_S=\theta_{\mathcal G}$, if and only if
+the retained cohorts' weighted-average effect equals the full population's,
+\[
+\frac{\sum_{g\in S} w_g\,\theta_g}{\sum_{g\in S} w_g}
+=\frac{\sum_{g\in\mathcal G} w_g\,\theta_g}{\sum_{g\in\mathcal G} w_g}.
+\]
+This holds in particular when no cohort is dropped, $S=\mathcal G$, and when effects are homogeneous,
+$\theta_g\equiv\theta$, under which every subpopulation shares the common value; and more generally
+whenever selection is uninformative about effect size, in that the dropped cohorts
+$\mathcal G\setminus S$ carry the same weighted-average effect as the retained ones. Under
+data-driven selection the two \emph{estimators} converge, $\hat\theta_{\hat S}-\hat\theta_{\mathcal G}
+\xrightarrow{p}0$, whenever the screen retains every cohort with probability approaching one, which by
+Proposition~\ref{prop:pretest} occurs precisely when no cohort is detectable,
+$\max_{e<0}\lvert\beta_{g,\mathrm{pre}}(e)\rvert\le c$ for every $g$; when some cohorts are detectable
+and dropped, the estimators converge to a common value if and only if the limiting selected set
+$S^\ast$ satisfies the equal-targets condition above.
+\end{proposition}
+
+\begin{proof}
+Both $\theta_S$ and $\theta_{\mathcal G}$ are weighted averages of the same cohort effects
+$\{\theta_g\}$, so they agree exactly when the displayed identity holds; $S=\mathcal G$ makes the two
+averages coincide term by term, and $\theta_g\equiv\theta$ makes each equal $\theta$. Under
+data-driven selection, if no cohort is detectable then by Proposition~\ref{prop:pretest} the screen
+retains all of $\mathcal G$ with probability approaching one, so $\hat S=\mathcal G$ on an event of
+probability tending to one and the two estimators coincide there. In general
+$\hat\theta_{\hat S}\xrightarrow{p}\theta_{S^\ast}$ and
+$\hat\theta_{\mathcal G}\xrightarrow{p}\theta_{\mathcal G}$, whose difference vanishes exactly under
+the equal-targets identity applied to $S^\ast$.
+\end{proof}
+
+Two remarks place the result. First, the equal-targets condition is the precise sense in which the
+LATT is a distinct estimand: it is distinct exactly to the extent that selection is informative about
+effect size, and the gap $\theta_S-\theta_{\mathcal G}$ is the heterogeneity that
+Proposition~\ref{prop:dominance} isolates as its $\gamma$ term, vanishing under homogeneity. This is
+the equivalence familiar from the local average treatment effect and overlap-weighted estimands, whose
+subpopulation targets coincide with the population one under an analogous ignorability of selection.
+Second, target equivalence and estimator convergence come apart. Heterogeneous effects can still leave
+the estimators convergent, when no cohort is detectable and the entire population is retained, even
+though the targets would differ for any strict selection; and conversely a strict but ignorable
+selection can leave the targets equal while the finite-sample estimators differ by the efficiency cost
+recorded in Proposition~\ref{prop:cons}.
+
 Under data-driven selection the rule~\eqref{eq:rule} couples $S$ to the estimation errors: a confounded
 cohort whose pre-trend noise happens to fall below $c$ is admitted, and its differential trend enters
 $\hat\theta_S$. This is a pre-test selection bias in the sense of \citet{roth2022pretrends}, with a
