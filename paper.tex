@@ -518,7 +518,92 @@ buffer of Lemma~\ref{lem:calib}, and the variance cost $\sigma^2$ with a samplin
 slack inflated by the selection quantile, so that the level-bound half-width comparison
 turns on the same three forces with $V$ discounted and $\sigma$ inflated. The
 mean-squared-error threshold \eqref{eq:threshold} correctly signs that comparison and
-is the transparent summary; the interval version sharpens the constants.
+is the transparent summary; the interval version, to which we now turn, sharpens the
+constants.
+
+The comparison of honest intervals can be made exact in the same two-cohort model, in
+the informative regime where the screen discards the confounded cohort with
+probability approaching one, so that the LATT selects the clean cohort alone. This is
+the regime in which the point-estimate advantage of Proposition~\ref{prop:dominance}
+attains its ceiling, and it is where the method is meant to help. Both procedures
+report a level-bound fixed-length confidence interval, whose half-width for a scalar
+target estimated with standard error $s$ under a worst-case bias bound $B$ is
+\begin{equation}\label{eq:flci-hw}
+h(B,s)\;=\;s\,\mathrm{cv}_\alpha\!\big(B/s\big),\qquad
+\mathrm{cv}_\alpha(t)=\text{the }(1-\alpha)\text{ quantile of }\lvert\mathcal N(t,1)\rvert,
+\end{equation}
+the near-optimal construction of \citet{armstrong2018}; $\mathrm{cv}_\alpha(0)=z_{1-\alpha/2}$
+is the pure-noise critical value and $\mathrm{cv}_\alpha(t)\uparrow t+z_{1-\alpha}$ as
+the bias comes to dominate. The LATT, using the clean cohort alone, is unbiased with
+standard error $\sigma$ and a residual-violation bound $M_L$, giving half-width
+$\sigma\,\mathrm{cv}_\alpha(M_L/\sigma)$. The ATT estimator, using both cohorts, has
+standard error $\sigma/\sqrt2$ but must set its bound to cover its own aggregate
+violation, $M_A=V/2$, giving half-width
+$(\sigma/\sqrt2)\,\mathrm{cv}_\alpha\!\big(V/(\sqrt2\,\sigma)\big)$. Each interval
+covers the common target at its nominal level by construction, since each bound
+dominates its own aggregate's violation, so the honest comparison is not one of
+coverage but of expected length at equal coverage.
+
+\begin{proposition}[The trade in honest intervals]\label{prop:interval}
+In the informative regime above, with homogeneous effects and a residual bound $M_L$ on
+the selected set, the LATT's level-bound fixed-length confidence interval is shorter
+than the ATT's if and only if
+\begin{equation}\label{eq:interval-cond}
+\mathrm{cv}_\alpha\!\big(M_L/\sigma\big)\;<\;\tfrac{1}{\sqrt2}\,
+\mathrm{cv}_\alpha\!\big(V/(\sqrt2\,\sigma)\big).
+\end{equation}
+When the selected set carries no residual violation, $M_L=0$, this reduces to a
+threshold on the violation, $V>\sqrt2\,\sigma\,t^\ast_\alpha$, where $t^\ast_\alpha$
+solves $\mathrm{cv}_\alpha(t^\ast_\alpha)=\sqrt2\,z_{1-\alpha/2}$; at $\alpha=0.05$,
+$t^\ast_\alpha\approx1.13$ and the threshold is $V\approx1.59\,\sigma$. This exceeds
+the mean-squared-error threshold $V>\sqrt2\,\sigma\approx1.41\,\sigma$ of
+Proposition~\ref{prop:dominance}, and the left-hand side of \eqref{eq:interval-cond} is
+increasing in $M_L$, so a larger residual bound raises the threshold further.
+\end{proposition}
+
+\begin{proof}
+By \eqref{eq:flci-hw} the half-widths are $h_L=\sigma\,\mathrm{cv}_\alpha(M_L/\sigma)$
+and $h_A=(\sigma/\sqrt2)\,\mathrm{cv}_\alpha(V/(\sqrt2\,\sigma))$, and $h_L<h_A$ is
+\eqref{eq:interval-cond} after dividing by $\sigma$. Both intervals attain nominal
+coverage: for the ATT, the plug-in estimator is $\mathcal N(\bar\tau+V/2,\sigma^2/2)$,
+so its coverage of $\bar\tau$ is
+$\Pr(\lvert Z+ (V/2)/s_A\rvert\le \mathrm{cv}_\alpha((V/2)/s_A))=1-\alpha$ with
+$s_A=\sigma/\sqrt2$ and $Z\sim\mathcal N(0,1)$, by the definition of $\mathrm{cv}_\alpha$;
+for the LATT the estimator is $\mathcal N(\bar\tau,\sigma^2)$ and coverage is
+$\Pr(\lvert Z\rvert\le\mathrm{cv}_\alpha(0))=1-\alpha$. Setting $M_L=0$ gives
+$\mathrm{cv}_\alpha(0)=z_{1-\alpha/2}$ on the left of \eqref{eq:interval-cond}, so the
+condition is $z_{1-\alpha/2}<\tfrac1{\sqrt2}\mathrm{cv}_\alpha(V/(\sqrt2\,\sigma))$,
+i.e.\ $\mathrm{cv}_\alpha(V/(\sqrt2\,\sigma))>\sqrt2\,z_{1-\alpha/2}$. Since
+$\mathrm{cv}_\alpha$ is continuous and strictly increasing, this is
+$V/(\sqrt2\,\sigma)>t^\ast_\alpha$ for the stated $t^\ast_\alpha$, and numerical
+evaluation of $\mathrm{cv}_{0.05}$ gives $t^\ast_{0.05}\approx1.13$. Monotonicity of
+$\mathrm{cv}_\alpha$ gives the comparative static in $M_L$.
+\end{proof}
+
+Three points close the comparison. First, coverage is never the margin: both procedures
+are honest by construction, so the ATT does not buy its narrower variance at the cost of
+under-coverage, it buys it at the cost of a bias bound $M_A=V/2$ that its interval must
+carry. The ATT pays for honesty in a width that grows linearly in the violation, through
+$\mathrm{cv}_\alpha(V/(\sqrt2\,\sigma))\approx V/(\sqrt2\,\sigma)+z_{1-\alpha}$ once the
+violation dominates, whereas the LATT pays a fixed width $2\sigma\,z_{1-\alpha/2}$ set by
+its variance alone. This is the price-of-honesty reading of Figure~\ref{fig:layer2} at the
+level of the two procedures. Second, honest intervals are more demanding than point
+estimation: the threshold $1.59\,\sigma$ exceeds the mean-squared-error threshold
+$1.41\,\sigma$ because the fixed-length interval charges for the standard-error inflation
+of dropping a cohort through the critical value $\mathrm{cv}_\alpha(0)=z_{1-\alpha/2}$,
+not only through the variance, so the violation must be somewhat larger before the
+smaller-bias interval also wins on width. Third, the two forces set aside for the clean
+statement both raise the threshold in the direction the point analysis already indicated.
+A residual bound $M_L>0$, whether from honest uncertainty that the selected set is truly
+flat or from the calibration of Lemma~\ref{lem:calib} to a random selected set, enters
+through $\mathrm{cv}_\alpha(M_L/\sigma)$ on the left of \eqref{eq:interval-cond}; and
+effect heterogeneity $\gamma\neq0$, when the target is the ATT, adds $\lvert\gamma\rvert/2$
+to the LATT's effective bias bound in the same place. The honest-interval trade is thus
+governed by the same three forces as the point-estimate trade of
+Proposition~\ref{prop:dominance}---the violation as the reason to trade, the variance and
+the heterogeneity as its price---with the violation discounted by the residual bound and
+the whole comparison shifted by the surcharge that fixed-length honesty places on a
+smaller sample.
 
 \section{Simulation study}\label{sec:sim}
 
