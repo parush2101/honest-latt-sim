@@ -303,7 +303,11 @@ asks how far the treated-comparison difference could have wandered from its flat
 absent treatment. The estimator is then the raw reweighted post-treatment average, with no extrapolation,
 and the associated fixed-length confidence interval (FLCI) is near-optimal \citep{armstrong2018}. Because
 $M$ is measured in the outcome's own units, the breakdown value $M^\ast$ reads directly as the size
-of post-treatment parallel-trends violation that would just overturn the stated conclusion.
+of post-treatment parallel-trends violation that would just overturn the stated conclusion. It is judged
+against the violations the data leave visible, the retained cohorts' own pre-trends, which the screen holds
+below $c$ and which are measured in the same units, and against the effect at stake, so that an $M^\ast$
+several times the credible cohorts' visible pre-trends signals a robust conclusion. The application of
+Section~\ref{sec:app} reads $M^\ast$ against both benchmarks.
 
 Validity depends on the selection regime. Under ex-ante selection $S$ is independent of $\hat\beta$, so
 the uniform validity of \citet{rambachan2023} applies verbatim. Under data-driven selection $S$ is
