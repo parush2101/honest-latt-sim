@@ -16,6 +16,8 @@
 \newtheorem{lemma}{Lemma}
 \newtheorem{assumption}{Assumption}
 \newtheorem{definition}{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}
 
 \title{\textbf{Trading Scope for Credibility in Difference-in-Differences}}
 \author{Parush Arora\thanks{Department of Economics, Ashoka University.} \and Abhishek Chand\thanks{Independent researcher.}}
@@ -552,6 +554,28 @@ is proportional to the observed pre-trend. When pre-trends are uninformative, th
 violation need not be, so the interval width tends to zero even as the bias does not---undercoverage
 precisely where our method's value is in question. The fixed bound $\Delta^{\mathrm{Level}}(M)$, set by the
 researcher rather than by the observed pre-trends, avoids this.
+
+\begin{remark}[Estimated covariance]\label{rem:sigmahat}
+Proposition~\ref{prop:carve} and the half-width \eqref{eq:flci-hw} treat $\Sigma$ as known; in practice one
+plugs in a consistent estimate $\hat\Sigma$, which enters twice, in the aggregate standard error $s_S$ and
+in the selection geometry $[\mathcal V^-,\mathcal V^+]$ and carving scale, so its dependence is more delicate
+here than in a fixed-target sensitivity analysis, where $\Sigma$ enters only the standard error. Suppose
+$\hat\Sigma\xrightarrow{p}\Sigma$ and the separation condition of Proposition~\ref{prop:oracle} holds, so
+that each cohort's population pre-trend statistic lies a fixed distance from the threshold. The
+truncated-normal pivot $F_{\theta_S,s_S^2}^{[\mathcal V^-,\mathcal V^+]}(\hat\theta_S)$ is continuous in
+$(\Sigma,\mathcal V^-,\mathcal V^+)$ at the truth, its truncation limits and scale are continuous functions
+of $\hat\Sigma$, and under separation the selection event is correctly classified with probability
+approaching one; by Slutsky the pivot evaluated at $\hat\Sigma$ converges in law to $\mathrm{Uniform}[0,1]$,
+so the carved interval has asymptotic coverage $1-\alpha$. The known-$\Sigma$ exactness of
+Proposition~\ref{prop:carve} thus degrades only to first-order valid coverage under estimation, and the
+panel simulation of Section~\ref{sec:calib}, which estimates the covariance from the data rather than
+supplying it, bears this out. The separation condition is not cosmetic: within a $\hat\Sigma$-sampling
+neighbourhood of the threshold a cohort's inclusion is itself estimated, and plug-in post-selection coverage
+there carries a higher-order, non-uniform cost, the estimated-$\Sigma$ shadow of the
+Leeb--P\"otscher obstruction. A researcher unwilling to assume separation should accordingly hold the
+carving scale $\gamma$ away from its degenerate limit, or use the independent-split construction, either of
+which makes the selection insensitive to $\hat\Sigma$ at the boundary.
+\end{remark}
 
 \subsection{When the trade pays: a dominance condition}\label{sec:dominance}
 
@@ -1323,7 +1347,8 @@ floor.
 Finally, we repeat the estimand demonstration on generated panel data, where individual outcomes are
 simulated for a staggered design with a level confound and idiosyncratic noise, cohort event-study
 coefficients are estimated from genuine difference-in-differences contrasts against a never-treated
-group, and their covariance is estimated rather than supplied. The conclusions are unchanged, since
+group, and their covariance is estimated rather than supplied, which is the empirical counterpart of
+Remark~\ref{rem:sigmahat}. The conclusions are unchanged, since
 across the informativeness axis the ATT estimator's bias stays flat near $+0.30$ while the LATT's falls
 toward zero, reproducing Figure~\ref{fig:scope} with estimated quantities, and the estimated standard
 error matches its Monte Carlo counterpart where selection is effectively deterministic. One discrepancy
