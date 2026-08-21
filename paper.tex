@@ -597,10 +597,12 @@ accordingly \emph{not} the near-optimal fixed-length interval of \citet{armstron
 optimality belong to the fixed-set case of Theorem~\ref{thm:width}, where selection does not randomize the target
 and the bias enters only through the standard error. Under data-driven selection we accept a modest excess length
 in exchange for a single interval valid against both the selection and the residual violation. Simulations confirm
-this. With one
-pre-period per cohort and a pre--post sampling correlation of $0.7$, the naive post-selection interval
-covers at $0.92$ and then $0.78$ as the retained cohort's population pre-trend moves one and two thresholds
-off center, while the carved interval holds between $0.93$ and $0.96$ throughout. The randomization also
+this. A scalar illustration---one retained cohort with a single pre-period, so the estimate and the selection
+statistic are jointly bivariate normal and the mechanism is transparent---makes the point: at a pre--post
+sampling correlation of $0.7$ the naive post-selection interval covers at $0.92$ and then $0.78$ as the cohort's
+population pre-trend moves one and two thresholds off center, while the carved interval holds between $0.93$ and
+$0.96$ throughout. The multi-cohort, four-pre-period design of Section~\ref{sec:calib} exhibits the same
+understatement of naive uncertainty under estimated selection. The randomization also
 recovers power a split would forfeit: at the worst configuration the carved interval at $\gamma=0.5$ is
 about a quarter narrower than the fully conditional one at $\gamma=0$, at unchanged coverage.
 
