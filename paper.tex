@@ -339,7 +339,7 @@ otherwise retains an asymptotic bias equal to the residual violation of the unde
 the identification gap that the honest inference of the next subsection bounds.
 \end{proposition}
 
-\subsection{Honest inference on the selected set}
+\subsection{Honest inference on the selected set}\label{sec:honest}
 
 Selecting credible cohorts does not by itself deliver parallel trends, since a cohort with a flat
 pre-trend may still have a nonzero post-treatment differential trend, and selection removes gross
@@ -540,18 +540,97 @@ informativeness from nothing, at $\phi=0$ where the two curves coincide, to a ce
 set by the bracket---which is the vertical gap between the two point-estimate bias
 curves traced in Figure~\ref{fig:scope} read as a function of $\phi$.
 
-The same accounting extends to $K$ cohorts, at the cost of a closed form. Partition
-the cohorts into a clean block, retained with probability approaching one, and
-confounded cohorts each admitted with a probability $\pi_g$ that the screen drives
-toward zero as its pre-trend becomes informative. To first order in the admission
-probabilities the LATT's risk is a mixture, dominated by the event that no confounded
-cohort survives and, at order $\pi_g$, by the single-admission events, and the sign of
-the leading advantage is again governed by a net-value functional in which each
-retained-versus-dropped comparison contributes a violation term against a variance
-term and a heterogeneity term. The two-cohort ledger is therefore the mechanism in
-miniature, and the qualitative conclusion---that the sign is a violation-to-noise
-question and informativeness a magnitude question---does not depend on the cohort
-count.
+The same accounting extends to $K$ cohorts, and the two-cohort ledger turns out to be
+the mechanism in full rather than in miniature. Let each cohort $g$ carry a weight
+$w_g$ (normalized so $\sum_{g}w_g=1$), a causal effect $\theta_g=\mathrm{ATT}(g,\cdot)$,
+a post-treatment violation $V_g$ (the aggregate $a(\delta_{g,\mathrm{post}})$, zero for a
+clean cohort), and an independent sampling variance $\sigma_g^2$ for its aggregated
+post-treatment estimate. The screen retains cohort $g$ with probability $\pi_g$,
+independently across cohorts and of the post-treatment estimates. The ATT estimator is
+the fixed average $\sum_g w_g\hat\beta_{g,\mathrm{post}}$; the LATT estimator reweights
+over the retained set $\hat S$, $\sum_{g\in\hat S}w_g\hat\beta_{g,\mathrm{post}}/W_{\hat S}$
+with $W_S=\sum_{g\in S}w_g$.
+
+\begin{proposition}[General-$K$ dominance]\label{prop:generalK}
+With the target $\theta_{\mathcal G}=\sum_g w_g\theta_g$, the ATT estimator has mean squared
+error $\mathrm{MSE}_{\mathrm{ATT}}=\big(\sum_g w_gV_g\big)^2+\sum_g w_g^2\sigma_g^2$, and the
+LATT estimator has
+\begin{equation}\label{eq:latt-exact}
+\mathrm{MSE}_{\mathrm{LATT}}=\sum_{S\subseteq\mathcal G}
+\Big(\textstyle\prod_{g\in S}\pi_g\prod_{g\notin S}(1-\pi_g)\Big)
+\Big[\big(\theta_S-\theta_{\mathcal G}+B_S\big)^2+\mathrm{Var}_S\Big],
+\end{equation}
+where $\theta_S=\sum_{g\in S}w_g\theta_g/W_S$, $B_S=\sum_{g\in S}w_gV_g/W_S$, and
+$\mathrm{Var}_S=\sum_{g\in S}w_g^2\sigma_g^2/W_S^2$, with the convention $S=\mathcal G$ when the
+screen retains no cohort. When every cohort is retained, $\pi_g=1$, the two estimators
+coincide and $\Delta=\mathrm{MSE}_{\mathrm{ATT}}-\mathrm{MSE}_{\mathrm{LATT}}=0$. Suppose instead
+the screen separates the cohorts, discarding every confounded cohort, $\pi_g\to0$ for
+$V_g\neq0$, and retaining every clean cohort, $\pi_g\to1$ for $V_g=0$, so that the retained
+set converges in probability to the clean set $\mathcal C$ and the dropped set is the
+confounded set $\mathcal F=\mathcal G\setminus\mathcal C$. Then
+\begin{equation}\label{eq:deltastar}
+\Delta\;\longrightarrow\;\Delta^\ast\;=\;B_{\mathcal F}^2-\Gamma^2-\Delta\mathrm{Var},
+\end{equation}
+where $B_{\mathcal F}=\sum_{g\in\mathcal F}w_gV_g$ is the aggregate violation removed by
+selection, $\Gamma=\theta_{\mathcal C}-\theta_{\mathcal G}$ is the composition gap between the
+retained subpopulation and the full population, and
+$\Delta\mathrm{Var}=\mathrm{Var}_{\mathcal C}-\sum_g w_g^2\sigma_g^2\ge0$ is the variance cost of
+dropping. Hence in the informative limit the LATT dominates the ATT in mean squared error if
+and only if
+\begin{equation}\label{eq:generalK-threshold}
+B_{\mathcal F}^2\;>\;\Gamma^2+\Delta\mathrm{Var}.
+\end{equation}
+With two equally weighted cohorts, one clean and one confounded with violation $V$, effect gap
+$\gamma$, and common variance $\sigma^2$, one has $B_{\mathcal F}^2=V^2/4$, $\Gamma^2=\gamma^2/4$,
+and $\Delta\mathrm{Var}=\sigma^2/2$, so \eqref{eq:generalK-threshold} is $V^2>\gamma^2+2\sigma^2$,
+recovering Proposition~\ref{prop:dominance}.
+\end{proposition}
+
+\begin{proof}
+The ATT estimator is a fixed linear combination with mean
+$\theta_{\mathcal G}+\sum_g w_gV_g$ and variance $\sum_g w_g^2\sigma_g^2$, giving
+$\mathrm{MSE}_{\mathrm{ATT}}$. For the LATT, condition on the retention configuration; on the
+event that the retained set is $S$, which has probability
+$\prod_{g\in S}\pi_g\prod_{g\notin S}(1-\pi_g)$, the estimator is
+$\sum_{g\in S}w_g\hat\beta_{g,\mathrm{post}}/W_S$, whose mean is $\theta_S+B_S$ and whose
+variance is $\mathrm{Var}_S$, since retention is independent of the post-treatment estimates. Its
+error relative to $\theta_{\mathcal G}$ has squared bias $(\theta_S-\theta_{\mathcal G}+B_S)^2$ and
+variance $\mathrm{Var}_S$; averaging over configurations gives \eqref{eq:latt-exact}. At
+$\pi_g=1$ only $S=\mathcal G$ has mass, where $\theta_{\mathcal G}-\theta_{\mathcal G}+B_{\mathcal G}
+=\sum_g w_gV_g$ and $\mathrm{Var}_{\mathcal G}=\sum_g w_g^2\sigma_g^2$, so
+$\mathrm{MSE}_{\mathrm{LATT}}=\mathrm{MSE}_{\mathrm{ATT}}$ and $\Delta=0$. Under separation the
+configuration $S=\mathcal C$ carries probability approaching one, so
+$\mathrm{MSE}_{\mathrm{LATT}}\to(\theta_{\mathcal C}-\theta_{\mathcal G})^2+\mathrm{Var}_{\mathcal C}$,
+using $B_{\mathcal C}=0$ because clean cohorts have $V_g=0$. Since clean cohorts contribute nothing
+to $\sum_g w_gV_g$, that sum equals $B_{\mathcal F}$, and
+$\Delta\to B_{\mathcal F}^2+\sum_g w_g^2\sigma_g^2-\Gamma^2-\mathrm{Var}_{\mathcal C}
+=B_{\mathcal F}^2-\Gamma^2-\Delta\mathrm{Var}$, which is \eqref{eq:deltastar}; the threshold
+\eqref{eq:generalK-threshold} is its positivity, and the two-cohort reduction is the displayed
+substitution.
+\end{proof}
+
+The general threshold \eqref{eq:generalK-threshold} is the two-cohort ledger written for many
+cohorts, with each of its three forces now an aggregate. The reason to trade is the total violation
+$B_{\mathcal F}$ that selection removes, the squared sum of the dropped cohorts' weighted violations,
+not any single one. The estimand cost is the composition gap $\Gamma$, the difference between the
+retained subpopulation's effect and the full population's, which is the many-cohort form of the
+heterogeneity $\gamma$ and vanishes under the equal-targets condition of
+Proposition~\ref{prop:coincide}. And the variance cost $\Delta\mathrm{Var}$ is the increase in
+sampling variance from reweighting onto fewer cohorts. The qualitative reading of the two-cohort
+case therefore holds at any cohort count: the sign of the advantage is a violation-against-noise-and-
+heterogeneity question, settled by \eqref{eq:generalK-threshold} and independent of how informative
+the pre-trends are, while informativeness governs only magnitude, since $\Delta$ runs from zero when
+the screen retains everyone, $\pi_g=1$, to $\Delta^\ast$ when it separates the cohorts. Two
+qualifications carry over from Proposition~\ref{prop:dominance} and connect to the inference above.
+The separation that makes \eqref{eq:deltastar} exact is the mean-squared-error counterpart of the
+condition behind Proposition~\ref{prop:oracle}; near-threshold cohorts, whose population pre-trend
+sits within sampling error of $c$, are retained with interior probability and are the same
+local-to-threshold configurations that obstruct uniform post-selection inference. And a confounded
+cohort that is undetectable, flat in the pre-period yet violating parallel trends after, is retained
+in the limit rather than dropped, so its violation stays in both estimators and in the residual bound
+$B_{S^\ast}$; it enters \eqref{eq:deltastar} by replacing $B_{\mathcal F}$ with the detectable
+cohorts' violation and $\Gamma$ with $\Gamma$ augmented by that residual, which is the identification
+gap of Proposition~\ref{prop:pretest} that the honest inference of Section~\ref{sec:honest} bounds.
 
 Three caveats keep the result honest. The advantage \eqref{eq:delta} is an upper bound
 on what the method delivers, because it omits two channels that both work against the
