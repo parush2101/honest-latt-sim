@@ -1240,10 +1240,14 @@ panel is the sensitivity/breakdown curve, with $M^\ast$ in outcome units.}
 
 Two questions remain for the data-driven regime, whether choosing the selected set from the same data
 distorts the sensitivity interval, and how to choose $M$ when the selected set, and hence its residual
-violation, is random. On the first, coverage against $M$ for the full-data and sample-splitting
-procedures crosses the nominal level at nearly the same bound ($M\approx0.048$ and $0.056$), so
-data-dependent selection introduces no gross distortion and splitting buys little, consistent with the
-pointwise reading of \citet{leeb2005}. On the second, the residual violation of the selected aggregate is
+violation, is random. On the first, the cost of choosing the set from the same data is concentrated near the threshold and falls
+on the variance rather than on gross coverage. The $M$ at which coverage crosses the nominal level is nearly
+the same for the full-data and sample-splitting procedures ($M\approx0.048$ and $0.056$), so where cohorts
+are well separated from $c$ selection is effectively deterministic, naive inference suffices, and splitting
+buys little, consistent with the pointwise reading of \citet{leeb2005}. That near-equality of crossing
+points understates the cost, however, because selection distorts the standard error rather than the
+crossing bound---the local-to-threshold regime the carving of Proposition~\ref{prop:carve} is built for,
+which the panel model below makes precise. On the second, the residual violation of the selected aggregate is
 not a constant but a spread, multi-modal random variable across replications, running from zero to about
 $0.06$ with a thin tail to $0.11$, each mode a different number of borderline cohorts surviving the
 screen, which is the content of Lemma~\ref{lem:calib}. A fixed $M$ must dominate it, and setting $M$ at
@@ -1260,8 +1264,9 @@ Remark~\ref{rem:sigmahat}. The conclusions are unchanged, since
 across the informativeness axis the ATT estimator's bias stays flat near $+0.30$ while the LATT's falls
 toward zero, reproducing Figure~\ref{fig:scope} with estimated quantities, and the estimated standard
 error matches its Monte Carlo counterpart where selection is effectively deterministic. One discrepancy
-is informative. At intermediate informativeness, where selection is stochastic, the estimated standard
-error understates its Monte Carlo counterpart ($0.016$ against $0.024$ at $\phi=0.75$), the missing
+is informative, and it is the payoff promised above. At intermediate informativeness, where selection is
+stochastic---the local-to-threshold regime the carved interval targets---the estimated standard error
+understates its Monte Carlo counterpart ($0.016$ against $0.024$ at $\phi=0.75$), the missing
 component being the variance induced by the randomness of selection, which a standard error conditional
 on the realized set does not capture. This confirms, from the panel side, that conditioning on a
 data-dependent selection understates uncertainty, and why the honest object to report is the sensitivity
