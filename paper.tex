@@ -393,11 +393,75 @@ uniform. \citet{leeb2005} show that a post-selection estimator's distribution ca
 consistently, so naive post-selection intervals lack uniform validity \citep{leeb2008}. The
 obstruction is confined to local-to-threshold configurations, where the selection statistic drifts
 toward the boundary at the sampling rate. Away from the boundary, selection is asymptotically
-deterministic and inference behaves conventionally. A researcher unwilling to assume separation can
-sidestep both caveats by selecting on information independent of the estimation errors, such as
-pre-determined covariates, a sample split, or randomized (data-carving) selection \citep{fithian2014}.
-These buy validity through independence between selection and estimation rather than correct selection,
-at some cost in efficiency.
+deterministic and inference behaves conventionally. A researcher unwilling to assume separation has two
+routes. One buys validity through independence between selection and estimation, selecting on
+pre-determined covariates or an independent sample split, at the cost of the efficiency that split data
+forgoes. The other conditions on the selection rather than avoiding it, and recovers that efficiency; we
+develop it now, because it delivers the uniform guarantee that Proposition~\ref{prop:oracle} lacks.
+
+The construction randomizes the screen and conditions on its outcome. Working in the reduced-form model
+$\hat\beta\sim\mathcal N(\beta,\Sigma)$ with $\Sigma$ known, draw independent noise
+$\omega\sim\mathcal N(0,\gamma\,\Sigma_{\mathrm{pre}})$ for a scale $\gamma\ge0$ and select on the noised
+pre-trends, $\hat S=\{g:\max_e\lvert\hat\beta_{g,\mathrm{pre}}(e)+\omega_{g}(e)\rvert\le c\}$, while
+estimating the selected aggregate $\theta_S=\ell_S'\beta_{\mathrm{post}}$ from the unrandomized
+$\hat\theta_S=\ell_S'\hat\beta_{\mathrm{post}}$, where $\ell_S$ carries the reweighting onto $S$. The
+target is the reduced-form aggregate: under parallel trends for $S$ it is the causal $\theta_S$, and in
+general it is that quantity plus the residual violation the level bound accounts for below, so selection
+uncertainty and identification are handled by separate instruments that compose.
+
+\begin{proposition}[Uniformly valid carved inference]\label{prop:carve}
+Fix $\gamma\ge0$. Condition on the selection event $\{\hat S=S\}$ together with the signs of the
+pre-trend coordinates that determine each cohort's inclusion, which renders the event a polyhedron in the
+Gaussian vector. Then $\hat\theta_S$ has a truncated Gaussian law,
+\[
+\hat\theta_S\mid\{\hat S=S\}\ \sim\ \mathcal{TN}\big(\theta_S,\ s_S^2,\ [\mathcal V^-,\mathcal V^+]\big),
+\qquad s_S^2=\ell_S'\Sigma_{\mathrm{post}}\,\ell_S,
+\]
+whose truncation limits $[\mathcal V^-,\mathcal V^+]$ are computable in closed form from $\Sigma$, $\gamma$,
+and the realized data by the polyhedral lemma of \citet{lee2016}; for a single pre-period per cohort they
+are the intersection over retained cohorts of the intervals the constraints
+$\lvert\hat\beta_{g,\mathrm{pre}}+\omega_g\rvert\le c$ place on $\hat\theta_S$ once the component of
+$\hat\beta_{g,\mathrm{pre}}+\omega_g$ orthogonal to $\hat\theta_S$ is held fixed. Inverting the
+truncated-normal pivot $F_{\theta_S,s_S^2}^{[\mathcal V^-,\mathcal V^+]}(\hat\theta_S)$ yields an interval
+$\mathcal C_{1-\alpha}(S)$ with exact conditional coverage $\Pr(\theta_S\in\mathcal C_{1-\alpha}(S)\mid
+\hat S=S)=1-\alpha$ for every $S$ and every $\beta$, hence exact unconditional coverage
+$\Pr(\theta_S\in\mathcal C_{1-\alpha}(\hat S))=1-\alpha$, uniformly in $\beta$ and without any separation
+condition. The scale $\gamma$ is a power parameter, not a validity parameter: $\gamma=0$ gives the fully
+conditional interval, $\gamma\to\infty$ drives selection independent of $\hat\theta_S$ so that the naive
+interval becomes valid, and intermediate $\gamma$ carves, recovering efficiency that full conditioning
+spends while retaining exact validity.
+\end{proposition}
+
+\begin{proof}
+Conditioning on the inclusion-determining signs makes each cohort's constraint a half-space or a pair of
+them, so the selection event is an intersection of half-spaces, a polyhedron in $(\hat\beta,\omega)$. The
+pair $(\hat\theta_S,\,\text{selection})$ is jointly Gaussian, and decomposing the constraint vector into
+its component along $\hat\theta_S$ and an orthogonal remainder that is independent of $\hat\theta_S$, the
+event fixes the remainder and confines $\hat\theta_S$ to an interval $[\mathcal V^-,\mathcal V^+]$ whose
+endpoints are the tightest of the resulting linear bounds; this is the polyhedral lemma of
+\citet{lee2016}. Hence the conditional law of $\hat\theta_S$ is $\mathcal N(\theta_S,s_S^2)$ truncated to
+that interval, the pivot is uniform on $[0,1]$ conditional on $\hat S=S$, and inverting it gives an
+interval with conditional coverage $1-\alpha$ for every $S$ and every $\beta$. Averaging over $S$ gives
+the same unconditional coverage, and since the finite-sample pivot is exact for known $\Sigma$ regardless
+of where $\beta$ sits relative to the threshold, coverage is uniform. The endpoint claims in $\gamma$ hold
+because $\gamma=0$ leaves the selection a deterministic function of $\hat\beta_{\mathrm{pre}}$, while as
+$\gamma\to\infty$ the correlation between the selection variable and $\hat\theta_S$ vanishes, so
+$[\mathcal V^-,\mathcal V^+]$ expands to the real line and the truncated law returns to
+$\mathcal N(\theta_S,s_S^2)$.
+\end{proof}
+
+Proposition~\ref{prop:carve} upgrades the pointwise oracle coverage of Proposition~\ref{prop:oracle} to a
+uniform guarantee, exactly across the local-to-threshold configurations that obstruct it, and it does so
+for the sampling and selection uncertainty in the reduced-form aggregate; the identification gap remains
+the province of the level bound, so the honest causal interval is the carved interval widened by $M$,
+$[\,\inf\mathcal C_{1-\alpha}(\hat S)-M,\ \sup\mathcal C_{1-\alpha}(\hat S)+M\,]$, valid whenever the
+retained set's residual violation lies in $\Delta^{\mathrm{Level}}(M)$. Simulations in the reduced-form
+model bear this out. With one pre-period per cohort and a pre--post sampling correlation of $0.7$, the
+naive post-selection interval covers at $0.92$ and then $0.78$ as the retained cohort's population
+pre-trend moves to one and two thresholds off center, the local-to-threshold regime, whereas the carved
+interval holds between $0.93$ and $0.96$ across every configuration. The randomization buys back power a
+split would forfeit: at the most severe configuration the carved interval at $\gamma=0.5$ is roughly a
+quarter narrower than the fully conditional one at $\gamma=0$, at unchanged coverage.
 
 The second issue is that the bound $M$ must accommodate a random selected set. The FLCI at $M$ is valid
 only if the selected set's residual violation lies in $\Delta^{\mathrm{Level}}(M)$. Since that violation
