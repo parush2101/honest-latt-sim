@@ -104,8 +104,9 @@ also determines the optimal weighting: minimizing worst-case risk over it yields
 weighting of cohorts by credibility net of noise (Proposition~\ref{prop:optimal}), of which the flatness
 screen with size weights is a special case, completing the analogy to the variance-minimizing overlap
 weights of \citet{crump2009}. \emph{Fifth, evidence.} Simulations trace the method's advantage across the
-informativeness of pre-trends, and an application to the shale boom withdraws a spuriously positive pooled
-estimate of the effect on house prices, locating it in the cohorts already trending before onset.
+informativeness of pre-trends and confirm that the optimal weighting improves on the hard screen, and an
+application to the shale boom withdraws a spuriously positive pooled estimate of the effect on house prices,
+locating it in the cohorts already trending before onset.
 
 Table~\ref{tab:position} places the paper among existing robust-DiD methods. Where they hold the ATT fixed
 and use pre-trends to bound or extrapolate the post-treatment violation, we change the target and treat the
@@ -1245,6 +1246,62 @@ component being the variance induced by the randomness of selection, which a sta
 on the realized set does not capture. This confirms, from the panel side, that conditioning on a
 data-dependent selection understates uncertainty, and why the honest object to report is the sensitivity
 interval of Section~\ref{sec:flci} rather than a conventional confidence interval.
+
+\subsection{The optimal weighting improves on the hard screen}\label{sec:optsim}
+
+Proposition~\ref{prop:optimal} predicts that the soft, credibility-and-precision weighting lowers risk
+relative to the hard flatness screen. We confirm this and measure the gain. The design has $K=12$ cohorts
+with homogeneous effects, so every weighting targets the same value and mean squared error is a fair
+comparison. Cohorts come in pairs at six violation levels $V_g\in\{0,0.08,\dots,0.40\}$; within each pair
+one member is precise (a large sample) and one noisy (a small one). A hard screen keeps or drops a pair as a
+whole, since both members share the credibility $m_g$, whereas the optimal weighting can separate them. The
+design is deliberately constructed to exhibit this precision channel, and a random-DGP average below reports
+the typical gain.
+
+We compare three procedures for the common target: the ATT, equal weights on all cohorts; the hard screen,
+equal weights on $\{g:m_g\le c\}$ at its best threshold $c$; and the optimal weighting $\lambda^\ast$ of
+Proposition~\ref{prop:optimal}, in an oracle version with $m_g=V_g$ known and a feasible version with
+$\hat m_g=\max_e\lvert\hat\beta_{g,\mathrm{pre}}(e)\rvert$ estimated from informative pre-trends.
+
+Table~\ref{tab:prop11} and Figure~\ref{fig:prop11} report the result. The left panel plots MSE against the
+hard-screen threshold: the optimal weighting lies below the hard-screen curve at every $c$, including its
+minimum. Against the best hard screen, the optimal weighting lowers MSE by $63\%$ when credibility is known.
+The feasible version, which estimates $m_g$ from the pre-trends and is compared to the best hard screen doing
+the same, lowers it by $28\%$; across $500$ random DGPs the average reduction over the best hard screen is
+$14\%$. The right panel shows the mechanism. At a common credibility level the optimal weighting loads on the
+precise member and down-weights the noisy one, where the hard screen weights them equally; and it retains
+marginally less credible cohorts at reduced weight rather than dropping them at a cutoff. The gap between the
+oracle and feasible lines is the price of estimating $m_g$ from noisy pre-trends, the open question the
+conclusion notes; even so, the feasible weighting improves on the hard screen.
+
+\begin{table}[t]
+\centering
+\caption{Optimal weighting versus the hard screen (reduced-form model, homogeneous effects, so all
+procedures target the same value). RMSE and MSE for that target; the optimal weighting minimizes worst-case
+MSE by Proposition~\ref{prop:optimal}.}
+\label{tab:prop11}
+\begin{tabular}{lcc}
+\toprule
+Procedure & RMSE & MSE \\
+\midrule
+ATT (all cohorts) & $0.200$ & $0.0402$ \\
+Hard screen (best $c$) & $0.032$ & $0.00104$ \\
+Optimal weighting, feasible ($\hat m_g$) & $0.022$ & $0.00048$ \\
+Optimal weighting, oracle ($m_g=V_g$) & $0.020$ & $0.00039$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{prop11.png}
+\caption{Optimal credible weighting (Proposition~\ref{prop:optimal}) versus the hard flatness screen,
+homogeneous effects so every procedure targets the same value. Left: MSE against the hard-screen threshold
+$c$; the optimal weighting, oracle and feasible, lies below the hard-screen curve at every $c$ and below the
+ATT. Right: weights at each violation level; the optimal weighting loads on the precise member of each pair
+and soft-thresholds the credibility gradient, where the hard screen weights retained cohorts equally.}
+\label{fig:prop11}
+\end{figure}
 
 \section{Empirical application}\label{sec:app}
 
