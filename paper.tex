@@ -86,7 +86,7 @@ that literature. Our central contribution is to make that selection honest: to g
 that is uniformly valid against both the data-driven selection and the residual violation of parallel
 trends that a pre-trend screen cannot rule out.
 
-We make four contributions. \emph{First, identification.} Changing the target to the credible
+We make five contributions. \emph{First, identification.} Changing the target to the credible
 subpopulation replaces parallel trends on all cohorts with parallel trends on the selected cohorts alone, a
 weaker requirement that can hold when the former fails (Proposition~\ref{prop:id}). \emph{Second, and
 centrally, honest post-selection inference.} We combine the post-selection ``carving'' of \citet{lee2016}
@@ -99,7 +99,11 @@ set-valued ATT---and turn the characterization into an estimable rule reported a
 intervals (Proposition~\ref{prop:switch}). Because both intervals are honest, the rule can never cost
 coverage, only efficiency; under homogeneous effects it selects the lower-risk procedure with probability
 approaching one, and under heterogeneity it returns a breakdown value $\Gamma^\ast$ in the idiom of a
-sensitivity analysis. \emph{Fourth, evidence.} Simulations trace the method's advantage across the
+sensitivity analysis. \emph{Fourth, optimal weighting.} The sensitivity class that governs the inference
+also determines the optimal weighting: minimizing worst-case risk over it yields a soft-thresholded
+weighting of cohorts by credibility net of noise (Proposition~\ref{prop:optimal}), of which the flatness
+screen with size weights is a special case, completing the analogy to the variance-minimizing overlap
+weights of \citet{crump2009}. \emph{Fifth, evidence.} Simulations trace the method's advantage across the
 informativeness of pre-trends, and an application to the shale boom withdraws a spuriously positive pooled
 estimate of the effect on house prices, locating it in the cohorts already trending before onset.
 
@@ -930,6 +934,83 @@ the heterogeneity as its price---with the violation discounted by the residual b
 the whole comparison shifted by the surcharge that fixed-length honesty places on a
 smaller sample.
 
+\subsection{Optimal credible weighting}\label{sec:optimal}
+
+The flatness screen and the cohort weights $w_g$ have so far been taken as given, the screen retaining a
+cohort outright and the weights fixed at, say, cohort size. Both are choices, and the sensitivity class
+that governs the honest inference also pins down their optimal form, in the decision-theoretic sense in
+which \citet{crump2009} derive the optimal-overlap subpopulation and \citet{li2018} the overlap weights:
+there, variance is minimized where positivity is scarce; here, worst-case mean squared error is minimized
+where credibility is scarce.
+
+Let the estimator be a weighted average $\hat\theta(\lambda)=\sum_g\lambda_g\hat\beta_{g,\mathrm{post}}$
+with $\lambda_g\ge0$ and $\sum_g\lambda_g=1$, and---following the overlap-weighting logic that the weights
+define the estimand as well as the estimator---let the target be the $\lambda$-weighted causal effect
+$\theta(\lambda)=\sum_g\lambda_g\theta_g$, whose interpretation is reported through the weights themselves.
+Since $\hat\beta_{g,\mathrm{post}}\sim\mathcal N(\theta_g+V_g,\sigma_g^2)$ independently, the estimator has
+identification bias $\sum_g\lambda_g V_g$ and variance $\sum_g\lambda_g^2\sigma_g^2$. The pre-trends enter
+through the sensitivity class: a cohort's post-treatment violation is bounded by a credibility level
+$m_g\ge0$, $\lvert V_g\rvert\le m_g$, with $m_g$ small for a cohort whose pre-trend is flat and large for
+one whose pre-trend is steep. The hard flatness screen is the coarsening $m_g\in\{0,\infty\}$, retaining
+the $m_g=0$ cohorts and discarding the rest; the level bound $M$ of Section~\ref{sec:honest} is the common
+value $m_g\equiv M$ on the retained set. The worst-case mean squared error over this class is
+\[
+\mathcal R(\lambda)=\Big(\sum_g\lambda_g m_g\Big)^2+\sum_g\lambda_g^2\sigma_g^2,
+\]
+the squared worst-case bias plus the variance, and the optimal credible weighting minimizes it over the
+simplex.
+
+\begin{proposition}[Optimal credible weighting]\label{prop:optimal}
+$\mathcal R$ is strictly convex on the simplex, so it has a unique minimizer $\lambda^\ast$. There are
+scalars $\mu$ and $B=\sum_g\lambda_g^\ast m_g$, the worst-case bias at the optimum, such that
+\[
+\lambda_g^\ast=\frac{1}{\sigma_g^2}\Big[\tfrac{\mu}{2}-B\,m_g\Big]_+,\qquad [x]_+=\max(x,0),
+\]
+with $\mu$ fixed by $\sum_g\lambda_g^\ast=1$. Consequently there is an endogenous credibility cutoff
+$m^\ast=\mu/(2B)$: cohorts with $m_g\ge m^\ast$ receive zero weight, and among the retained cohorts the
+weight is $\lambda_g^\ast\propto(m^\ast-m_g)/\sigma_g^2$, decreasing in the credibility bound $m_g$ and in
+the sampling variance $\sigma_g^2$.
+\end{proposition}
+
+\begin{proof}
+$\sum_g\lambda_g^2\sigma_g^2$ is strictly convex for $\sigma_g^2>0$ and $(\sum_g\lambda_g m_g)^2$ is
+convex, so $\mathcal R$ is strictly convex and its minimizer over the compact convex simplex is unique. The
+worst-case bias is $\sup_{\lvert V_g\rvert\le m_g}\lvert\sum_g\lambda_g V_g\rvert=\sum_g\lambda_g m_g$
+since $\lambda_g\ge0$, giving the displayed $\mathcal R$. Form the Lagrangian
+$\mathcal R(\lambda)-\mu(\sum_g\lambda_g-1)-\sum_g\nu_g\lambda_g$ with $\nu_g\ge0$; stationarity gives
+$2Bm_g+2\lambda_g\sigma_g^2-\mu-\nu_g=0$ with $B=\sum_g\lambda_g m_g$. For $\lambda_g>0$ complementary
+slackness sets $\nu_g=0$ and $\lambda_g=(\mu/2-Bm_g)/\sigma_g^2$; for $\lambda_g=0$ it requires
+$\mu/2-Bm_g\le0$, i.e.\ $m_g\ge\mu/(2B)$. Combining the two cases gives the truncated form and the cutoff
+$m^\ast=\mu/(2B)$, with $\mu$ determined by the budget constraint and $B$ by its own definition at the
+resulting $\lambda^\ast$.
+\end{proof}
+
+Three readings connect the result to the rest of the paper. First, the optimal rule is a \emph{soft}
+flatness screen. It reproduces the hard screen's qualitative content---cohorts whose pre-trends are too
+steep are dropped---but with an endogenous threshold set by the bias--variance trade-off rather than a
+researcher's $c$, and with the surviving cohorts weighted continuously by how credible and how precise they
+are, rather than equally. A marginally less credible but large and precisely estimated cohort is retained
+where the hard screen would discard it, because the variance its inclusion saves outweighs the bias it
+admits---the same calculus as the dominance condition of Proposition~\ref{prop:dominance}, now internal to
+the weighting. Second, the result justifies the paper's default. Among equally credible cohorts,
+$m_g\equiv0$, the weights collapse to inverse-variance, $\lambda_g^\ast\propto1/\sigma_g^2$, and when
+sampling variance scales inversely with cohort size, $\sigma_g^2\propto1/n_g$, inverse-variance weighting
+is size weighting; the fixed $w_g$ of the definition is thus optimal precisely under homoskedastic-per-unit
+noise and equal credibility, and the proposition says what to do when either fails. Third, it completes the
+analogy to limited overlap. \citet{crump2009} trim and \citet{li2018} weight to minimize variance where
+positivity is the binding scarcity; here credibility is the scarcity, and the optimal response is to weight
+cohorts by credibility net of noise, with trimming emerging as the corner solution for cohorts past
+$m^\ast$.
+
+The credibility levels $m_g$ are reported, not assumed, in the same currency as everything else: a natural
+choice sets $m_g$ to the cohort's own maximal pre-trend, $m_g=\max_{e<0}\lvert\hat\beta_{g,\mathrm{pre}}(e)
+\rvert$, so that the weighting is read off the observed pre-trends. This makes the weights data-driven, a
+refinement of the selection already treated, and---as there---validity does not rest on it: the honest
+interval of Section~\ref{sec:honest} takes its coverage from the researcher-set level bound $M$, while the
+estimated $m_g$ only orders and weights the cohorts. Using $m_g$ to weight but $M$ to cover keeps efficiency
+and honesty on separate instruments, as the carved inference of Proposition~\ref{prop:carve} keeps
+selection and identification on separate instruments.
+
 \section{Simulation study}\label{sec:sim}
 
 \subsection{Design}\label{sec:design}
@@ -1263,13 +1344,16 @@ assumed away. We also make the scope condition operational: a feasible rule, rep
 intervals, signals when narrowing the target lowers risk, with a breakdown value $\Gamma^\ast$ standing in
 for the one quantity---the effects of the discarded cohorts---that the data cannot identify.
 
-Two questions remain open. The first is the finite-sample coverage of a single interval chosen by a
-hard-thresholded rule, as against the both-intervals report we recommend, whose honesty does not depend on
-the choice. The second is whether the credible-subpopulation weighting is optimal in a decision-theoretic
-sense, analogous to the variance-minimizing overlap weights of \citet{crump2009}, rather than merely
-credible; a weighting that traded a little credibility for a large reduction in the variance cost
-$\Delta\mathrm{Var}$ might dominate the flat screen, and characterizing it would complete the analogy to the
-limited-overlap literature from which the approach borrows.
+We also characterize the optimal credible weighting (Proposition~\ref{prop:optimal}): minimizing worst-case
+risk yields a soft-thresholded weighting of cohorts by credibility net of noise, of which the flatness
+screen with size weights is a special case, which completes the analogy to the variance-minimizing overlap
+weights of \citet{crump2009} that the approach borrows from.
+
+Two questions remain open. The first is the finite-sample behaviour of the feasible optimal weighting, in
+which the credibility levels $m_g$ are estimated from the pre-trends rather than known, and which therefore
+inherits the sampling noise in those pre-trends. The second is the finite-sample coverage of a
+\emph{single} interval chosen by a hard-thresholded switching rule, as against the both-intervals report we
+recommend, whose honesty does not depend on the choice.
 
 \clearpage
 \bibliographystyle{aer}
