@@ -24,15 +24,19 @@
 
 \begin{abstract}
 \noindent When parallel trends fails for some treated cohorts but not others, the average treatment
-effect on the treated (ATT) becomes hard to recover. We propose changing the estimand rather than
-defending it. The credible-subpopulation local ATT
-(LATT) is the effect for the subpopulation of cohorts whose parallel trends is credible, and it is
-point-identified under parallel trends for the selected cohorts alone, a weaker requirement that can hold
-when the ATT's fails. It is estimated by reweighting standard group-time effects toward those cohorts, and
-paired with honest sensitivity bounds on the residual violation that a pre-trend screen cannot rule out. The method's advantage grows with how informative pre-trends are about post-treatment
-violations, as simulations confirm. In an application, a significantly positive pooled estimate of the
-shale boom's effect on local house prices proves to rest on cohorts already trending before onset, and
-the credible subpopulation reveals no effect.
+effect on the treated (ATT) becomes hard to recover: its point estimate is biased, and its honest
+confidence set, though valid, is wide, because it must accommodate the worst offending cohort in the
+average. We propose changing the estimand. The credible-subpopulation local ATT (LATT) is the effect for
+the cohorts whose parallel trends is credible; it is point-identified under parallel trends for those
+cohorts alone, a weaker requirement that can hold when the ATT's fails, and is estimated by reweighting
+standard group-time effects. Selecting those cohorts from the observed pre-trends reintroduces the
+pre-test problem that honest-DiD methods were built to avoid, and our main contribution is to make the
+selection honest: we combine post-selection inference with sensitivity bounds into a single interval that
+is uniformly valid against both the data-driven selection and the residual violation the screen cannot
+rule out. We further give a feasible, estimable rule for when the trade pays; because it reports two
+honest intervals, the rule can cost efficiency but never coverage. In an application, a significantly
+positive pooled estimate of the shale boom's effect on local house prices proves to rest on cohorts
+already trending before onset, and the credible subpopulation reveals no effect.
 \end{abstract}
 
 \medskip
@@ -54,54 +58,102 @@ passing them induces a pre-test selection bias \citep{roth2022pretrends}, and ev
 does not guarantee a clean post-period, since nothing prevents a confound from arriving at the moment of
 treatment \citep{kahnlang2020}.
 
-A growing literature, surveyed in \citet{roth2023trending},
-has responded by relaxing parallel trends itself. Building on \citet{manski2018}, \citet{rambachan2023}
-abandon exact parallel trends and instead bound how different the post-treatment violations can be from
-the observed pre-trends, reporting a uniformly valid confidence set for the ATT in place of a point
-estimate. A Bayesian variant \citep{kwonroth2024} places an empirical-Bayes prior on the violation $\delta$ to
-sharpen the set into a posterior mean and credible interval, and \citet{dechaisemartin2026} instead
-ranks the post-treatment difference-in-differences against the pre-treatment ones. All keep the ATT as
-the target and use the pre-trends to extrapolate the violation across periods.
+A growing literature, surveyed in \citet{roth2023trending}, responds by relaxing parallel trends while
+holding the ATT fixed as the target. Building on \citet{manski2018}, \citet{rambachan2023} bound how far
+post-treatment violations can depart from the observed pre-trends and report a uniformly valid confidence
+set for the ATT; \citet{kwonroth2024} sharpen the set with an empirical-Bayes prior on the violation; and
+\citet{dechaisemartin2026} rank the post-treatment differences against the pre-treatment ones. All keep
+the ATT and use the pre-trends to extrapolate the violation across periods. But the ATT is where a
+structural difficulty lies. When parallel trends fails for some cohorts and holds for others, the ATT is
+an average over all treated cohorts, including the offenders: its point estimate is biased, and its honest
+confidence set, though valid, is wide, because it must accommodate the worst cohort in the average.
 
-The ATT is where a structural limitation appears. When parallel trends
-fails for some cohorts but holds for others, the ATT, an average over all treated cohorts including the
-offending ones, is the object that is hard to recover. A point estimate of it is then biased,
-and the sensitivity set, though honest, can be wide and uninformative, because it must accommodate the
-worst offenders in the average.
-
-This paper takes a different route. When the population target is not credibly identified, we retreat to
-a subpopulation where it is. This is the logic of the local average treatment effect \citep{imbens1994},
-of the optimal-subpopulation average treatment effect under limited overlap \citep{crump2009}, and of
-overlap weighting \citep{li2018}. In each case one trades the original estimand for a credibly-identified
-effect on a selected subpopulation, and defends the trade by characterizing whom the subpopulation
-comprises.
-
-We develop the staggered-DiD instance of this principle. The credible-subpopulation LATT is the weighted
-average of group-time effects restricted to cohorts whose parallel trends is credible, and it is
-point-identified under parallel trends for the selected cohorts alone, a weaker requirement than the ATT's
-that can hold when the latter fails, since the excluded cohorts' violations do not enter it.
-Estimation is a transparent reweighting of standard group-time effects \citep{callaway2021}, so the
-method applies to any heterogeneity-robust estimator that delivers them.\footnote{These estimators
+This paper changes the target, and then confronts the inference problem that the change creates. When the
+population ATT is not credibly identified, we retreat to the subpopulation of cohorts where it is---the
+logic of the local average treatment effect \citep{imbens1994}, of the optimal-subpopulation average
+treatment effect under limited overlap \citep{crump2009}, and of overlap weighting \citep{li2018}, each of
+which trades the original estimand for a credibly identified effect on a selected subpopulation. The
+credible-subpopulation LATT is a reweighting of standard group-time effects \citep{callaway2021} over the
+cohorts whose parallel trends is credible.\footnote{These estimators
 \citep{callaway2021, sun2021, borusyak2024, dechaisemartin2020} repair the aggregation failure of
 two-way fixed effects under staggered adoption \citep{goodmanbacon2021}, whose implicit weights can turn
 negative under treatment-effect heterogeneity. That repair concerns aggregation, not identification,
-since they maintain parallel trends and are biased when it fails, which is the failure we address.} Credibility
-is assessed from the pre-trends, making the reweighting a data-dependent selection, whose inference we
-treat with the sensitivity machinery of \citet{rambachan2023}.
+since they maintain parallel trends and are biased when it fails, which is the failure we address.}
+Credibility can be decided ex ante, from covariates or institutional knowledge, but in the leading case it
+is read from the pre-trends themselves---and selecting on the same pre-trends used for estimation is
+exactly the step the honest-DiD literature avoided, because it revives the pre-test bias that motivates
+that literature. Our central contribution is to make that selection honest: to give inference for the LATT
+that is uniformly valid against both the data-driven selection and the residual violation of parallel
+trends that a pre-trend screen cannot rule out.
 
-The method thus occupies a distinct point on a frontier of credibility, precision, and scope. Against a
-point estimate of the ATT it buys credibility by narrowing the target, and against a HonestDiD set for
-the ATT it buys a sharper, point-identified answer. Its advantage is governed by how informative
-pre-trends are about post-treatment violations. When they are uninformative, selection buys nothing and
-the assumption must rest on economic context, and there the relative-magnitudes restriction is
-self-undermining, reporting false precision when pre-trends are flat where a fixed, researcher-set bound
-is not.
+We make four contributions. \emph{First, identification.} Changing the target to the credible
+subpopulation replaces parallel trends on all cohorts with parallel trends on the selected cohorts alone, a
+weaker requirement that can hold when the former fails (Proposition~\ref{prop:id}). \emph{Second, and
+centrally, honest post-selection inference.} We combine the post-selection ``carving'' of \citet{lee2016}
+with the sensitivity bounds of \citet{rambachan2023} into a single interval for the LATT that is uniformly
+valid in the data-generating parameter, with no separation or consistent-selection condition
+(Proposition~\ref{prop:carve}): the carved component absorbs the data-driven selection and the level bound
+absorbs the residual identification failure, and the two compose. \emph{Third, a feasible decision rule.}
+We characterize in closed form when the trade pays---when the point-identified LATT dominates the
+set-valued ATT---and turn the characterization into an estimable rule reported alongside both honest
+intervals (Proposition~\ref{prop:switch}). Because both intervals are honest, the rule can never cost
+coverage, only efficiency; under homogeneous effects it selects the lower-risk procedure with probability
+approaching one, and under heterogeneity it returns a breakdown value $\Gamma^\ast$ in the idiom of a
+sensitivity analysis. \emph{Fourth, evidence.} Simulations trace the method's advantage across the
+informativeness of pre-trends, and an application to the shale boom withdraws a spuriously positive pooled
+estimate of the effect on house prices, locating it in the cohorts already trending before onset.
+
+Table~\ref{tab:position} places the paper among existing robust-DiD methods. Where they hold the ATT fixed
+and use pre-trends to bound or extrapolate the post-treatment violation, we change the target and treat the
+resulting selection as the object requiring inference; we nest the sensitivity analysis of
+\citet{rambachan2023} by applying it to the retained sub-aggregate, and we connect to the post-selection
+inference literature \citep{lee2016, leeb2005, leeb2008} that the honest-DiD papers, by never selecting,
+did not need.
+
+\begin{table}[t]
+\centering
+\caption{Where this paper sits. Existing robust-DiD methods hold the ATT fixed and use pre-trends to bound
+or extrapolate the post-treatment violation; we change the target to a credibly identified subpopulation
+and make the resulting data-driven selection honest.}
+\label{tab:position}
+\small
+\begin{tabular}{@{}p{0.20\textwidth}p{0.13\textwidth}p{0.29\textwidth}p{0.27\textwidth}@{}}
+\toprule
+Approach & Target & Use of pre-trends & Inference guarantee \\
+\midrule
+Pre-trends test, then point DiD & ATT & Screen; keep design if the test passes & None post-test (pre-test bias) \\
+\citet{rambachan2023} & ATT & Bound post- by pre-treatment violation ($\Delta$) & Uniform over $\delta\in\Delta$ \\
+\citet{kwonroth2024} & ATT & Calibrate an (empirical-)Bayes prior on $\delta$ & Bayesian credible set \\
+\citet{dechaisemartin2026} & ATT & Rank post- against pre-treatment DiDs & Valid under the ranking \\
+\textbf{This paper} & \textbf{LATT} (credible subpop.) & Select credible cohorts; bound residual violation & \textbf{Uniform vs.\ selection \emph{and} residual violation} \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 The remainder of the paper is organized as follows. Section~\ref{sec:approach} fixes the staggered-DiD
-setup, defines the credible-subpopulation LATT, and develops its identification, estimation, and
-sensitivity-based inference. Section~\ref{sec:sim} reports the simulation study,
+setup, defines the credible-subpopulation LATT, and develops its identification, estimation, honest
+inference, and the decision rule. Section~\ref{sec:sim} reports the simulation study,
 Section~\ref{sec:app} applies the method to the local house-price effect of the shale boom, and
-Section~\ref{sec:conc} concludes.
+Section~\ref{sec:conc} concludes. The procedure, assembled in one place, is the following.
+
+\begin{center}
+\fbox{\begin{minipage}{0.92\textwidth}
+\textbf{The credible-subpopulation procedure.}
+\begin{enumerate}\setlength\itemsep{2pt}
+\item \emph{Estimate} cohort-level (group-time) event studies with any heterogeneity-robust estimator
+\citep{callaway2021, sun2021, borusyak2024, dechaisemartin2020}.
+\item \emph{Select} the credible cohorts---from institutional knowledge or a covariate split (ex ante), or
+by screening the pre-trends for flatness (data-driven).
+\item \emph{Estimate} the LATT by reweighting the retained cohorts' post-treatment effects.
+\item \emph{Report honest inference}: the level-bound sensitivity interval on the retained set, carved for
+the selection when it is data-driven (Proposition~\ref{prop:carve}), and the breakdown violation
+$M^\ast$.
+\item \emph{Report the trade}: both honest intervals (LATT and ATT) with the switching diagnostic
+$(\hat D,\ \widehat{\Delta\mathrm{Var}},\ \Gamma^\ast)$ that signals which is more informative
+(Proposition~\ref{prop:switch}).
+\end{enumerate}
+\end{minipage}}
+\end{center}
 
 \section{The credible-subpopulation LATT}\label{sec:approach}
 
@@ -186,7 +238,10 @@ therefore equals the weighted average of the aggregated causal effects, which is
 Cohorts outside $S$ receive zero weight, so their differential trends do not enter.
 \end{proof}
 
-Proposition~\ref{prop:id} is elementary, but it is the paper's central point. Changing the target to the
+Proposition~\ref{prop:id} is elementary, and deliberately so. The paper's work is not in the
+identification, which merely restates that a weighted average over cohorts where parallel trends holds is
+identified, but in the honest inference for the data-driven selection this target invites, developed in
+Section~\ref{sec:honest}. Changing the target to the
 credible subpopulation weakens the identifying requirement from parallel trends on all cohorts to parallel
 trends on $S$, which can hold when the former fails, at the cost of a narrower question whose subpopulation
 $S$ must then be characterized. The weakening is genuine but conditional, and two things must be kept
@@ -721,7 +776,60 @@ cohorts' effects differ from the retained ones by more than $\Gamma^\ast$ allows
 in the same idiom as the breakdown value $M^\ast$ for the identifying restriction, now for the estimand
 change rather than the violation.
 
-Three caveats keep the result honest. The advantage \eqref{eq:delta} is an upper bound
+These pieces assemble into a rule the practitioner can actually run. The recommended output is not a
+single chosen estimator but \emph{both} honest intervals---for the ATT and for the LATT---together with the
+diagnostic, and the rule advises which of the two honest intervals is the more informative. Reporting both
+is what keeps the recommendation honest: because each interval covers its own target at the nominal level
+whatever the data say, a rule that only ranks them can misfire on efficiency but never on coverage. This is
+the decision-theoretic counterpart of the scope condition, and it is feasible up to the single quantity---
+the effects of the discarded cohorts---that no design can identify.
+
+\begin{proposition}[A feasible and honest switching rule]\label{prop:switch}
+Consider the informative limit of Proposition~\ref{prop:generalK}, and suppose the researcher reports the
+honest level-bound interval for \emph{both} the ATT and the LATT, together with the rule: prefer the LATT
+when $\hat D^2>\widehat{\Delta\mathrm{Var}}$ and the ATT otherwise, where
+$\hat D=\hat\theta_{\mathcal G}-\hat\theta_{\hat S}\xrightarrow{p}D=B_{\mathcal F}-\Gamma$ and
+$\widehat{\Delta\mathrm{Var}}$ is the variance cost, a function of $\Sigma$ and the weights alone. Then:
+\begin{enumerate}
+\item[(i)] \emph{(Honesty is unconditional.)} Each reported interval covers its own target at level
+$1-\alpha$ for every $\beta$, by the validity of the level-bound interval (carved, under data-driven
+selection, by Proposition~\ref{prop:carve}). Since both are always reported, the rule---however it
+decides---cannot affect coverage; it ranks the two honest intervals and is an efficiency device only.
+\item[(ii)] \emph{(Consistency under homogeneity.)} If treatment effects are homogeneous, so the
+composition gap $\Gamma=0$, and $D^2\neq\Delta\mathrm{Var}$, the rule prefers the mean-squared-error-dominant
+procedure with probability approaching one.
+\item[(iii)] \emph{(Sensitivity under heterogeneity.)} In general the advantage
+$\Delta^\ast=B_{\mathcal F}^2-\Gamma^2-\Delta\mathrm{Var}=D^2+2D\Gamma-\Delta\mathrm{Var}$ is monotone in the
+unidentified $\Gamma$ when $D>0$ and changes sign at the breakdown value
+$\Gamma^\ast=(\Delta\mathrm{Var}-D^2)/(2D)$. The trade pays unless the discarded cohorts' effects differ
+from the retained cohorts' by more than $\Gamma^\ast$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+(i) Each interval's coverage statement is a property of that interval alone and holds for every $\beta$;
+reporting both leaves each untouched, so whichever the rule recommends, the reader is handed an interval
+that covers at $1-\alpha$. (ii) By Proposition~\ref{prop:generalK}, in the informative limit the LATT
+dominates the ATT in mean squared error iff $\Delta^\ast>0$, and under $\Gamma=0$ this is
+$D^2>\Delta\mathrm{Var}$. Since $\hat D\xrightarrow{p}D$ and $\widehat{\Delta\mathrm{Var}}\xrightarrow{p}
+\Delta\mathrm{Var}$ (indeed the latter is known given $\Sigma$), the continuous map gives
+$\mathbf{1}\{\hat D^2>\widehat{\Delta\mathrm{Var}}\}\xrightarrow{p}\mathbf 1\{D^2>\Delta\mathrm{Var}\}$
+whenever $D^2\neq\Delta\mathrm{Var}$, which is the sign of $\Delta^\ast$. (iii) Writing
+$B_{\mathcal F}=D+\Gamma$ in $\Delta^\ast=B_{\mathcal F}^2-\Gamma^2-\Delta\mathrm{Var}$ cancels the squared
+gap and leaves $\Delta^\ast=D^2+2D\Gamma-\Delta\mathrm{Var}$, linear in $\Gamma$ with slope $2D$; its root
+is $\Gamma^\ast$, and it is increasing in $\Gamma$ when $D>0$.
+\end{proof}
+
+Proposition~\ref{prop:switch} is the formal recommendation that the scope condition pointed to. It turns
+the informal ``report the LATT when pre-trends are informative'' into an estimable statistic with a
+guarantee, and it separates cleanly what the data decide from what they cannot: the variance cost and the
+gap $D$ are estimable, so under homogeneity the decision is made for the researcher; the composition gap
+$\Gamma$ is not, so under heterogeneity the honest output is the breakdown $\Gamma^\ast$, read exactly as
+$M^\ast$ is read for the identifying restriction. The rule never has to suppress an interval to deliver
+this, which is why it cannot cost coverage---the one guarantee a method built to restore honesty must not
+spend.
+
+Three caveats keep the dominance calculation honest. The advantage \eqref{eq:delta} is an upper bound
 on what the method delivers, because it omits two channels that both work against the
 LATT: occasional false rejection of the clean cohort, which enters at order
 $1-p_1$ when the threshold is not comfortably large, and the additional variance that
@@ -1147,12 +1255,21 @@ The method delivers a sharp answer where the ATT estimator is biased and its sen
 at the price of a narrower, subpopulation target whose composition must be described rather than
 assumed. Its advantage is contingent on pre-trends being informative about post-treatment violations.
 Where they are not, only economic context can carry the assumption. Under data-driven selection the
-estimator carries a pre-test bias that vanishes as pre-trends grow informative and a pointwise, rather than
-uniform, guarantee, which a researcher can trade for uniform validity by selecting on independent
-information. The principal open
-question is a decision-theoretic characterization of the region in which the point-identified LATT
-dominates the set-valued ATT, which would turn the scope condition documented here into a formal
-recommendation.
+estimator carries a pre-test bias that vanishes as pre-trends grow informative; the inference we
+recommend is honest regardless, combining the post-selection carving of \citet{lee2016} with the
+sensitivity bounds of \citet{rambachan2023} into an interval uniformly valid against both the selection and
+the residual violation, so that the pre-test problem the selection revives is met head-on rather than
+assumed away. We also make the scope condition operational: a feasible rule, reported alongside both honest
+intervals, signals when narrowing the target lowers risk, with a breakdown value $\Gamma^\ast$ standing in
+for the one quantity---the effects of the discarded cohorts---that the data cannot identify.
+
+Two questions remain open. The first is the finite-sample coverage of a single interval chosen by a
+hard-thresholded rule, as against the both-intervals report we recommend, whose honesty does not depend on
+the choice. The second is whether the credible-subpopulation weighting is optimal in a decision-theoretic
+sense, analogous to the variance-minimizing overlap weights of \citet{crump2009}, rather than merely
+credible; a weighting that traded a little credibility for a large reduction in the variance cost
+$\Delta\mathrm{Var}$ might dominate the flat screen, and characterizing it would complete the analogy to the
+limited-overlap literature from which the approach borrows.
 
 \clearpage
 \bibliographystyle{aer}
