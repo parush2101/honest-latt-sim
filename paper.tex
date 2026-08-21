@@ -88,14 +88,18 @@ that literature. Our central contribution is to make that selection honest: to g
 that is uniformly valid against both the data-driven selection and the residual violation of parallel
 trends that a pre-trend screen cannot rule out.
 
-We make five contributions. \emph{First, identification.} Changing the target to the credible
-subpopulation replaces parallel trends on all cohorts with parallel trends on the selected cohorts alone, a
-weaker requirement that can hold when the former fails (Proposition~\ref{prop:id}). \emph{Second, and
-centrally, honest post-selection inference.} We combine the post-selection ``carving'' of \citet{lee2016}
-with the sensitivity bounds of \citet{rambachan2023} into a single interval for the LATT that is uniformly
-valid in the data-generating parameter, with no separation or consistent-selection condition
-(Proposition~\ref{prop:carve}): the carved component absorbs the data-driven selection and the level bound
-absorbs the residual identification failure, and the two compose. \emph{Third, a feasible decision rule.}
+That the LATT is point-identified under parallel trends on the selected cohorts alone---a weaker
+requirement that can hold when the ATT's fails (Proposition~\ref{prop:id})---is immediate, and we treat it
+as a benchmark rather than a contribution: the screen selects on pre-trends, and a flat pre-trend does not
+certify the flat post-trend that identification requires, so the honest interval, not the point, is the
+object we carry. The paper's work is the inference that a data-driven selection demands, and it makes four
+contributions. \emph{First, and centrally, honest post-selection inference.} We combine the post-selection
+``carving'' of \citet{lee2016} with the sensitivity bounds of \citet{rambachan2023} into a single interval
+for the LATT that is uniformly valid in the data-generating parameter, with no separation or
+consistent-selection condition (Proposition~\ref{prop:carve}): the carved component absorbs the data-driven
+selection and the level bound absorbs the residual identification failure, and the two compose. This is the
+step the fixed-target sensitivity analysis never takes, because it never selects. \emph{Second, a feasible
+decision rule.}
 We characterize in closed form when the trade pays---when the point-identified LATT dominates the
 set-valued ATT. A width-dominance theorem gives the explicit threshold on the dropped cohorts' violation
 above which the credible-subpopulation honest interval is strictly shorter than the \citet{rambachan2023}
@@ -104,11 +108,11 @@ interval for the ATT, a threshold estimable from the estimated covariance alone
 honest intervals (Proposition~\ref{prop:switch}). Because both intervals are honest, the rule can never cost
 coverage, only efficiency; under homogeneous effects it selects the lower-risk procedure with probability
 approaching one, and under heterogeneity it returns a breakdown value $\Gamma^\ast$ in the idiom of a
-sensitivity analysis. \emph{Fourth, optimal weighting.} The sensitivity class that governs the inference
+sensitivity analysis. \emph{Third, optimal weighting.} The sensitivity class that governs the inference
 also determines the optimal weighting: minimizing worst-case risk over it yields a soft-thresholded
 weighting of cohorts by credibility net of noise (Proposition~\ref{prop:optimal}), of which the flatness
 screen with size weights is a special case, completing the analogy to the variance-minimizing overlap
-weights of \citet{crump2009}. \emph{Fifth, evidence.} Simulations trace the method's advantage across the
+weights of \citet{crump2009}. \emph{Fourth, evidence.} Simulations trace the method's advantage across the
 informativeness of pre-trends and confirm that the optimal weighting improves on the hard screen, and an
 application to the shale boom withdraws a spuriously positive pooled estimate of the effect on house prices,
 locating it in the cohorts already trending before onset.
@@ -231,7 +235,8 @@ average over post-treatment periods), the credible-subpopulation local ATT, defi
 the aggregated causal effect of cohort $g$.
 \end{definition}
 
-The value of the target is that it is identified under a weaker condition than the ATT.
+The target is identified under a weaker condition than the ATT---a benchmark we state before turning,
+in Section~\ref{sec:honest}, to the honest interval that is the paper's actual object.
 
 \begin{proposition}[Identification]\label{prop:id}
 If parallel trends holds for every $g\in S$, i.e.\ $\delta_{g,\mathrm{post}}=0$ for all $g\in S$, then
