@@ -10,7 +10,9 @@
 \onehalfspacing
 \interfootnotelinepenalty=10000
 
+\newtheorem{theorem}{Theorem}
 \newtheorem{proposition}{Proposition}
+\newtheorem{corollary}{Corollary}
 \newtheorem{lemma}{Lemma}
 \newtheorem{assumption}{Assumption}
 \newtheorem{definition}{Definition}
@@ -95,8 +97,11 @@ valid in the data-generating parameter, with no separation or consistent-selecti
 (Proposition~\ref{prop:carve}): the carved component absorbs the data-driven selection and the level bound
 absorbs the residual identification failure, and the two compose. \emph{Third, a feasible decision rule.}
 We characterize in closed form when the trade pays---when the point-identified LATT dominates the
-set-valued ATT---and turn the characterization into an estimable rule reported alongside both honest
-intervals (Proposition~\ref{prop:switch}). Because both intervals are honest, the rule can never cost
+set-valued ATT. A width-dominance theorem gives the explicit threshold on the dropped cohorts' violation
+above which the credible-subpopulation honest interval is strictly shorter than the \citet{rambachan2023}
+interval for the ATT, a threshold estimable from the estimated covariance alone
+(Theorem~\ref{thm:width}); and we turn the characterization into an estimable rule reported alongside both
+honest intervals (Proposition~\ref{prop:switch}). Because both intervals are honest, the rule can never cost
 coverage, only efficiency; under homogeneous effects it selects the lower-risk procedure with probability
 approaching one, and under heterogeneity it returns a breakdown value $\Gamma^\ast$ in the idiom of a
 sensitivity analysis. \emph{Fourth, optimal weighting.} The sensitivity class that governs the inference
@@ -858,6 +863,83 @@ $(\sigma/\sqrt2)\,\mathrm{cv}_\alpha\!\big(V/(\sqrt2\,\sigma)\big)$. Each interv
 covers the common target at its nominal level by construction, since each bound
 dominates its own aggregate's violation, so the honest comparison is not one of
 coverage but of expected length at equal coverage.
+
+Before specializing to two cohorts, we state the comparison in general, since it holds at
+any cohort count and isolates the single quantity---the violation carried by the dropped
+cohorts---that decides it. Write the ATT estimator as
+$\hat\theta_{\mathcal G}=\ell_{\mathcal G}'\hat\beta_{\mathrm{post}}$ with aggregate standard
+error $s_{\mathcal G}^2=\ell_{\mathcal G}'\Sigma_{\mathrm{post}}\ell_{\mathcal G}$ and honest
+bias bound $B_{\mathcal G}$ dominating the full set's violation
+$\lvert\ell_{\mathcal G}'\delta_{\mathrm{post}}\rvert$, and the LATT estimator as
+$\hat\theta_S=\ell_S'\hat\beta_{\mathrm{post}}$ with carved standard error $s_S$ and residual
+bound $B_S$. Both honest intervals are the fixed-length construction \eqref{eq:flci-hw}.
+
+\begin{theorem}[Width dominance]\label{thm:width}
+Suppose the LATT interval is the carved interval of Proposition~\ref{prop:carve} (under ex-ante
+selection, the interval of \citealp{rambachan2023}), with half-width $h_S=h(B_S,s_S)$, and let
+$h_{\mathcal G}=h(B_{\mathcal G},s_{\mathcal G})$ be the ATT interval. Then
+\[
+h_S<h_{\mathcal G}\quad\Longleftrightarrow\quad
+s_S\,\mathrm{cv}_\alpha\!\big(B_S/s_S\big)\;<\;
+s_{\mathcal G}\,\mathrm{cv}_\alpha\!\big(B_{\mathcal G}/s_{\mathcal G}\big).
+\]
+Holding $(s_{\mathcal G},s_S,B_S)$ fixed, there is a unique threshold
+\[
+B_{\mathcal G}^\ast\;=\;s_{\mathcal G}\,\mathrm{cv}_\alpha^{-1}\!\Big(\tfrac{s_S}{s_{\mathcal G}}\,
+\mathrm{cv}_\alpha\!\big(B_S/s_S\big)\Big)
+\]
+such that the credible-subpopulation interval is strictly shorter than the ATT interval if and
+only if $B_{\mathcal G}>B_{\mathcal G}^\ast$. Since $B_{\mathcal G}$ carries the dropped cohorts'
+aggregate violation $B_{\mathcal F}$ while $B_S$ does not, this is a threshold on
+$B_{\mathcal F}$; and whenever restricting to $S$ raises the aggregate variance,
+$s_S>s_{\mathcal G}$, the threshold is strictly positive, so a minimum dropped violation is
+required before bias relief outweighs the variance cost.
+\end{theorem}
+
+\begin{proof}
+By \eqref{eq:flci-hw} each interval is the near-optimal fixed-length interval of
+\citet{armstrong2018}, with half-width $h(B,s)=s\,\mathrm{cv}_\alpha(B/s)$ and coverage at least
+$1-\alpha$ whenever the bound dominates the estimator's bias; for the ATT this gives
+$h_{\mathcal G}=h(B_{\mathcal G},s_{\mathcal G})$, and under ex-ante $S$ the same applies to the
+LATT. Under data-driven selection $\hat\theta_S\mid\{\hat S=S\}$ is truncated Gaussian, so the
+plug-in interval is not honest; Proposition~\ref{prop:carve} replaces it with the carved statistic,
+whose pivot is exactly $\mathcal N(\theta_S,s_S^2)$-calibrated unconditionally and uniformly in
+$\beta$, so the carved interval is again of the form \eqref{eq:flci-hw} with standard error $s_S$
+and bound $B_S$, giving $h_S=h(B_S,s_S)$. It is this step that licenses the comparison: without it
+$h_S$ is not an honest half-width, and it is the step the fixed-target sensitivity analysis never
+takes. Both half-widths share $\varphi(B,s)=s\,\mathrm{cv}_\alpha(B/s)$, so $h_S<h_{\mathcal G}$ is
+the displayed inequality. Fix $(s_{\mathcal G},s_S,B_S)$ and set
+$c_0=s_S\,\mathrm{cv}_\alpha(B_S/s_S)$. The map $g(B)=s_{\mathcal G}\,\mathrm{cv}_\alpha(B/s_{\mathcal G})$
+is continuous and strictly increasing, from $g(0)=s_{\mathcal G}\,z_{1-\alpha/2}$ to $\infty$; since
+$\mathrm{cv}_\alpha:[0,\infty)\to[z_{1-\alpha/2},\infty)$ is a strictly increasing bijection and
+$c_0/s_{\mathcal G}\ge (s_S/s_{\mathcal G})\,z_{1-\alpha/2}\ge z_{1-\alpha/2}$, the equation
+$g(B_{\mathcal G}^\ast)=c_0$ has the unique solution displayed, and
+$h_S<h_{\mathcal G}\iff B_{\mathcal G}>B_{\mathcal G}^\ast$. Finally $s_S\ge s_{\mathcal G}$ because
+reweighting onto the retained set cannot lower the aggregate variance below the full set's optimum
+under precision weights, so the inequality $c_0/s_{\mathcal G}\ge z_{1-\alpha/2}$ is strict, and
+$B_{\mathcal G}^\ast>0$, whenever $s_S>s_{\mathcal G}$.
+\end{proof}
+
+\begin{corollary}[Explicit threshold under equal weights]\label{cor:width}
+Let $K$ equally weighted cohorts with common per-cohort post-treatment variance $\sigma^2$ and
+independent estimates comprise $k$ clean cohorts ($V_g=0$), retained, and $K-k$ confounded cohorts
+(violation $V$), dropped in the informative limit, with the retained set truly flat, $B_S=0$.
+Writing $f=(K-k)/K$, so that $s_{\mathcal G}=\sigma/\sqrt K$, $s_S=\sigma/\sqrt k$, and
+$B_{\mathcal G}=fV$,
+\[
+h_S<h_{\mathcal G}\quad\Longleftrightarrow\quad
+\mathrm{cv}_\alpha\!\Big(\tfrac{fV\sqrt K}{\sigma}\Big)>\sqrt{\tfrac{K}{k}}\,z_{1-\alpha/2}
+\quad\Longleftrightarrow\quad
+V>V^\ast:=\frac{\sigma}{f\sqrt K}\,
+\mathrm{cv}_\alpha^{-1}\!\Big(\sqrt{\tfrac{K}{k}}\,z_{1-\alpha/2}\Big),
+\]
+equivalently $B_{\mathcal F}=fV>B_{\mathcal F}^\ast=(\sigma/\sqrt K)\,
+\mathrm{cv}_\alpha^{-1}\big(\sqrt{K/k}\,z_{1-\alpha/2}\big)$. At $K=2$, $k=1$ this is
+Proposition~\ref{prop:interval} with $M_L=0$.
+\end{corollary}
+
+The two-cohort model makes these constants explicit and adds the residual bound $M_L$ that the
+corollary sets to zero.
 
 \begin{proposition}[The trade in honest intervals]\label{prop:interval}
 In the informative regime above, with homogeneous effects and a residual bound $M_L$ on
