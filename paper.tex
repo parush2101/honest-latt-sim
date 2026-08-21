@@ -94,7 +94,7 @@ That the LATT is point-identified under parallel trends on the selected cohorts 
 requirement that can hold when the ATT's fails (Proposition~\ref{prop:id})---is immediate, and we treat it
 as a benchmark rather than a contribution: the screen selects on pre-trends, and a flat pre-trend does not
 certify the flat post-trend that identification requires, so the honest interval, not the point, is the
-object we carry. The paper's work is the inference that a data-driven selection demands, and it makes four
+object we carry. The paper's work is the inference that a data-driven selection demands, and it makes three
 contributions. \emph{First, and centrally, honest post-selection inference.} We combine the post-selection
 ``carving'' of \citet{lee2016} with the sensitivity bounds of \citet{rambachan2023} into a single interval
 for the LATT that is uniformly valid in the data-generating parameter, with no separation or
@@ -110,14 +110,13 @@ interval for the ATT, a threshold estimable from the estimated covariance alone
 honest intervals (Proposition~\ref{prop:switch}). Because both intervals are honest, the rule can never cost
 coverage, only efficiency; under homogeneous effects it selects the lower-risk procedure with probability
 approaching one, and under heterogeneity it returns a breakdown value $\Gamma^\ast$ in the idiom of a
-sensitivity analysis. \emph{Third, optimal weighting.} The sensitivity class that governs the inference
-also determines the optimal weighting: minimizing worst-case risk over it yields a soft-thresholded
-weighting of cohorts by credibility net of noise (Proposition~\ref{prop:optimal}), of which the flatness
-screen with size weights is a special case, completing the analogy to the variance-minimizing overlap
-weights of \citet{crump2009}. \emph{Fourth, evidence.} Simulations trace the method's advantage across the
-informativeness of pre-trends and confirm that the optimal weighting improves on the hard screen, and an
+sensitivity analysis. \emph{Third, evidence.} Simulations trace the method's advantage across the
+informativeness of pre-trends, and an
 application to the shale boom withdraws a spuriously positive pooled estimate of the effect on house prices,
-locating it in the cohorts already trending before onset.
+locating it in the cohorts already trending before onset. An appendix develops the optimal credible
+weighting that the same sensitivity class implies (Proposition~\ref{prop:optimal})---a soft-thresholded
+weighting of cohorts by credibility net of noise, of which the flatness screen is a special case,
+completing the analogy to the variance-minimizing overlap weights of \citet{crump2009}.
 
 Table~\ref{tab:position} places the paper among existing robust-DiD methods. Where they hold the ATT fixed
 and use pre-trends to bound or extrapolate the post-treatment violation, we change the target and treat the
@@ -800,13 +799,11 @@ cohorts' effects differ from the retained ones by more than $\Gamma^\ast$ allows
 in the same idiom as the breakdown value $M^\ast$ for the identifying restriction, now for the estimand
 change rather than the violation.
 
-These pieces assemble into a rule the practitioner can actually run. The recommended output is not a
-single chosen estimator but \emph{both} honest intervals---for the ATT and for the LATT---together with the
-diagnostic, and the rule advises which of the two honest intervals is the more informative. Reporting both
-is what keeps the recommendation honest: because each interval covers its own target at the nominal level
-whatever the data say, a rule that only ranks them can misfire on efficiency but never on coverage. This is
-the decision-theoretic counterpart of the scope condition, and it is feasible up to the single quantity---
-the effects of the discarded cohorts---that no design can identify.
+These pieces assemble into a rule the practitioner can run: report \emph{both} honest intervals---for the
+ATT and for the LATT---with the diagnostic, and let the rule advise which is more informative. Because each
+interval covers its own target whatever the data say, ranking them can misfire on efficiency but never on
+coverage---feasible up to the single quantity, the effects of the discarded cohorts, that no design can
+identify.
 
 \begin{proposition}[A feasible and honest switching rule]\label{prop:switch}
 Consider the informative limit of Proposition~\ref{prop:generalK}, and suppose the researcher reports the
@@ -844,14 +841,11 @@ gap and leaves $\Delta^\ast=D^2+2D\Gamma-\Delta\mathrm{Var}$, linear in $\Gamma$
 is $\Gamma^\ast$, and it is increasing in $\Gamma$ when $D>0$.
 \end{proof}
 
-Proposition~\ref{prop:switch} is the formal recommendation that the scope condition pointed to. It turns
-the informal ``report the LATT when pre-trends are informative'' into an estimable statistic with a
-guarantee, and it separates cleanly what the data decide from what they cannot: the variance cost and the
-gap $D$ are estimable, so under homogeneity the decision is made for the researcher; the composition gap
-$\Gamma$ is not, so under heterogeneity the honest output is the breakdown $\Gamma^\ast$, read exactly as
-$M^\ast$ is read for the identifying restriction. The rule never has to suppress an interval to deliver
-this, which is why it cannot cost coverage---the one guarantee a method built to restore honesty must not
-spend.
+Proposition~\ref{prop:switch} turns the informal ``report the LATT when pre-trends are informative'' into
+an estimable statistic, and separates what the data decide from what they cannot: $D$ and the variance cost
+are estimable, so under homogeneity the decision is made for the researcher, while the unidentified
+composition gap $\Gamma$ is reported as the breakdown $\Gamma^\ast$, read as $M^\ast$ is for the identifying
+restriction. The rule never suppresses an interval, so it cannot cost coverage.
 
 Three caveats keep the dominance calculation honest. The advantage \eqref{eq:delta} is an upper bound
 on what the method delivers, because it omits two channels that both work against the
@@ -963,150 +957,24 @@ V>V^\ast:=\frac{\sigma}{f\sqrt K}\,
 \mathrm{cv}_\alpha^{-1}\!\Big(\sqrt{\tfrac{K}{k}}\,z_{1-\alpha/2}\Big),
 \]
 equivalently $B_{\mathcal F}=fV>B_{\mathcal F}^\ast=(\sigma/\sqrt K)\,
-\mathrm{cv}_\alpha^{-1}\big(\sqrt{K/k}\,z_{1-\alpha/2}\big)$. At $K=2$, $k=1$ this is
-Proposition~\ref{prop:interval} with $M_L=0$.
+\mathrm{cv}_\alpha^{-1}\big(\sqrt{K/k}\,z_{1-\alpha/2}\big)$. The two-cohort case $K=2$, $k=1$ makes
+the constants explicit, as we now record.
 \end{corollary}
 
-The two-cohort model makes these constants explicit and adds the residual bound $M_L$ that the
-corollary sets to zero.
-
-\begin{proposition}[The trade in honest intervals]\label{prop:interval}
-In the informative regime above, with homogeneous effects and a residual bound $M_L$ on
-the selected set, the LATT's level-bound fixed-length confidence interval is shorter
-than the ATT's if and only if
-\begin{equation}\label{eq:interval-cond}
-\mathrm{cv}_\alpha\!\big(M_L/\sigma\big)\;<\;\tfrac{1}{\sqrt2}\,
-\mathrm{cv}_\alpha\!\big(V/(\sqrt2\,\sigma)\big).
-\end{equation}
-When the selected set carries no residual violation, $M_L=0$, this reduces to a
-threshold on the violation, $V>\sqrt2\,\sigma\,t^\ast_\alpha$, where $t^\ast_\alpha$
-solves $\mathrm{cv}_\alpha(t^\ast_\alpha)=\sqrt2\,z_{1-\alpha/2}$; at $\alpha=0.05$,
-$t^\ast_\alpha\approx1.13$ and the threshold is $V\approx1.59\,\sigma$. This exceeds
-the mean-squared-error threshold $V>\sqrt2\,\sigma\approx1.41\,\sigma$ of
-Proposition~\ref{prop:dominance}, and the left-hand side of \eqref{eq:interval-cond} is
-increasing in $M_L$, so a larger residual bound raises the threshold further.
-\end{proposition}
-
-\begin{proof}
-By \eqref{eq:flci-hw} the half-widths are $h_L=\sigma\,\mathrm{cv}_\alpha(M_L/\sigma)$
-and $h_A=(\sigma/\sqrt2)\,\mathrm{cv}_\alpha(V/(\sqrt2\,\sigma))$, and $h_L<h_A$ is
-\eqref{eq:interval-cond} after dividing by $\sigma$. Both intervals attain nominal
-coverage: for the ATT, the plug-in estimator is $\mathcal N(\bar\tau+V/2,\sigma^2/2)$,
-so its coverage of $\bar\tau$ is
-$\Pr(\lvert Z+ (V/2)/s_A\rvert\le \mathrm{cv}_\alpha((V/2)/s_A))=1-\alpha$ with
-$s_A=\sigma/\sqrt2$ and $Z\sim\mathcal N(0,1)$, by the definition of $\mathrm{cv}_\alpha$;
-for the LATT the estimator is $\mathcal N(\bar\tau,\sigma^2)$ and coverage is
-$\Pr(\lvert Z\rvert\le\mathrm{cv}_\alpha(0))=1-\alpha$. Setting $M_L=0$ gives
-$\mathrm{cv}_\alpha(0)=z_{1-\alpha/2}$ on the left of \eqref{eq:interval-cond}, so the
-condition is $z_{1-\alpha/2}<\tfrac1{\sqrt2}\mathrm{cv}_\alpha(V/(\sqrt2\,\sigma))$,
-i.e.\ $\mathrm{cv}_\alpha(V/(\sqrt2\,\sigma))>\sqrt2\,z_{1-\alpha/2}$. Since
-$\mathrm{cv}_\alpha$ is continuous and strictly increasing, this is
-$V/(\sqrt2\,\sigma)>t^\ast_\alpha$ for the stated $t^\ast_\alpha$, and numerical
-evaluation of $\mathrm{cv}_{0.05}$ gives $t^\ast_{0.05}\approx1.13$. Monotonicity of
-$\mathrm{cv}_\alpha$ gives the comparative static in $M_L$.
-\end{proof}
-
-Three points close the comparison. First, coverage is never the margin: both procedures
-are honest by construction, so the ATT does not buy its narrower variance at the cost of
-under-coverage, it buys it at the cost of a bias bound $M_A=V/2$ that its interval must
-carry. The ATT pays for honesty in a width that grows linearly in the violation, through
-$\mathrm{cv}_\alpha(V/(\sqrt2\,\sigma))\approx V/(\sqrt2\,\sigma)+z_{1-\alpha}$ once the
-violation dominates, whereas the LATT pays a fixed width $2\sigma\,z_{1-\alpha/2}$ set by
-its variance alone. This is the price-of-honesty reading of Figure~\ref{fig:layer2} at the
-level of the two procedures. Second, honest intervals are more demanding than point
-estimation: the threshold $1.59\,\sigma$ exceeds the mean-squared-error threshold
-$1.41\,\sigma$ because the fixed-length interval charges for the standard-error inflation
-of dropping a cohort through the critical value $\mathrm{cv}_\alpha(0)=z_{1-\alpha/2}$,
-not only through the variance, so the violation must be somewhat larger before the
-smaller-bias interval also wins on width. Third, the two forces set aside for the clean
-statement both raise the threshold in the direction the point analysis already indicated.
-A residual bound $M_L>0$, whether from honest uncertainty that the selected set is truly
-flat or from the calibration of Lemma~\ref{lem:calib} to a random selected set, enters
-through $\mathrm{cv}_\alpha(M_L/\sigma)$ on the left of \eqref{eq:interval-cond}; and
-effect heterogeneity $\gamma\neq0$, when the target is the ATT, adds $\lvert\gamma\rvert/2$
-to the LATT's effective bias bound in the same place. The honest-interval trade is thus
-governed by the same three forces as the point-estimate trade of
-Proposition~\ref{prop:dominance}---the violation as the reason to trade, the variance and
-the heterogeneity as its price---with the violation discounted by the residual bound and
-the whole comparison shifted by the surcharge that fixed-length honesty places on a
-smaller sample.
-
-\subsection{Optimal credible weighting}\label{sec:optimal}
-
-The flatness screen and the cohort weights $w_g$ have so far been taken as given, the screen retaining a
-cohort outright and the weights fixed at, say, cohort size. Both are choices, and the sensitivity class
-that governs the honest inference also pins down their optimal form, in the decision-theoretic sense in
-which \citet{crump2009} derive the optimal-overlap subpopulation and \citet{li2018} the overlap weights:
-there, variance is minimized where positivity is scarce; here, worst-case mean squared error is minimized
-where credibility is scarce.
-
-Let the estimator be a weighted average $\hat\theta(\lambda)=\sum_g\lambda_g\hat\beta_{g,\mathrm{post}}$
-with $\lambda_g\ge0$ and $\sum_g\lambda_g=1$, and---following the overlap-weighting logic that the weights
-define the estimand as well as the estimator---let the target be the $\lambda$-weighted causal effect
-$\theta(\lambda)=\sum_g\lambda_g\theta_g$, whose interpretation is reported through the weights themselves.
-Since $\hat\beta_{g,\mathrm{post}}\sim\mathcal N(\theta_g+V_g,\sigma_g^2)$ independently, the estimator has
-identification bias $\sum_g\lambda_g V_g$ and variance $\sum_g\lambda_g^2\sigma_g^2$. The pre-trends enter
-through the sensitivity class: a cohort's post-treatment violation is bounded by a credibility level
-$m_g\ge0$, $\lvert V_g\rvert\le m_g$, with $m_g$ small for a cohort whose pre-trend is flat and large for
-one whose pre-trend is steep. The hard flatness screen is the coarsening $m_g\in\{0,\infty\}$, retaining
-the $m_g=0$ cohorts and discarding the rest; the level bound $M$ of Section~\ref{sec:honest} is the common
-value $m_g\equiv M$ on the retained set. The worst-case mean squared error over this class is
-\[
-\mathcal R(\lambda)=\Big(\sum_g\lambda_g m_g\Big)^2+\sum_g\lambda_g^2\sigma_g^2,
-\]
-the squared worst-case bias plus the variance, and the optimal credible weighting minimizes it over the
-simplex.
-
-\begin{proposition}[Optimal credible weighting]\label{prop:optimal}
-$\mathcal R$ is strictly convex on the simplex, so it has a unique minimizer $\lambda^\ast$. There are
-scalars $\mu$ and $B=\sum_g\lambda_g^\ast m_g$, the worst-case bias at the optimum, such that
-\[
-\lambda_g^\ast=\frac{1}{\sigma_g^2}\Big[\tfrac{\mu}{2}-B\,m_g\Big]_+,\qquad [x]_+=\max(x,0),
-\]
-with $\mu$ fixed by $\sum_g\lambda_g^\ast=1$. Consequently there is an endogenous credibility cutoff
-$m^\ast=\mu/(2B)$: cohorts with $m_g\ge m^\ast$ receive zero weight, and among the retained cohorts the
-weight is $\lambda_g^\ast\propto(m^\ast-m_g)/\sigma_g^2$, decreasing in the credibility bound $m_g$ and in
-the sampling variance $\sigma_g^2$.
-\end{proposition}
-
-\begin{proof}
-$\sum_g\lambda_g^2\sigma_g^2$ is strictly convex for $\sigma_g^2>0$ and $(\sum_g\lambda_g m_g)^2$ is
-convex, so $\mathcal R$ is strictly convex and its minimizer over the compact convex simplex is unique. The
-worst-case bias is $\sup_{\lvert V_g\rvert\le m_g}\lvert\sum_g\lambda_g V_g\rvert=\sum_g\lambda_g m_g$
-since $\lambda_g\ge0$, giving the displayed $\mathcal R$. Form the Lagrangian
-$\mathcal R(\lambda)-\mu(\sum_g\lambda_g-1)-\sum_g\nu_g\lambda_g$ with $\nu_g\ge0$; stationarity gives
-$2Bm_g+2\lambda_g\sigma_g^2-\mu-\nu_g=0$ with $B=\sum_g\lambda_g m_g$. For $\lambda_g>0$ complementary
-slackness sets $\nu_g=0$ and $\lambda_g=(\mu/2-Bm_g)/\sigma_g^2$; for $\lambda_g=0$ it requires
-$\mu/2-Bm_g\le0$, i.e.\ $m_g\ge\mu/(2B)$. Combining the two cases gives the truncated form and the cutoff
-$m^\ast=\mu/(2B)$, with $\mu$ determined by the budget constraint and $B$ by its own definition at the
-resulting $\lambda^\ast$.
-\end{proof}
-
-Three readings connect the result to the rest of the paper. First, the optimal rule is a \emph{soft}
-flatness screen. It reproduces the hard screen's qualitative content---cohorts whose pre-trends are too
-steep are dropped---but with an endogenous threshold set by the bias--variance trade-off rather than a
-researcher's $c$, and with the surviving cohorts weighted continuously by how credible and how precise they
-are, rather than equally. A marginally less credible but large and precisely estimated cohort is retained
-where the hard screen would discard it, because the variance its inclusion saves outweighs the bias it
-admits---the same calculus as the dominance condition of Proposition~\ref{prop:dominance}, now internal to
-the weighting. Second, the result justifies the paper's default. Among equally credible cohorts,
-$m_g\equiv0$, the weights collapse to inverse-variance, $\lambda_g^\ast\propto1/\sigma_g^2$, and when
-sampling variance scales inversely with cohort size, $\sigma_g^2\propto1/n_g$, inverse-variance weighting
-is size weighting; the fixed $w_g$ of the definition is thus optimal precisely under homoskedastic-per-unit
-noise and equal credibility, and the proposition says what to do when either fails. Third, it completes the
-analogy to limited overlap. \citet{crump2009} trim and \citet{li2018} weight to minimize variance where
-positivity is the binding scarcity; here credibility is the scarcity, and the optimal response is to weight
-cohorts by credibility net of noise, with trimming emerging as the corner solution for cohorts past
-$m^\ast$.
-
-The credibility levels $m_g$ are reported, not assumed, in the same currency as everything else: a natural
-choice sets $m_g$ to the cohort's own maximal pre-trend, $m_g=\max_{e<0}\lvert\hat\beta_{g,\mathrm{pre}}(e)
-\rvert$, so that the weighting is read off the observed pre-trends. This makes the weights data-driven, a
-refinement of the selection already treated, and---as there---validity does not rest on it: the honest
-interval of Section~\ref{sec:honest} takes its coverage from the researcher-set level bound $M$, while the
-estimated $m_g$ only orders and weights the cohorts. Using $m_g$ to weight but $M$ to cover keeps efficiency
-and honesty on separate instruments, as the carved inference of Proposition~\ref{prop:carve} keeps
-selection and identification on separate instruments.
+\emph{Two cohorts, with a residual bound.} In the two-cohort model of
+Proposition~\ref{prop:dominance}, in the informative regime where the screen retains the clean cohort
+alone, the LATT interval carries standard error $\sigma$ and a residual bound $M_L$ while the ATT interval
+carries standard error $\sigma/\sqrt2$ and a bound $M_A=V/2$; by \eqref{eq:flci-hw} the LATT interval is
+shorter if and only if $\mathrm{cv}_\alpha(M_L/\sigma)<\tfrac1{\sqrt2}\,\mathrm{cv}_\alpha(V/(\sqrt2\,\sigma))$,
+which at $M_L=0$ is $V>1.59\,\sigma$ (at $\alpha=0.05$). Two features carry the economics. The threshold
+exceeds the mean-squared-error threshold $V>\sqrt2\,\sigma\approx1.41\,\sigma$ of
+Proposition~\ref{prop:dominance}, because the fixed-length interval charges for the standard-error inflation
+of dropping a cohort, not only for its variance; and coverage is never the margin, since both procedures
+are honest---the ATT pays for honesty in a width that grows linearly in $V$, whereas the LATT pays a fixed
+$2\sigma\,z_{1-\alpha/2}$ set by its variance alone, the price-of-honesty reading of
+Figure~\ref{fig:layer2}. A residual bound $M_L>0$, and effect heterogeneity $\gamma\neq0$ when the target
+is the ATT (which adds $\lvert\gamma\rvert/2$ to the LATT's effective bias), both raise the threshold, in
+the direction the point analysis already indicated.
 
 \section{Simulation study}\label{sec:sim}
 
@@ -1359,62 +1227,6 @@ on the realized set does not capture. This confirms, from the panel side, that c
 data-dependent selection understates uncertainty, and why the honest object to report is the sensitivity
 interval of Section~\ref{sec:flci} rather than a conventional confidence interval.
 
-\subsection{The optimal weighting improves on the hard screen}\label{sec:optsim}
-
-Proposition~\ref{prop:optimal} predicts that the soft, credibility-and-precision weighting lowers risk
-relative to the hard flatness screen. We confirm this and measure the gain. The design has $K=12$ cohorts
-with homogeneous effects, so every weighting targets the same value and mean squared error is a fair
-comparison. Cohorts come in pairs at six violation levels $V_g\in\{0,0.08,\dots,0.40\}$; within each pair
-one member is precise (a large sample) and one noisy (a small one). A hard screen keeps or drops a pair as a
-whole, since both members share the credibility $m_g$, whereas the optimal weighting can separate them. The
-design is deliberately constructed to exhibit this precision channel, and a random-DGP average below reports
-the typical gain.
-
-We compare three procedures for the common target: the ATT, equal weights on all cohorts; the hard screen,
-equal weights on $\{g:m_g\le c\}$ at its best threshold $c$; and the optimal weighting $\lambda^\ast$ of
-Proposition~\ref{prop:optimal}, in an oracle version with $m_g=V_g$ known and a feasible version with
-$\hat m_g=\max_e\lvert\hat\beta_{g,\mathrm{pre}}(e)\rvert$ estimated from informative pre-trends.
-
-Table~\ref{tab:prop11} and Figure~\ref{fig:prop11} report the result. The left panel plots MSE against the
-hard-screen threshold: the optimal weighting lies below the hard-screen curve at every $c$, including its
-minimum. Against the best hard screen, the optimal weighting lowers MSE by $63\%$ when credibility is known.
-The feasible version, which estimates $m_g$ from the pre-trends and is compared to the best hard screen doing
-the same, lowers it by $28\%$; across $500$ random DGPs the average reduction over the best hard screen is
-$14\%$. The right panel shows the mechanism. At a common credibility level the optimal weighting loads on the
-precise member and down-weights the noisy one, where the hard screen weights them equally; and it retains
-marginally less credible cohorts at reduced weight rather than dropping them at a cutoff. The gap between the
-oracle and feasible lines is the price of estimating $m_g$ from noisy pre-trends, the open question the
-conclusion notes; even so, the feasible weighting improves on the hard screen.
-
-\begin{table}[t]
-\centering
-\caption{Optimal weighting versus the hard screen (reduced-form model, homogeneous effects, so all
-procedures target the same value). RMSE and MSE for that target; the optimal weighting minimizes worst-case
-MSE by Proposition~\ref{prop:optimal}.}
-\label{tab:prop11}
-\begin{tabular}{lcc}
-\toprule
-Procedure & RMSE & MSE \\
-\midrule
-ATT (all cohorts) & $0.200$ & $0.0402$ \\
-Hard screen (best $c$) & $0.032$ & $0.00104$ \\
-Optimal weighting, feasible ($\hat m_g$) & $0.022$ & $0.00048$ \\
-Optimal weighting, oracle ($m_g=V_g$) & $0.020$ & $0.00039$ \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=\textwidth]{prop11.png}
-\caption{Optimal credible weighting (Proposition~\ref{prop:optimal}) versus the hard flatness screen,
-homogeneous effects so every procedure targets the same value. Left: MSE against the hard-screen threshold
-$c$; the optimal weighting, oracle and feasible, lies below the hard-screen curve at every $c$ and below the
-ATT. Right: weights at each violation level; the optimal weighting loads on the precise member of each pair
-and soft-thresholds the credibility gradient, where the hard screen weights retained cohorts equally.}
-\label{fig:prop11}
-\end{figure}
-
 \section{Empirical application}\label{sec:app}
 
 We illustrate the method with the local effect of the shale boom on house prices, a staggered design
@@ -1498,10 +1310,10 @@ assumed away. We also make the scope condition operational: a feasible rule, rep
 intervals, signals when narrowing the target lowers risk, with a breakdown value $\Gamma^\ast$ standing in
 for the one quantity---the effects of the discarded cohorts---that the data cannot identify.
 
-We also characterize the optimal credible weighting (Proposition~\ref{prop:optimal}): minimizing worst-case
-risk yields a soft-thresholded weighting of cohorts by credibility net of noise, of which the flatness
-screen with size weights is a special case, which completes the analogy to the variance-minimizing overlap
-weights of \citet{crump2009} that the approach borrows from.
+An appendix characterizes the optimal credible weighting (Proposition~\ref{prop:optimal}): minimizing
+worst-case risk yields a soft-thresholded weighting of cohorts by credibility net of noise, of which the
+flatness screen with size weights is a special case, which completes the analogy to the variance-minimizing
+overlap weights of \citet{crump2009} that the approach borrows from.
 
 Two questions remain open. The first is the finite-sample behaviour of the feasible optimal weighting, in
 which the credibility levels $m_g$ are estimated from the pre-trends rather than known, and which therefore
@@ -1510,6 +1322,142 @@ inherits the sampling noise in those pre-trends. The second is the finite-sample
 recommend, whose honesty does not depend on the choice.
 
 \clearpage
+\appendix
+
+\section{Optimal credible weighting}\label{sec:optimal}
+
+
+The flatness screen and the cohort weights $w_g$ have so far been taken as given, the screen retaining a
+cohort outright and the weights fixed at, say, cohort size. Both are choices, and the sensitivity class
+that governs the honest inference also pins down their optimal form, in the decision-theoretic sense in
+which \citet{crump2009} derive the optimal-overlap subpopulation and \citet{li2018} the overlap weights:
+there, variance is minimized where positivity is scarce; here, worst-case mean squared error is minimized
+where credibility is scarce.
+
+Let the estimator be a weighted average $\hat\theta(\lambda)=\sum_g\lambda_g\hat\beta_{g,\mathrm{post}}$
+with $\lambda_g\ge0$ and $\sum_g\lambda_g=1$, and---following the overlap-weighting logic that the weights
+define the estimand as well as the estimator---let the target be the $\lambda$-weighted causal effect
+$\theta(\lambda)=\sum_g\lambda_g\theta_g$, whose interpretation is reported through the weights themselves.
+Since $\hat\beta_{g,\mathrm{post}}\sim\mathcal N(\theta_g+V_g,\sigma_g^2)$ independently, the estimator has
+identification bias $\sum_g\lambda_g V_g$ and variance $\sum_g\lambda_g^2\sigma_g^2$. The pre-trends enter
+through the sensitivity class: a cohort's post-treatment violation is bounded by a credibility level
+$m_g\ge0$, $\lvert V_g\rvert\le m_g$, with $m_g$ small for a cohort whose pre-trend is flat and large for
+one whose pre-trend is steep. The hard flatness screen is the coarsening $m_g\in\{0,\infty\}$, retaining
+the $m_g=0$ cohorts and discarding the rest; the level bound $M$ of Section~\ref{sec:honest} is the common
+value $m_g\equiv M$ on the retained set. The worst-case mean squared error over this class is
+\[
+\mathcal R(\lambda)=\Big(\sum_g\lambda_g m_g\Big)^2+\sum_g\lambda_g^2\sigma_g^2,
+\]
+the squared worst-case bias plus the variance, and the optimal credible weighting minimizes it over the
+simplex.
+
+\begin{proposition}[Optimal credible weighting]\label{prop:optimal}
+$\mathcal R$ is strictly convex on the simplex, so it has a unique minimizer $\lambda^\ast$. There are
+scalars $\mu$ and $B=\sum_g\lambda_g^\ast m_g$, the worst-case bias at the optimum, such that
+\[
+\lambda_g^\ast=\frac{1}{\sigma_g^2}\Big[\tfrac{\mu}{2}-B\,m_g\Big]_+,\qquad [x]_+=\max(x,0),
+\]
+with $\mu$ fixed by $\sum_g\lambda_g^\ast=1$. Consequently there is an endogenous credibility cutoff
+$m^\ast=\mu/(2B)$: cohorts with $m_g\ge m^\ast$ receive zero weight, and among the retained cohorts the
+weight is $\lambda_g^\ast\propto(m^\ast-m_g)/\sigma_g^2$, decreasing in the credibility bound $m_g$ and in
+the sampling variance $\sigma_g^2$.
+\end{proposition}
+
+\begin{proof}
+$\sum_g\lambda_g^2\sigma_g^2$ is strictly convex for $\sigma_g^2>0$ and $(\sum_g\lambda_g m_g)^2$ is
+convex, so $\mathcal R$ is strictly convex and its minimizer over the compact convex simplex is unique. The
+worst-case bias is $\sup_{\lvert V_g\rvert\le m_g}\lvert\sum_g\lambda_g V_g\rvert=\sum_g\lambda_g m_g$
+since $\lambda_g\ge0$, giving the displayed $\mathcal R$. Form the Lagrangian
+$\mathcal R(\lambda)-\mu(\sum_g\lambda_g-1)-\sum_g\nu_g\lambda_g$ with $\nu_g\ge0$; stationarity gives
+$2Bm_g+2\lambda_g\sigma_g^2-\mu-\nu_g=0$ with $B=\sum_g\lambda_g m_g$. For $\lambda_g>0$ complementary
+slackness sets $\nu_g=0$ and $\lambda_g=(\mu/2-Bm_g)/\sigma_g^2$; for $\lambda_g=0$ it requires
+$\mu/2-Bm_g\le0$, i.e.\ $m_g\ge\mu/(2B)$. Combining the two cases gives the truncated form and the cutoff
+$m^\ast=\mu/(2B)$, with $\mu$ determined by the budget constraint and $B$ by its own definition at the
+resulting $\lambda^\ast$.
+\end{proof}
+
+Three readings connect the result to the rest of the paper. First, the optimal rule is a \emph{soft}
+flatness screen. It reproduces the hard screen's qualitative content---cohorts whose pre-trends are too
+steep are dropped---but with an endogenous threshold set by the bias--variance trade-off rather than a
+researcher's $c$, and with the surviving cohorts weighted continuously by how credible and how precise they
+are, rather than equally. A marginally less credible but large and precisely estimated cohort is retained
+where the hard screen would discard it, because the variance its inclusion saves outweighs the bias it
+admits---the same calculus as the dominance condition of Proposition~\ref{prop:dominance}, now internal to
+the weighting. Second, the result justifies the paper's default. Among equally credible cohorts,
+$m_g\equiv0$, the weights collapse to inverse-variance, $\lambda_g^\ast\propto1/\sigma_g^2$, and when
+sampling variance scales inversely with cohort size, $\sigma_g^2\propto1/n_g$, inverse-variance weighting
+is size weighting; the fixed $w_g$ of the definition is thus optimal precisely under homoskedastic-per-unit
+noise and equal credibility, and the proposition says what to do when either fails. Third, it completes the
+analogy to limited overlap. \citet{crump2009} trim and \citet{li2018} weight to minimize variance where
+positivity is the binding scarcity; here credibility is the scarcity, and the optimal response is to weight
+cohorts by credibility net of noise, with trimming emerging as the corner solution for cohorts past
+$m^\ast$.
+
+The credibility levels $m_g$ are reported, not assumed, in the same currency as everything else: a natural
+choice sets $m_g$ to the cohort's own maximal pre-trend, $m_g=\max_{e<0}\lvert\hat\beta_{g,\mathrm{pre}}(e)
+\rvert$, so that the weighting is read off the observed pre-trends. This makes the weights data-driven, a
+refinement of the selection already treated, and---as there---validity does not rest on it: the honest
+interval of Section~\ref{sec:honest} takes its coverage from the researcher-set level bound $M$, while the
+estimated $m_g$ only orders and weights the cohorts. Using $m_g$ to weight but $M$ to cover keeps efficiency
+and honesty on separate instruments, as the carved inference of Proposition~\ref{prop:carve} keeps
+selection and identification on separate instruments.
+
+\subsection{Simulation: the optimal weighting improves on the hard screen}\label{sec:optsim}
+
+Proposition~\ref{prop:optimal} predicts that the soft, credibility-and-precision weighting lowers risk
+relative to the hard flatness screen. We confirm this and measure the gain. The design has $K=12$ cohorts
+with homogeneous effects, so every weighting targets the same value and mean squared error is a fair
+comparison. Cohorts come in pairs at six violation levels $V_g\in\{0,0.08,\dots,0.40\}$; within each pair
+one member is precise (a large sample) and one noisy (a small one). A hard screen keeps or drops a pair as a
+whole, since both members share the credibility $m_g$, whereas the optimal weighting can separate them. The
+design is deliberately constructed to exhibit this precision channel, and a random-DGP average below reports
+the typical gain.
+
+We compare three procedures for the common target: the ATT, equal weights on all cohorts; the hard screen,
+equal weights on $\{g:m_g\le c\}$ at its best threshold $c$; and the optimal weighting $\lambda^\ast$ of
+Proposition~\ref{prop:optimal}, in an oracle version with $m_g=V_g$ known and a feasible version with
+$\hat m_g=\max_e\lvert\hat\beta_{g,\mathrm{pre}}(e)\rvert$ estimated from informative pre-trends.
+
+Table~\ref{tab:prop11} and Figure~\ref{fig:prop11} report the result. The left panel plots MSE against the
+hard-screen threshold: the optimal weighting lies below the hard-screen curve at every $c$, including its
+minimum. Against the best hard screen, the optimal weighting lowers MSE by $63\%$ when credibility is known.
+The feasible version, which estimates $m_g$ from the pre-trends and is compared to the best hard screen doing
+the same, lowers it by $28\%$; across $500$ random DGPs the average reduction over the best hard screen is
+$14\%$. The right panel shows the mechanism. At a common credibility level the optimal weighting loads on the
+precise member and down-weights the noisy one, where the hard screen weights them equally; and it retains
+marginally less credible cohorts at reduced weight rather than dropping them at a cutoff. The gap between the
+oracle and feasible lines is the price of estimating $m_g$ from noisy pre-trends, the open question the
+conclusion notes; even so, the feasible weighting improves on the hard screen.
+
+\begin{table}[t]
+\centering
+\caption{Optimal weighting versus the hard screen (reduced-form model, homogeneous effects, so all
+procedures target the same value). RMSE and MSE for that target; the optimal weighting minimizes worst-case
+MSE by Proposition~\ref{prop:optimal}.}
+\label{tab:prop11}
+\begin{tabular}{lcc}
+\toprule
+Procedure & RMSE & MSE \\
+\midrule
+ATT (all cohorts) & $0.200$ & $0.0402$ \\
+Hard screen (best $c$) & $0.032$ & $0.00104$ \\
+Optimal weighting, feasible ($\hat m_g$) & $0.022$ & $0.00048$ \\
+Optimal weighting, oracle ($m_g=V_g$) & $0.020$ & $0.00039$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{prop11.png}
+\caption{Optimal credible weighting (Proposition~\ref{prop:optimal}) versus the hard flatness screen,
+homogeneous effects so every procedure targets the same value. Left: MSE against the hard-screen threshold
+$c$; the optimal weighting, oracle and feasible, lies below the hard-screen curve at every $c$ and below the
+ATT. Right: weights at each violation level; the optimal weighting loads on the precise member of each pair
+and soft-thresholds the credibility gradient, where the hard screen weights retained cohorts equally.}
+\label{fig:prop11}
+\end{figure}
+
 \bibliographystyle{aer}
 \bibliography{refs}
 
