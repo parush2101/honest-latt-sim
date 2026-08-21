@@ -696,6 +696,31 @@ $B_{S^\ast}$; it enters \eqref{eq:deltastar} by replacing $B_{\mathcal F}$ with 
 cohorts' violation and $\Gamma$ with $\Gamma$ augmented by that residual, which is the identification
 gap of Proposition~\ref{prop:pretest} that the honest inference of Section~\ref{sec:honest} bounds.
 
+The dominance condition can be read off the data, up to the one quantity it cannot identify, and so
+furnishes a diagnostic for whether the trade is worth making. The variance cost $\Delta\mathrm{Var}$ is a
+function of $\Sigma$ and the weights alone and is therefore estimable, and the difference between the two
+point estimators consistently estimates the violation net of the composition gap,
+\begin{equation}\label{eq:D-identified}
+\hat\theta_{\mathcal G}-\hat\theta_{\hat S}\;\xrightarrow{p}\;B_{\mathcal F}-\Gamma\;=:\;D,
+\end{equation}
+since the ATT estimator carries the dropped cohorts' violation while the LATT estimator does not. What is
+not identified is $\Gamma$ on its own, because it depends on the counterfactual effects of the very
+cohorts the screen discards. Writing $B_{\mathcal F}=D+\Gamma$ in \eqref{eq:generalK-threshold}, the
+advantage $\Delta^\ast=B_{\mathcal F}^2-\Gamma^2-\Delta\mathrm{Var}$ becomes
+$D^2+2D\Gamma-\Delta\mathrm{Var}$, linear in the unidentified $\Gamma$ because the squared composition gap
+cancels. Two readings follow. Under homogeneous effects, $\Gamma=0$, the trade pays exactly when the
+squared gap between the estimators exceeds the variance cost,
+\begin{equation}\label{eq:diagnostic}
+D^2\;>\;\Delta\mathrm{Var},
+\end{equation}
+a comparison the practitioner can compute and, using the carved standard error of
+Proposition~\ref{prop:carve} for $D$, test. In general the verdict is monotone in $\Gamma$, increasing
+when $D>0$, and flips at the breakdown value $\Gamma^\ast=(\Delta\mathrm{Var}-D^2)/(2D)$. A researcher thus
+reports $\hat D$, $\widehat{\Delta\mathrm{Var}}$, and $\Gamma^\ast$, and the trade pays unless the dropped
+cohorts' effects differ from the retained ones by more than $\Gamma^\ast$ allows---a sensitivity statement
+in the same idiom as the breakdown value $M^\ast$ for the identifying restriction, now for the estimand
+change rather than the violation.
+
 Three caveats keep the result honest. The advantage \eqref{eq:delta} is an upper bound
 on what the method delivers, because it omits two channels that both work against the
 LATT: occasional false rejection of the clean cohort, which enters at order
