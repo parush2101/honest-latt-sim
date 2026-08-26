@@ -11,9 +11,22 @@ __pycache__/
 *.synctex.gz
 
 # Large raw data (reproducible from scripts / public sources)
-walmart/CAINC1_*.csv
-walmart/CAINC1.zip
-data/*.csv
-shale/shale_panel.csv
-covid/*.xlsx
-housing/fhfa_county.xlsx
+application/shale/shale_panel.csv
+application/housing/fhfa_county.xlsx
+
+# Archived local exploration: never part of the paper, kept locally only.
+# (Small scripts/READMEs under archive/ that were previously tracked are still committed.)
+archive/divorce/
+archive/guns/
+archive/medicaid/
+archive/walmart/
+archive/bll/
+archive/data/
+archive/covid/laucnty*.txt
+archive/covid/t.bin
+archive/covid/*.xlsx
+
+# latexmk build db
+*.fdb_latexmk
+*.fls
+paper.tex.bak

@@ -1,8 +1,11 @@
 \documentclass[11pt]{article}
 \usepackage[margin=1in]{geometry}
-\usepackage{amsmath,amssymb,amsthm}
+\usepackage{amsmath, amssymb, amsthm}
 \usepackage{graphicx}
+\graphicspath{{figures/}{./}}
 \usepackage{booktabs}
+\usepackage{float}
+\usepackage{algorithm}
 \usepackage{caption}
 \usepackage[round]{natbib}
 \usepackage{setspace}
@@ -19,8 +22,7 @@
 \theoremstyle{remark}
 \newtheorem{remark}{Remark}
 
-\title{\textbf{Trading Scope for Credibility in Difference-in-Differences}\\[4pt]
-\large Honest Inference After Selecting Cohorts on Pre-Trends}
+\title{\textbf{Trading Scope for Credibility in Difference-in-Differences}}
 \author{Parush Arora\thanks{Department of Economics, Ashoka University.} \and Abhishek Chand\thanks{Independent researcher.}}
 \date{}
 
@@ -29,29 +31,33 @@
 
 \begin{abstract}
 \noindent In staggered difference-in-differences, parallel trends may hold for some treated cohorts and
-fail for others, so the average treatment effect on the treated (ATT), an average over all cohorts
-including the offenders, is biased and its honest confidence set is wide. Dropping the offending cohorts
-and reporting the effect for the credible ones---the difference-in-differences analogue of the local
-average treatment effect and of overlap weighting---point-identifies the sub-aggregate under a weaker
-parallel-trends requirement that can hold when the ATT's fails (Proposition~\ref{prop:id}). But when the
-credible cohorts are read off the observed pre-trends, selection reintroduces the pre-test problem the
-honest-DiD literature was built to avoid, and existing honest methods do not cover it, because they never
-select. Our contribution is inference for this selected target: we compose the post-selection carving of
-\citet{lee2016} with the sensitivity bounds of \citet{rambachan2023} into a single interval, uniformly
-valid against \emph{both} the data-driven selection and the residual violation the screen cannot rule out,
-with no separation or consistent-selection condition. We characterize in closed form when narrowing the
-target lowers risk---a feasible rule, reported alongside both honest intervals, that can cost efficiency
-but never coverage. In an application, a significantly positive pooled estimate of the shale boom's effect
-on local house prices proves to rest on cohorts already trending before onset; the credible
-subpopulation---the counties whose oil-and-gas onset did not coincide with the mid-2000s housing
-run-up---reveals no effect.
+fail for others. The standard estimator is then biased for the average treatment effect on the treated
+(ATT), which averages over all cohorts including the offenders. Honest inference that keeps the ATT as the
+target does not repair this: it reads a pooled pre-trend that the cohort-level violations can wash out of,
+leaving its confidence set either wide or, when the maintained sensitivity class is calibrated on that
+washed-out aggregate, misleadingly narrow. We take a different route. We drop the offending cohorts and
+target the effect for the credible ones, the difference-in-differences analogue of the local average
+treatment effect and of overlap weighting. This credible-subpopulation effect is point-identified under a
+weaker parallel-trends requirement that can hold when the ATT's fails. When the credible cohorts are read
+off the observed pre-trends, however, selection reintroduces the pre-test problem the honest-DiD literature
+was built to avoid, and existing honest methods do not cover it because they never select. Our
+contributions are to formalize this change of estimand for staggered designs and to supply honest inference
+for it. We compose the post-selection carving of \citet{lee2016} with the sensitivity bounds of
+\citet{rambachan2023}: the carving makes inference for the selected reduced-form aggregate uniformly valid
+against the data-driven selection, with no separation or consistent-selection condition when the
+event-study covariance is known, and the sensitivity bounds carry it to the causal target at each level of
+the residual violation the screen cannot rule out. We characterize in closed form when narrowing the target
+lowers risk, a feasible rule that can cost efficiency but never coverage. In an application to the shale
+boom, a relative-magnitudes analysis certifies a significantly positive pooled effect on house prices, but
+the credible subpopulation, the counties whose oil-and-gas onset did not coincide with the mid-2000s
+housing run-up, shows no effect, locating the pooled positive in cohorts already trending before onset.
 \end{abstract}
 
 \medskip
-\noindent\textbf{Keywords:} Difference-in-differences, Staggered adoption, Parallel trends, Robust inference, Sensitivity analysis, Partial identification.
+\noindent\textbf{Keywords. } Difference-in-differences, Staggered adoption, Parallel trends, Robust inference, Sensitivity analysis, Partial identification.
 
 \smallskip
-\noindent\textbf{JEL classification:} C1, C23, C51.
+\noindent\textbf{JEL classification. } C1, C23, C51.
 
 \newpage
 
@@ -61,32 +67,43 @@ Difference-in-differences is among the most widely used research designs in empi
 credibility rests on the parallel trends assumption, that absent treatment treated and comparison units
 would have evolved in parallel. Researchers assess it by testing for pre-treatment differences in trends,
 but that practice is fragile. Pre-trends tests are often underpowered against economically meaningful
-violations \citep{bilinski2020, freyaldenhoven2019, kahnlang2020, roth2022pretrends}, conditioning on
-passing them induces a pre-test selection bias \citep{roth2022pretrends}, and even a clean pre-period
+violations \citep{bilinski2020, freyaldenhoven2019, kahnlang2020, roth2022pretrends}. Conditioning on
+passing them induces a pre-test selection bias \citep{roth2022pretrends}, though such conditional inference
+remains valid, if conservative, when parallel trends holds \citep{dechaisemartin2024pretest}. And even a clean pre-period
 does not guarantee a clean post-period, since nothing prevents a confound from arriving at the moment of
 treatment \citep{kahnlang2020}.
 
 A growing literature, surveyed in \citet{roth2023trending}, responds by relaxing parallel trends while
 holding the ATT fixed as the target. Building on \citet{manski2018}, \citet{rambachan2023} bound how far
 post-treatment violations can depart from the observed pre-trends and report a uniformly valid confidence
-set for the ATT; \citet{kwonroth2024} sharpen the set with an empirical-Bayes prior on the violation; and
+set for the ATT. \citet{kwonroth2024} sharpen the set with an empirical-Bayes prior on the violation, and
 \citet{dechaisemartin2026} rank the post-treatment differences against the pre-treatment ones. All keep
 the ATT and use the pre-trends to extrapolate the violation across periods. But the ATT is where a
 structural difficulty lies. When parallel trends fails for some cohorts and holds for others, the ATT is
-an average over all treated cohorts, including the offenders: its point estimate is biased, and its honest
-confidence set, though valid, is wide, because it must accommodate the worst cohort in the average.
+an average over all treated cohorts, including the offenders, and its point estimate is biased. Staggered
+adoption makes such heterogeneity the rule rather than the exception. Each cohort's timing must be defended
+on its own, one cohort's adoption perhaps as good as randomly timed while another's coincides with a
+confounding shock, so parallel trends is naturally a cohort-level property, credible for some and not for
+others. Honest inference that keeps the ATT as the target does not repair this. It reads a pre-trend that pools the
+cohorts, and the failure takes one of two forms. When the aggregate pre-trend reveals the violation, the
+honest set is valid but wide, accommodating the worst cohort. When the offending cohorts' pre-trends wash
+out of the aggregate, a minority, differently timed, the honest set is instead falsely precise, tight
+around the biased estimate. As Section~\ref{sec:app} shows, a relative-magnitudes sensitivity analysis then
+certifies a spurious effect. Either way the fixed-target analysis on the aggregate is the wrong instrument,
+because the violation is a property of the cohort composition that the aggregate hides.
 
-The target change is the easy half and an old idea; the work is that selecting the credible cohorts from
-the pre-trends revives the very pre-test bias honest-DiD exists to avoid, and no existing honest method
+Our response is to change the target. When parallel trends fails for some cohorts, we drop them and report
+the effect for the credible ones. The obstacle is inference. Selecting the credible cohorts from the
+pre-trends revives the very pre-test bias honest-DiD exists to avoid, and no existing honest method
 addresses it, because none selects. This paper supplies that inference. Applied practice already retreats
-to the part of a design it trusts, but piecemeal and without inference to match: researchers exclude
+to the part of a design it trusts, but piecemeal and without inference to match. Researchers exclude
 treated units whose inclusion would contaminate the comparison, select and weight comparison units for
 pre-treatment fit \citep{abadie2010}, and, less formally, adjust samples and specifications until the
-pre-trends look flat---the specification search whose statistical costs \citet{roth2022pretrends}
+pre-trends look flat, the specification search whose statistical costs \citet{roth2022pretrends}
 documents. Each is a retreat to a more credible subpopulation, made ad hoc or on design grounds, and none
 carries inference valid against the selection it performs. When the population ATT is not credibly
-identified, we make that retreat explicit and give it a target and an inference: we drop to the
-subpopulation of cohorts where identification is credible---the logic of the local average treatment
+identified, we make that retreat explicit and give it a target and an inference. We drop to the
+subpopulation of cohorts where identification is credible, the logic of the local average treatment
 effect \citep{imbens1994}, of the optimal-subpopulation average treatment effect under limited overlap
 \citep{crump2009}, and of overlap weighting \citep{li2018}, each of which trades the original estimand for
 a credibly identified effect on a selected subpopulation. The credible-subpopulation LATT is a reweighting
@@ -97,97 +114,74 @@ two-way fixed effects under staggered adoption \citep{goodmanbacon2021}, whose i
 negative under treatment-effect heterogeneity. That repair concerns aggregation, not identification,
 since they maintain parallel trends and are biased when it fails, which is the failure we address.}
 Credibility can be decided ex ante, from covariates or institutional knowledge, but in the leading case it
-is read from the pre-trends themselves---and selecting on the same pre-trends used for estimation is
-exactly the step the honest-DiD literature avoided, because it revives the pre-test bias that motivates
-that literature. Our central contribution is to make that selection honest: to give inference for the LATT
-that is uniformly valid against both the data-driven selection and the residual violation of parallel
-trends that a pre-trend screen cannot rule out.
+is read from the pre-trends themselves, the same pre-trends used for estimation, which is exactly the
+selection the honest-DiD literature avoided. The paper thus makes two contributions. The first is to
+propose and formalize this change of estimand for staggered difference-in-differences, giving the
+credible-subpopulation effect an identification result and a rule for when to adopt it. The second, where
+the work lies, is to make the data-driven selection honest, with inference for the LATT that is uniformly
+valid against both the selection and the residual violation of parallel trends that a pre-trend screen
+cannot rule out.
 
-That the LATT is point-identified under parallel trends on the selected cohorts alone---a weaker
-requirement that can hold when the ATT's fails (Proposition~\ref{prop:id})---is immediate, and we treat it
-as a benchmark rather than a contribution: the screen selects on pre-trends, and a flat pre-trend does not
-certify the flat post-trend that identification requires, so the honest interval, not the point, is the
-object we carry. The paper's work is the inference that a data-driven selection demands, and it makes three
-contributions. \emph{First, and centrally, honest post-selection inference.} We combine the post-selection
+That the LATT is point-identified under parallel trends on the selected cohorts alone, a weaker
+requirement that can hold when the ATT's fails, is immediate. Because the
+screen selects on pre-trends, and a flat pre-trend does not certify the flat post-trend that identification
+requires, the honest interval, not the point, is the object we carry. This second contribution, the
+inference a data-driven selection demands, has three parts. First, and centrally, honest post-selection
+inference. We combine the post-selection
 ``carving'' of \citet{lee2016} with the sensitivity bounds of \citet{rambachan2023} into a single interval
 for the LATT that is uniformly valid in the data-generating parameter, with no separation or
-consistent-selection condition (Proposition~\ref{prop:carve}): the carved component absorbs the data-driven
+consistent-selection condition when the event-study covariance is known, and to first order when it is
+consistently estimated. The carved component absorbs the data-driven
 selection and the level bound absorbs the residual identification failure, and the two compose. Neither
 ingredient suffices alone. Post-selection carving \citep{lee2016} delivers valid inference when the target
-is point-identified conditional on the selected set; here it is not, because a flat pre-trend does not
+is point-identified conditional on the selected set. Here it is not, because a flat pre-trend does not
 certify the flat post-trend that identification requires, so carving alone leaves a residual violation it
 cannot touch, and composing it with a sensitivity class is what restores honesty. This is the step the
 fixed-target sensitivity analysis never takes, because it never selects, and it carries selection and
-identification uncertainty on separate instruments. \emph{Second, a feasible
-decision rule.}
-We characterize in closed form when the trade pays---when the point-identified LATT dominates the
-set-valued ATT. A width-dominance theorem gives the explicit threshold on the dropped cohorts' violation
-above which the credible-subpopulation honest interval is strictly shorter than the \citet{rambachan2023}
-interval for the ATT, a threshold estimable from the estimated covariance alone
-(Theorem~\ref{thm:width}); and we turn the characterization into an estimable rule reported alongside both
-honest intervals (Proposition~\ref{prop:switch}). Because both intervals are honest, the rule can never cost
-coverage, only efficiency; under homogeneous effects it selects the lower-risk procedure with probability
+identification uncertainty on separate instruments. Second, a feasible
+decision rule.
+We characterize in closed form when the trade pays, when the credible-subpopulation honest interval is
+shorter than the honest interval for the ATT. A width-dominance theorem gives the explicit threshold on the dropped cohorts' violation
+above which the credible-subpopulation interval is strictly shorter than the honest ATT interval, a
+threshold estimable from the covariance and the chosen sensitivity bounds. The closed-form threshold is for
+the fixed-length intervals of ex-ante selection. Under data-driven selection the carved interval's expected
+length is infinite, so the comparison there is by coverage and median length rather than a
+width threshold. We turn the characterization into an estimable rule reported alongside both
+honest intervals. Because both intervals are honest, the rule can never cost
+coverage, only efficiency. Under homogeneous effects it selects the lower-risk procedure with probability
 approaching one, and under heterogeneity it returns a breakdown value $\Gamma^\ast$ in the idiom of a
-sensitivity analysis. \emph{Third, evidence.} Simulations trace the method's advantage across the
-informativeness of pre-trends, and an
-application to the shale boom withdraws a spuriously positive pooled estimate of the effect on house prices,
-locating it in the cohorts already trending before onset. An appendix develops the optimal credible
-weighting that the same sensitivity class implies (Proposition~\ref{prop:optimal})---a soft-thresholded
+sensitivity analysis. Third, evidence. Simulations trace the method's advantage across the
+informativeness of pre-trends and confirm the width dominance directly. Once the dropped violation is large
+enough, the honest credible-subpopulation interval is strictly shorter than the honest ATT interval, both
+covering. An
+application to the shale boom then withdraws a spuriously positive pooled estimate of the effect on house prices.
+A relative-magnitudes sensitivity analysis certifies a $+6.7$ log-point effect, yet the credible
+subpopulation, the counties whose onset did not coincide with the housing run-up, reveals essentially zero,
+locating the pooled effect in the cohorts already trending before onset. An appendix develops the optimal credible
+weighting that the same sensitivity class implies, a soft-thresholded
 weighting of cohorts by credibility net of noise, of which the flatness screen is a special case,
 completing the analogy to the variance-minimizing overlap weights of \citet{crump2009}.
 
-Table~\ref{tab:position} places the paper among existing robust-DiD methods. Where they hold the ATT fixed
-and use pre-trends to bound or extrapolate the post-treatment violation, we change the target and treat the
-resulting selection as the object requiring inference; we nest the sensitivity analysis of
+Among existing robust-DiD methods, which hold the ATT fixed and use pre-trends to bound or extrapolate the
+post-treatment violation, none selects, so none confronts selection in its inference. We instead change the
+target and treat the resulting selection as the object requiring inference, producing an interval uniformly
+valid against both the data-driven selection and the residual violation, a guarantee the fixed-target
+methods have no need for. We nest the sensitivity analysis of
 \citet{rambachan2023} by applying it to the retained sub-aggregate, and we connect to the post-selection
 inference literature \citep{lee2016, leeb2005, leeb2008} that the honest-DiD papers, by never selecting,
-did not need.
-
-\begin{table}[t]
-\centering
-\caption{Where this paper sits. Existing robust-DiD methods hold the ATT fixed and use pre-trends to bound
-or extrapolate the post-treatment violation; none selects, so none confronts selection in its inference.
-Our contribution is the last column: an interval uniformly valid against the data-driven selection
-\emph{and} the residual violation, a guarantee the fixed-target methods have no need for.}
-\label{tab:position}
-\small
-\begin{tabular}{@{}p{0.20\textwidth}p{0.13\textwidth}p{0.29\textwidth}p{0.27\textwidth}@{}}
-\toprule
-Approach & Target & Use of pre-trends & Inference guarantee \\
-\midrule
-Pre-trends test, then point DiD & ATT & Screen; keep design if the test passes & None post-test (pre-test bias) \\
-\citet{rambachan2023} & ATT & Bound post- by pre-treatment violation ($\Delta$) & Uniform over $\delta\in\Delta$ \\
-\citet{kwonroth2024} & ATT & Calibrate an (empirical-)Bayes prior on $\delta$ & Bayesian credible set \\
-\citet{dechaisemartin2026} & ATT & Rank post- against pre-treatment DiDs & Valid under the ranking \\
-\textbf{This paper} & \textbf{LATT} (credible subpop.) & Select credible cohorts; bound residual violation & \textbf{Uniform vs.\ selection \emph{and} residual violation} \\
-\bottomrule
-\end{tabular}
-\end{table}
+did not need. The most closely related work is \citet{dechaisemartin2026}, which also brings the pre-trends into
+the inference rather than leaving them to a pre-test, but keeps the ATT and bounds it by ranking the
+post-treatment differences against the pre-treatment ones. We instead change the target to the credible
+subpopulation, so the object inference must be valid against is the data-driven cohort selection, not the
+extrapolation across periods.
 
 The remainder of the paper is organized as follows. Section~\ref{sec:approach} fixes the staggered-DiD
-setup, defines the credible-subpopulation LATT, and develops its identification, estimation, honest
-inference, and the decision rule. Section~\ref{sec:sim} reports the simulation study,
+setup, defines the credible-subpopulation LATT, and develops its identification and estimation.
+Section~\ref{sec:honest} develops the honest inference that a data-driven selection demands, and
+Section~\ref{sec:dominance} the decision of when to narrow the target. Section~\ref{sec:sim} reports the
+simulation study,
 Section~\ref{sec:app} applies the method to the local house-price effect of the shale boom, and
-Section~\ref{sec:conc} concludes. The procedure, assembled in one place, is the following.
-
-\begin{center}
-\fbox{\begin{minipage}{0.92\textwidth}
-\textbf{The credible-subpopulation procedure.}
-\begin{enumerate}\setlength\itemsep{2pt}
-\item \emph{Estimate} cohort-level (group-time) event studies with any heterogeneity-robust estimator
-\citep{callaway2021, sun2021, borusyak2024, dechaisemartin2020}.
-\item \emph{Select} the credible cohorts---from institutional knowledge or a covariate split (ex ante), or
-by screening the pre-trends for flatness (data-driven).
-\item \emph{Estimate} the LATT by reweighting the retained cohorts' post-treatment effects.
-\item \emph{Report honest inference}: the level-bound sensitivity interval on the retained set, carved for
-the selection when it is data-driven (Proposition~\ref{prop:carve}), and the breakdown violation
-$M^\ast$.
-\item \emph{Report the trade}: both honest intervals (LATT and ATT) with the switching diagnostic
-$(\hat D,\ \widehat{\Delta\mathrm{Var}},\ \Gamma^\ast)$ that signals which is more informative
-(Proposition~\ref{prop:switch}).
-\end{enumerate}
-\end{minipage}}
-\end{center}
+Section~\ref{sec:conc} concludes.
 
 \section{The credible-subpopulation LATT}\label{sec:approach}
 
@@ -208,7 +202,10 @@ special cases.
 It is convenient to work with the event-study representation and the decomposition of
 \citet{rambachan2023}. Let $\hat\beta=(\hat\beta_{\mathrm{pre}}',\hat\beta_{\mathrm{post}}')'$ be an
 asymptotically normal vector of event-study coefficients estimated by any of the heterogeneity-robust
-procedures above, with $\sqrt{n}(\hat\beta-\beta)\to\mathcal{N}(0,\Sigma)$. The estimand decomposes as
+procedures above, with $\sqrt{n}(\hat\beta-\beta)\to\mathcal{N}(0,\Sigma)$. The finite-sample covariance of
+$\hat\beta$ is then $\Sigma_n=\Sigma/n$, and the Gaussian working model of Section~\ref{sec:honest},
+together with the standard errors, truncation limits, and randomization scale used throughout, is stated in
+terms of $\Sigma_n$, and we write $\Sigma$ for $\Sigma_n$ when no confusion arises. The estimand decomposes as
 \begin{equation}
 \beta = \tau + \delta, \qquad \tau_{\mathrm{pre}}=0,
 \label{eq:decomp}
@@ -218,13 +215,22 @@ the differential trend between treated and comparison groups that would have occ
 treatment. Parallel trends is the restriction $\delta_{\mathrm{post}}=0$, under which
 $\beta_{\mathrm{post}}=\tau_{\mathrm{post}}$, and a pre-trends test is a test of $\delta_{\mathrm{pre}}=0$.
 
+\begin{assumption}[Maintained conditions]\label{ass:main}
+(i) Asymptotic normality. The event-study estimator satisfies
+$\sqrt{n}(\hat\beta-\beta)\xrightarrow{d}\mathcal N(0,\Sigma)$ for a positive-definite $\Sigma$, consistently
+estimable by some $\hat\Sigma\xrightarrow{p}\Sigma$. (ii) No anticipation. $\tau_{g,\mathrm{pre}}=0$
+for every cohort $g$, so that the pre-treatment coefficients identify the pre-treatment differential trend,
+$\beta_{g,\mathrm{pre}}=\delta_{g,\mathrm{pre}}$.
+\end{assumption}
+
+All results maintain Assumption~\ref{ass:main}. The finite-sample carved inference of
+Section~\ref{sec:honest} additionally works in the Gaussian model $\hat\beta\sim\mathcal N(\beta,\Sigma)$
+with $\Sigma$ known, with the estimated-$\Sigma$ case treated in Remark~\ref{rem:sigmahat}.
+
 We will require the analogous objects at the cohort level. Write $\delta_g$ for the differential
 trend of cohort $g$ and say that parallel trends holds for $g$ if $\delta_{g,\mathrm{post}}=0$.
-A key feature of applications is that this may hold for some cohorts and fail for others. Defending the
-timing of treatment as unrelated to the outcome path is already delicate in a two-group design, and
-staggered adoption raises the burden rather than lowering it, since each cohort's timing must be
-defended on its own, one cohort's adoption perhaps as good as randomly timed while another's coincides
-with a confounding shock.
+A key feature of applications, motivated in the introduction, is that this may hold for some cohorts and
+fail for others, since each cohort's adoption timing must be defended on its own.
 
 Finally, we distinguish two regimes for how cohorts are judged credible, because they carry different
 inferential guarantees. Under ex-ante (or independent) selection, credibility is decided from
@@ -236,7 +242,7 @@ counterpart $S^\ast$, the set a population pre-trend statistic would select. The
 below holds for any set held fixed, and so identifies the random target $\theta_{\hat S}$ conditional on the
 realized $\hat S$. Identifying the fixed population parameter $\theta_{S^\ast}$ instead requires $\hat S$ to
 recover $S^\ast$, a selection-consistency condition we return to under inference
-(Proposition~\ref{prop:oracle}). The distinction is thus minor for identification but central for inference,
+(Remark~\ref{rem:oracle}). The distinction is thus minor for identification but central for inference,
 and we treat it explicitly below.
 
 \subsection{Estimand and identification}
@@ -255,7 +261,7 @@ average over post-treatment periods), the credible-subpopulation local ATT, defi
 the aggregated causal effect of cohort $g$.
 \end{definition}
 
-The target is identified under a weaker condition than the ATT---a benchmark we state before turning,
+The target is identified under a weaker condition than the ATT, a benchmark we state before turning,
 in Section~\ref{sec:honest}, to the honest interval that is the paper's actual object.
 
 \begin{proposition}[Identification benchmark]\label{prop:id}
@@ -266,17 +272,11 @@ irrespective of whether $\delta_{g,\mathrm{post}}\neq 0$ for cohorts $g\notin S$
 \end{proposition}
 
 \begin{proof}
-For $g\in S$, $\beta_{g,\mathrm{post}} = \tau_{g,\mathrm{post}}+\delta_{g,\mathrm{post}}
-= \tau_{g,\mathrm{post}}$ by the hypothesis and \eqref{eq:decomp}, so $a(\beta_{g,\mathrm{post}})
-= a(\tau_{g,\mathrm{post}}) = \mathrm{ATT}(g,\cdot)$ by linearity of $a$. The reweighted sum over $S$
-therefore equals the weighted average of the aggregated causal effects, which is $\theta_S$ by definition.
-Cohorts outside $S$ receive zero weight, so their differential trends do not enter.
+See Appendix~\ref{app:proofs}.
 \end{proof}
 
-Proposition~\ref{prop:id} is elementary, and deliberately so. The paper's work is not in the
-identification, which merely restates that a weighted average over cohorts where parallel trends holds is
-identified, but in the honest inference for the data-driven selection this target invites, developed in
-Section~\ref{sec:honest}. Changing the target to the
+The identification in Proposition~\ref{prop:id} is immediate. The substance is the honest inference for the
+data-driven selection this target invites, developed in Section~\ref{sec:honest}. Changing the target to the
 credible subpopulation weakens the identifying requirement from parallel trends on all cohorts to parallel
 trends on $S$, which can hold when the former fails, at the cost of a narrower question whose subpopulation
 $S$ must then be characterized. The weakening is genuine but conditional, and two things must be kept
@@ -289,22 +289,20 @@ the point-identified $\theta_S$ as a benchmark and pair it with the honest sensi
 below, which bound the residual post-treatment violation the screen leaves behind and, in doing so,
 return a set rather than a point when that violation is nonzero.
 
-The narrower question carries an interpretability cost that we state plainly rather than leave for the
-reader to raise. The LATT is our target, and against it the estimator is honestly centered; the
-mean-squared-error comparison of Section~\ref{sec:dominance}, which charges the LATT a $\gamma^2$ term,
-treats the ATT as the estimand and is offered as a courtesy to a reader who insists on it, not as a
-concession that the LATT is a biased estimate of something else. What must be conceded is different: the
-credible subpopulation is delimited by a statistical property---flat, credible pre-trends---rather than by
-a substantive behavioral criterion, so it is less transparently interpretable than the compliers of the
-local average treatment effect \citep{imbens1994}, and when treatment effects are heterogeneous it answers
-a different and possibly less policy-relevant question than the ATT for the full treated population. That
-gap is exactly the composition gap $\Gamma$ of Section~\ref{sec:dominance}, unidentified because it depends
-on the effects of the cohorts the screen discards. We do not argue it away: we report both honest intervals
-with the breakdown value $\Gamma^\ast$, so the reader sees the full-population target alongside the credible
-one and how far the discarded cohorts' effects must differ to overturn the reading. Where the retained set
-admits a substantive description---in the application of Section~\ref{sec:app}, the counties whose oil-and-gas
-onset did not coincide with the mid-2000s housing run-up---we recommend leading with it, since it converts a
-cohort selected for a convenient statistical property into a subpopulation a reader can name.
+Narrowing the target carries an interpretability cost, and a standing reporting rule addresses it. The
+credible subpopulation is delimited by a statistical property, flat pre-trends, rather than by a
+substantive behavioral criterion, so it is less transparently interpretable than the compliers of the local
+average treatment effect \citep{imbens1994}, and under heterogeneous effects it answers a different question
+than the ATT for the full treated population. We handle this directly. The gap between the two is the
+composition gap $\Gamma$, unidentified because it depends on the effects of the discarded cohorts, so we
+always report both honest intervals with the breakdown value $\Gamma^\ast$, and the reader sees the
+full-population target alongside the credible one and how far the discarded cohorts' effects must differ to
+overturn the
+reading, and wherever the retained set admits a substantive description, in the application of
+Section~\ref{sec:app}, the counties whose oil-and-gas onset did not coincide with the mid-2000s housing
+run-up, lead with that description, which converts a cohort selected for a convenient statistical
+property into a subpopulation a reader can name, characterizing it by its covariates the way applied work
+characterizes the compliers of an instrumental-variables design \citep{abadie2003}.
 
 The construction uses staggered timing only to supply the groups. What it requires is a partition of the
 treated population into groups whose parallel trends can each be assessed. Adoption cohorts are the
@@ -351,7 +349,7 @@ inference subtleties that follow it.
 
 We do not recommend committing to a single $c$. The sensitivity interval of
 Section~\ref{sec:approach} is applied to whichever set $c$ selects, and its bound $M$ must dominate that
-set's residual \emph{post}-treatment violation, so the effect of $c$ on the required $M$ runs through how
+set's residual post-treatment violation, so the effect of $c$ on the required $M$ runs through how
 far screening on flat pre-trends also flattens post-trends. When pre-trends are informative about
 post-treatment violations, a stricter $c$ yields a cleaner set that a smaller $M$ suffices to cover, while
 a laxer $c$ buys scope at the cost of a larger $M$, so the threshold trades scope for precision rather than
@@ -378,78 +376,48 @@ selected- and full-population weighted averages of the cohort effects. In either
 efficiency loss relative to estimators that use all cohorts.
 \end{proposition}
 
-The consistency clause of Proposition~\ref{prop:cons} invites a sharper question: when does
-narrowing the target cost nothing, in that the LATT and the ATT are the same object? The answer
-separates equivalence of the two targets from convergence of the two estimators.
+The consistency clause of Proposition~\ref{prop:cons} invites a sharper question. When does narrowing the
+target cost nothing, in that the LATT and the ATT are the same object? Writing $\theta_g:=\mathrm{ATT}(g,\cdot)$,
+$\mathcal G$ for the full set of treated cohorts, and $\theta_{\mathcal G}$ for the ATT, the two coincide for
+a fixed selected set $S$, $\theta_S=\theta_{\mathcal G}$, exactly when the retained cohorts' weighted-average
+effect equals the full population's,
+$\sum_{g\in S}w_g\theta_g/\sum_{g\in S}w_g=\sum_{g\in\mathcal G}w_g\theta_g/\sum_{g\in\mathcal G}w_g$. In
+particular when no cohort is dropped, when effects are homogeneous, and more generally whenever selection is
+uninformative about effect size. The gap $\theta_S-\theta_{\mathcal G}$ is the composition gap $\Gamma$ that
+Proposition~\ref{prop:generalK} isolates in Appendix~\ref{app:mse}, the LATT's counterpart of the selection
+that separates a local from an average treatment effect \citep{imbens1994,li2018}. Target equivalence and estimator convergence are
+distinct. Under data-driven selection the estimators can still converge, when no cohort is detectable and the
+whole population is retained, by Proposition~\ref{prop:pretest}, even where the targets would differ for any
+strict selection, while a strict but ignorable selection leaves the targets equal yet the finite-sample
+estimators differ by the efficiency cost of Proposition~\ref{prop:cons}.
 
-\begin{proposition}[Coincidence of the LATT and the ATT]\label{prop:coincide}
-Write $\theta_g:=\mathrm{ATT}(g,\cdot)$ for the cohort-level causal effect, $\mathcal G$ for the full
-set of treated cohorts, and $\theta_{\mathcal G}$ for the ATT, the aggregate over all of $\mathcal G$.
-For a fixed selected set $S$ the two targets coincide, $\theta_S=\theta_{\mathcal G}$, if and only if
-the retained cohorts' weighted-average effect equals the full population's,
-\[
-\frac{\sum_{g\in S} w_g\,\theta_g}{\sum_{g\in S} w_g}
-=\frac{\sum_{g\in\mathcal G} w_g\,\theta_g}{\sum_{g\in\mathcal G} w_g}.
-\]
-This holds in particular when no cohort is dropped, $S=\mathcal G$, and when effects are homogeneous,
-$\theta_g\equiv\theta$, under which every subpopulation shares the common value; and more generally
-whenever selection is uninformative about effect size, in that the dropped cohorts
-$\mathcal G\setminus S$ carry the same weighted-average effect as the retained ones. Under
-data-driven selection the two \emph{estimators} converge, $\hat\theta_{\hat S}-\hat\theta_{\mathcal G}
-\xrightarrow{p}0$, whenever the screen retains every cohort with probability approaching one, which by
-Proposition~\ref{prop:pretest} occurs precisely when no cohort is detectable,
-$\max_{e<0}\lvert\beta_{g,\mathrm{pre}}(e)\rvert\le c$ for every $g$; when some cohorts are detectable
-and dropped, the estimators converge to a common value if and only if the limiting selected set
-$S^\ast$ satisfies the equal-targets condition above.
-\end{proposition}
-
-\begin{proof}
-Both $\theta_S$ and $\theta_{\mathcal G}$ are weighted averages of the same cohort effects
-$\{\theta_g\}$, so they agree exactly when the displayed identity holds; $S=\mathcal G$ makes the two
-averages coincide term by term, and $\theta_g\equiv\theta$ makes each equal $\theta$. Under
-data-driven selection, if no cohort is detectable then by Proposition~\ref{prop:pretest} the screen
-retains all of $\mathcal G$ with probability approaching one, so $\hat S=\mathcal G$ on an event of
-probability tending to one and the two estimators coincide there. In general
-$\hat\theta_{\hat S}\xrightarrow{p}\theta_{S^\ast}$ and
-$\hat\theta_{\mathcal G}\xrightarrow{p}\theta_{\mathcal G}$, whose difference vanishes exactly under
-the equal-targets identity applied to $S^\ast$.
-\end{proof}
-
-Two remarks place the result. First, the equal-targets condition is the precise sense in which the
-LATT is a distinct estimand: it is distinct exactly to the extent that selection is informative about
-effect size, and the gap $\theta_S-\theta_{\mathcal G}$ is the heterogeneity that
-Proposition~\ref{prop:generalK} isolates as its composition-gap term $\Gamma$, vanishing under
-homogeneity. This is
-the equivalence familiar from the local average treatment effect and overlap-weighted estimands, whose
-subpopulation targets coincide with the population one under an analogous ignorability of selection.
-Second, target equivalence and estimator convergence come apart. Heterogeneous effects can still leave
-the estimators convergent, when no cohort is detectable and the entire population is retained, even
-though the targets would differ for any strict selection; and conversely a strict but ignorable
-selection can leave the targets equal while the finite-sample estimators differ by the efficiency cost
-recorded in Proposition~\ref{prop:cons}.
-
-Under data-driven selection the rule~\eqref{eq:rule} couples $S$ to the estimation errors: a confounded
+Under data-driven selection the rule~\eqref{eq:rule} couples $S$ to the estimation errors. A confounded
 cohort whose pre-trend noise happens to fall below $c$ is admitted, and its differential trend enters
 $\hat\theta_S$. This is a pre-test selection bias in the sense of \citet{roth2022pretrends}, with a
 definite source and a definite fate.
 
 \begin{proposition}[Pre-test bias]\label{prop:pretest}
-Under data-driven selection, $\hat\theta_S$ carries a finite-sample bias equal to the weighted average
-of the admitted confounded cohorts' post-treatment differential trends, times their probability of
-admission. Whether it vanishes turns on detectability. Call a confounded cohort detectable if its
+Under data-driven selection, $\hat\theta_S$ carries a finite-sample bias whose leading term is the weighted
+average of the admitted confounded cohorts' post-treatment differential trends, times their probability of
+admission. The exact bias also reflects the random weight normalization on the selected set and, when pre-
+and post-treatment estimation errors are correlated, a term from conditioning on the selection. Whether the
+leading term vanishes turns on detectability. Call a confounded cohort detectable if its
 population pre-trend statistic exceeds the threshold, $\max_{e<0}\lvert\beta_{g,\mathrm{pre}}(e)\rvert>c$,
 and undetectable if it is flat in the pre-period, $\max_{e<0}\lvert\beta_{g,\mathrm{pre}}(e)\rvert\le c$,
 yet violates parallel trends in the post-period. As per-cohort information grows, a detectable cohort's
 admission probability tends to zero and its contribution to the bias vanishes, whereas an undetectable
-cohort's admission probability tends to one and its contribution persists at every sample size. Hence
-$\hat\theta_S$ is consistent for $\theta_S$ if and only if every confounded cohort is detectable, and
-otherwise retains an asymptotic bias equal to the residual violation of the undetectable cohorts, which is
-the identification gap that the honest inference of the next subsection bounds.
+cohort's admission probability tends to one and its contribution persists at every sample size, while a
+cohort exactly at the threshold is admitted with an interior probability. Hence
+$\hat\theta_S$ is consistent for $\theta_S$ whenever the selected aggregate's residual violation vanishes,
+which holds in particular if every confounded cohort is detectable, though detectability of each is
+sufficient rather than necessary, since cohort-level violations may cancel in the aggregate. Otherwise
+$\hat\theta_S$ retains an asymptotic bias equal to the residual violation of the undetectable cohorts, the
+identification gap that the honest inference of the next subsection bounds.
 \end{proposition}
 
-\subsection{Honest inference on the selected set}\label{sec:honest}
+\section{Honest inference}\label{sec:honest}
 
-A flat pre-trend does not guarantee a flat post-trend: selection removes gross violations but not subtle
+A flat pre-trend does not guarantee a flat post-trend. Selection removes gross violations but not subtle
 residual ones. We therefore pair the point estimate with the sensitivity analysis of \citet{rambachan2023},
 applied to the selected-cohort aggregate. It imposes a restriction $\delta_{S,\mathrm{post}}\in\Delta$ on
 the residual differential trend and reports the implied confidence set for $\theta_S$. To match the
@@ -457,51 +425,71 @@ flatness screen we use the level bound
 $\Delta^{\mathrm{Level}}(M)=\{\delta:\lvert\delta_{\mathrm{post}}(e)\rvert\le M\ \forall e\}$, which asks how
 far the treated-comparison difference could have drifted from its flat pre-treatment level. The estimator
 is then the reweighted post-treatment average, with no extrapolation, and its fixed-length confidence
-interval (FLCI) is near-optimal \citep{armstrong2018}. Because $M$ is in the outcome's own units, the
-breakdown value $M^\ast$ is the size of post-treatment violation that would just overturn the conclusion.
-We benchmark it two ways: against the retained cohorts' own pre-trends, which the screen holds below $c$ in
-the same units, and against the effect at stake. An $M^\ast$ several times the retained cohorts' visible
-pre-trends signals a robust conclusion, and Section~\ref{sec:app} reports both benchmarks.
+interval (FLCI) is near-optimal \citep{armstrong2018}. We use this imported construction throughout. For a
+scalar target estimated with standard error $s$ under a worst-case bias bound $B$, the near-optimal FLCI of
+\citet{armstrong2018} has half-width
+\begin{equation}\label{eq:flci-hw}
+h(B,s)\;=\;s\,\mathrm{cv}_\alpha\!\big(B/s\big),\qquad
+\mathrm{cv}_\alpha(t)=\text{the }(1-\alpha)\text{ quantile of }\lvert\mathcal N(t,1)\rvert,
+\end{equation}
+with $\mathrm{cv}_\alpha(0)=z_{1-\alpha/2}$ the pure-noise critical value and
+$\mathrm{cv}_\alpha(t)\uparrow t+z_{1-\alpha}$ as the bias comes to dominate. The bound $M$ is not estimated but is the axis of a
+sensitivity analysis. The pre-period identifies $\delta_{\mathrm{pre}}$ and not $\delta_{\mathrm{post}}$, so no
+screen can certify a value of $M$, and the honest object is not a single interval but the map from $M$ to the
+interval it implies, together with the breakdown value $M^\ast$, the smallest post-treatment violation under
+which the stated conclusion no longer follows. This is the level-bound analogue of the breakdown reporting of
+\citet{rambachan2023}. The honest object is not a claim that the retained cohorts' post-trends are flat, which no pre-trend can
+establish, but the map of how flat they must be for the reading to stand. Because $M$ and $M^\ast$ are in
+the outcome's own units, $M^\ast$ is directly interpretable. We benchmark it two ways: against the retained
+cohorts' own pre-trends, which the screen holds below $c$ in the same units, and against the effect at
+stake. An $M^\ast$ several times the retained cohorts' visible pre-trends signals a conclusion surviving
+violations far larger than anything the pre-period displays. Section~\ref{sec:app} reports both benchmarks.
 
 Validity depends on the selection regime. Under ex-ante selection $S$ is independent of $\hat\beta$, and the
 uniform validity of \citet{rambachan2023} applies verbatim. Under data-driven selection $S$ is random, and
-two issues arise. The first is post-selection inference; it is asymptotically harmless when cohorts are well
+two issues arise. The first is post-selection inference. It is asymptotically harmless when cohorts are well
 separated from the threshold.
 
-\begin{proposition}[Selection consistency and oracle coverage]\label{prop:oracle}
-Suppose the statistic on which selection is based is consistent for its population counterpart, that
-the following separation condition holds, that there exists $\epsilon>0$ such that, for every cohort, the
-population value of that statistic lies at distance at least $\epsilon$ from the threshold $c$, and that the
-population credible set's residual violation satisfies the maintained restriction
-$\delta_{S^\ast,\mathrm{post}}\in\Delta^{\mathrm{Level}}(M)$. Then $P(\hat S = S^\ast)\to 1$, where
-$S^\ast$ denotes the population credible set, and the FLCI computed on the estimated set $\hat S$ has the
-same asymptotic coverage as the oracle interval computed on $S^\ast$. Selection consistency delivers this
-equivalence to the oracle interval, and the maintained restriction delivers the oracle interval's nominal
-coverage of the causal target, so the two together give nominal coverage.
-\end{proposition}
+\begin{remark}[Pointwise oracle coverage under separation]\label{rem:oracle}
+A consistency argument already secures coverage under a strong condition. If the selection statistic is
+consistent and every cohort's population value lies a fixed distance from the threshold $c$ (a separation
+condition), and the population credible set's residual violation satisfies
+$\delta_{S^\ast,\mathrm{post}}\in\Delta^{\mathrm{Level}}(M)$, then $P(\hat S=S^\ast)\to1$ and the FLCI on the
+estimated set $\hat S$ inherits the oracle coverage of the interval on the population set $S^\ast$, nominal
+by the fixed-set validity noted above. This oracle guarantee has two limitations, both removed by the carved construction
+below. The separation condition is untestable
+and nearly restates the parallel-trends question, relocating the identifying content rather than supplying
+it, and the coverage is only pointwise, since a post-selection distribution cannot be estimated uniformly
+consistently \citep{leeb2005,leeb2008}, the obstruction confined to the local-to-threshold configurations
+where the selection statistic drifts toward the boundary at the sampling rate.
+\end{remark}
 
-\begin{proof}
-By consistency of the selection statistic together with the separation condition, the probability that
-any given cohort is misclassified tends to zero. Since the number of cohorts is finite, a union bound
-gives $P(\hat S\neq S^\ast)\to 0$. On the complementary event the estimator, its covariance estimate and
-the resulting interval coincide exactly with their oracle counterparts computed on the non-random set
-$S^\ast$. The two sequences therefore share a limiting distribution, and the coverage of the interval
-computed on $\hat S$ converges to that of the oracle interval, which is nominal by the validity of
-\citet{rambachan2023} applied to a fixed set whose residual violation lies in $\Delta^{\mathrm{Level}}(M)$.
-\end{proof}
+A researcher unwilling to assume separation has two options. One secures validity through independence,
+selecting on pre-determined covariates or an independent sample split, at the cost of the efficiency the
+split forgoes. The other conditions on the selection and recovers that efficiency. We develop it now,
+because it delivers the uniform guarantee the consistency argument lacks. The result rests on the following
+conditions and on the classical post-selection lemma, both collected here so the construction is
+self-contained.
 
-Two caveats attach to Proposition~\ref{prop:oracle}. First, the separation condition is untestable and
-nearly restates the parallel-trends question: to assert that every cohort is plainly credible or plainly
-not is close to asserting that one already knows which cohorts are credible, so the condition relocates the
-identifying content rather than supplying it. Second, the guarantee is pointwise, not uniform.
-\citet{leeb2005} show that a post-selection estimator's distribution cannot be estimated uniformly
-consistently, so naive post-selection intervals lack uniform validity \citep{leeb2008}. The obstruction is
-confined to local-to-threshold configurations, where the selection statistic drifts toward the boundary at
-the sampling rate; away from the boundary, selection is asymptotically deterministic and inference is
-conventional. A researcher unwilling to assume separation has two options. One secures validity through
-independence, selecting on pre-determined covariates or an independent sample split, at the cost of the
-efficiency the split forgoes. The other conditions on the selection and recovers that efficiency. We
-develop it now, because it delivers the uniform guarantee Proposition~\ref{prop:oracle} lacks.
+\begin{assumption}[Carved-inference conditions]\label{ass:carve}
+In addition to Assumption~\ref{ass:main}, the finite-sample carved inference maintains. (i) the Gaussian
+model $\hat\beta\sim\mathcal N(\beta,\Sigma)$ with $\Sigma$ known, the estimated-$\Sigma$ case treated in
+Remark~\ref{rem:sigmahat}. (ii) the data-driven flatness screen $R$ of \eqref{eq:rule}, randomized at a
+scale $\gamma\ge0$, and (iii) conditioning on the realized selection event together with the active
+pre-period constraints and their signs, for each retained cohort the constraints that bind, for each
+dropped cohort a breaching coordinate and its sign.
+\end{assumption}
+
+\begin{lemma}[Polyhedral lemma, \citealp{lee2016}]\label{lem:poly}
+Let $y\sim\mathcal N(\mu,\Sigma)$ and fix a contrast $\eta$. On any polyhedral event $\{Ay\le b\}$,
+decompose $Ay$ into its component along $\eta'y$ and a remainder $r$ that is independent of $\eta'y$.
+Conditional on the event $\{Ay\le b\}$ and on the realized remainder $r$, the event confines $\eta'y$ to an
+interval $[\mathcal V^-,\mathcal V^+]$ whose endpoints are computable in closed form from $(A,b,\Sigma,\eta)$
+and $r$, and its law is $\mathcal N(\eta'\mu,\eta'\Sigma\eta)$ truncated to $[\mathcal V^-,\mathcal V^+]$. The
+truncated-normal pivot $F^{[\mathcal V^-,\mathcal V^+]}_{\eta'\mu,\,\eta'\Sigma\eta}(\eta'y)$ is therefore
+$\mathrm{Uniform}[0,1]$ conditional on the event and $r$, and, since this holds for every value of $r$,
+conditional on the event alone by iterated expectations.
+\end{lemma}
 
 The construction randomizes the screen and conditions on its outcome. In the reduced-form model
 $\hat\beta\sim\mathcal N(\beta,\Sigma)$ with $\Sigma$ known, draw independent noise
@@ -509,39 +497,33 @@ $\omega\sim\mathcal N(0,\gamma\,\Sigma_{\mathrm{pre}})$ for a scale $\gamma\ge0$
 pre-trends, $\hat S=\{g:\max_e\lvert\hat\beta_{g,\mathrm{pre}}(e)+\omega_{g}(e)\rvert\le c\}$, while
 estimating the aggregate $\theta_S=\ell_S'\beta_{\mathrm{post}}$ from the unrandomized
 $\hat\theta_S=\ell_S'\hat\beta_{\mathrm{post}}$, where $\ell_S$ carries the reweighting onto $S$. The
-target is the reduced-form aggregate: under parallel trends for $S$ it is the causal $\theta_S$, and
+target is the reduced-form aggregate. Under parallel trends for $S$ it is the causal $\theta_S$, and
 otherwise it is that quantity plus the residual violation the level bound handles below. Selection
 uncertainty and identification are thus carried by separate instruments.
 
-\begin{proposition}[Uniformly valid carved inference]\label{prop:carve}
-Fix $\gamma\ge0$. Condition on the selection event $\{\hat S=S\}$ together with the active coordinates of the
-flatness screen and their signs---for each retained cohort the pre-period constraints that bind, and for each
-dropped cohort a pre-period $e_g^\ast$ whose coordinate breaches the threshold together with its sign---which
-renders the event a polyhedron in the Gaussian vector even with several pre-periods per cohort. Then $\hat\theta_S$ has a truncated Gaussian law,
+\begin{theorem}[Uniformly valid carved inference]\label{thm:carve}
+Maintain Assumption~\ref{ass:carve} and fix $\gamma\ge0$. Conditioning on the selection event $\{\hat S=S\}$
+together with the active flatness-screen coordinates and their signs renders the event a polyhedron in the
+Gaussian vector even with several pre-periods per cohort. Then, conditional on $\{\hat S=S\}$ and the
+Gaussian remainder $r$ orthogonal to $\hat\theta_S$, the estimate has a truncated Gaussian law,
 \[
-\hat\theta_S\mid\{\hat S=S\}\ \sim\ \mathcal{TN}\big(\theta_S,\ s_S^2,\ [\mathcal V^-,\mathcal V^+]\big),
+\hat\theta_S\mid\{\hat S=S\},\,r\ \sim\ \mathcal{TN}\big(\theta_S,\ s_S^2,\ [\mathcal V^-,\mathcal V^+]\big),
 \qquad s_S^2=\ell_S'\Sigma_{\mathrm{post}}\,\ell_S,
 \]
 whose truncation limits $[\mathcal V^-,\mathcal V^+]$ are computable in closed form from $\Sigma$, $\gamma$,
-and the realized data by the polyhedral lemma of \citet{lee2016}: they are the intersection, over retained
-cohorts of the two-sided constraints $\lvert\hat\beta_{g,\mathrm{pre}}+\omega_g\rvert\le c$ and over dropped
-cohorts of the one-sided active constraint $\pm(\hat\beta_{g,\mathrm{pre}}(e_g^\ast)+\omega_g)>c$, of the
-intervals these place on $\hat\theta_S$ once the component of each constraint orthogonal to $\hat\theta_S$ is
-held fixed; with a single pre-period per cohort the retained-cohort constraints alone bind. Inverting the
+and the realized data by the polyhedral lemma of \citet{lee2016}. Inverting the
 truncated-normal pivot $F_{\theta_S,s_S^2}^{[\mathcal V^-,\mathcal V^+]}(\hat\theta_S)$ yields an interval
-$\mathcal C_{1-\alpha}(S)$ with exact conditional coverage $\Pr(\theta_S\in\mathcal C_{1-\alpha}(S)\mid
-\hat S=S)=1-\alpha$ for every $S$ and every $\beta$, hence exact unconditional coverage
-$\Pr(\theta_S\in\mathcal C_{1-\alpha}(\hat S))=1-\alpha$, uniformly in $\beta$ and without any separation
-condition. The scale $\gamma$ is a power parameter, not a validity parameter: $\gamma=0$ gives the fully
-conditional interval, $\gamma\to\infty$ drives selection independent of $\hat\theta_S$ so that the naive
-interval becomes valid, and intermediate $\gamma$ carves, recovering efficiency that full conditioning
-spends while retaining exact validity.
-\end{proposition}
+$\mathcal C_{1-\alpha}(S)$ whose pivot is uniform for every realized $r$, hence uniform conditional on
+$\{\hat S=S\}$ by iterated expectations. This gives exact conditional coverage
+$\Pr(\theta_S\in\mathcal C_{1-\alpha}(S)\mid\hat S=S)=1-\alpha$ for every $S\neq\varnothing$ and every
+$\beta$, and hence exact unconditional coverage $\Pr(\theta_S\in\mathcal C_{1-\alpha}(\hat S)\mid\hat
+S\neq\varnothing)=1-\alpha$, uniformly in $\beta$ and without any separation condition.
+\end{theorem}
 
 \begin{proof}
 For a retained cohort the screen $\max_e\lvert\hat\beta_{g,\mathrm{pre}}(e)+\omega_g\rvert\le c$ is a box, an
 intersection of half-spaces. For a dropped cohort the complementary event $\max_e\lvert\cdot\rvert>c$ is a
-\emph{union} of half-spaces and is not itself convex; conditioning on a breaching coordinate $e_g^\ast$ and its
+union of half-spaces and is not itself convex. Conditioning on a breaching coordinate $e_g^\ast$ and its
 sign selects the single half-space $\pm(\hat\beta_{g,\mathrm{pre}}(e_g^\ast)+\omega_g)>c$, and when several
 coordinates breach we condition on the full active set. The conditioned selection event is thus an intersection
 of half-spaces, a polyhedron in $(\hat\beta,\omega)$, for any number of pre-periods per cohort. This
@@ -550,8 +532,8 @@ recovered by averaging over the finer partition as well as over $S$. The
 pair $(\hat\theta_S,\,\text{selection})$ is jointly Gaussian, and decomposing the constraint vector into
 its component along $\hat\theta_S$ and an orthogonal remainder that is independent of $\hat\theta_S$, the
 event fixes the remainder and confines $\hat\theta_S$ to an interval $[\mathcal V^-,\mathcal V^+]$ whose
-endpoints are the tightest of the resulting linear bounds; this is the polyhedral lemma of
-\citet{lee2016}. Hence the conditional law of $\hat\theta_S$ is $\mathcal N(\theta_S,s_S^2)$ truncated to
+endpoints are the tightest of the resulting linear bounds. This is Lemma~\ref{lem:poly} applied to the
+conditioned event. Hence the conditional law of $\hat\theta_S$ is $\mathcal N(\theta_S,s_S^2)$ truncated to
 that interval, the pivot is uniform on $[0,1]$ conditional on $\hat S=S$, and inverting it gives an
 interval with conditional coverage $1-\alpha$ for every $S$ and every $\beta$. Averaging over $S$ gives
 the same unconditional coverage, and since the finite-sample pivot is exact for known $\Sigma$ regardless
@@ -562,9 +544,26 @@ $[\mathcal V^-,\mathcal V^+]$ expands to the real line and the truncated law ret
 $\mathcal N(\theta_S,s_S^2)$.
 \end{proof}
 
-Proposition~\ref{prop:carve} upgrades the pointwise oracle coverage of Proposition~\ref{prop:oracle} to a
-uniform guarantee, precisely across the local-to-threshold configurations that obstruct it. It does so for
-the sampling and selection uncertainty in the reduced-form aggregate; the identification gap remains with
+\begin{remark}[The truncation limits and the role of $\gamma$]\label{rem:carve-detail}
+The limits $[\mathcal V^-,\mathcal V^+]$ are the intersection, over retained cohorts of the two-sided
+constraints $\lvert\hat\beta_{g,\mathrm{pre}}+\omega_g\rvert\le c$ and over dropped cohorts of the one-sided
+active constraint $\pm(\hat\beta_{g,\mathrm{pre}}(e_g^\ast)+\omega_g)>c$, of the intervals these place on
+$\hat\theta_S$ once $r$ is held fixed. With a single pre-period per cohort, and when the dropped cohorts'
+screening statistics are uncorrelated with $\hat\theta_S$, the retained-cohort constraints alone bind; in
+general the dropped-cohort constraints also enter and are retained. The scale $\gamma$ is a power
+parameter, not a validity parameter. At $\gamma=0$ the interval is fully conditional; intermediate $\gamma$
+carves, recovering efficiency that full conditioning spends while retaining exact validity; and as
+$\gamma\to\infty$ the noise decorrelates the selection from $\hat\theta_S$ but sends every retention
+probability to zero, so $\hat S=\varnothing$ with probability approaching one. The useful regime is
+intermediate $\gamma$, and on the empty event the procedure reports the ATT interval.
+\end{remark}
+
+Theorem~\ref{thm:carve} upgrades the pointwise oracle coverage of Remark~\ref{rem:oracle} to a
+uniform guarantee, precisely across the local-to-threshold configurations that obstruct it. The guarantee is
+exact for known $\Sigma$ and degrades to first-order validity when $\Sigma$ is consistently estimated
+(Remark~\ref{rem:sigmahat}). That is the paper's single scope qualification, and we do not restate it
+elsewhere. It does so for
+the sampling and selection uncertainty in the reduced-form aggregate. The identification gap remains with
 the level bound, which we now fold in to reach the causal target.
 
 \begin{corollary}[Honest causal interval under data-driven selection]\label{cor:causal}
@@ -572,7 +571,7 @@ Let $\theta_{\hat S}^{\mathrm c}=\ell_{\hat S}'\tau_{\mathrm{post}}$ be the caus
 $B_{\hat S}=\sup_{\delta_{\mathrm{post}}\in\Delta^{\mathrm{Level}}(M)}\lvert\ell_{\hat S}'\delta_{\mathrm{post}}\rvert$
 the worst-case residual bias the level bound allows, so that
 $\lvert\theta_{\hat S}-\theta_{\hat S}^{\mathrm c}\rvert\le B_{\hat S}$ whenever
-$\delta_{\hat S,\mathrm{post}}\in\Delta^{\mathrm{Level}}(M)$; for a single-period or convex-averaging functional
+$\delta_{\hat S,\mathrm{post}}\in\Delta^{\mathrm{Level}}(M)$. For a single-period or convex-averaging functional
 $a(\cdot)$, $B_{\hat S}=M$. Then the widened carved interval
 \[
 \mathcal C^{M}_{1-\alpha}(\hat S)\ :=\ \big[\,\inf\mathcal C_{1-\alpha}(\hat S)-B_{\hat S},\
@@ -584,357 +583,108 @@ $\delta_{\hat S,\mathrm{post}}\in\Delta^{\mathrm{Level}}(M)$.
 \end{corollary}
 
 \begin{proof}
-Proposition~\ref{prop:carve} gives $\theta_{\hat S}\in\mathcal C_{1-\alpha}(\hat S)$ with probability $1-\alpha$.
-The maintained restriction places $\theta_{\hat S}^{\mathrm c}$ within $B_{\hat S}$ of $\theta_{\hat S}$
-deterministically, so $\{\theta_{\hat S}\in\mathcal C_{1-\alpha}(\hat S)\}\subseteq\{\theta_{\hat S}^{\mathrm c}\in
-\mathcal C^{M}_{1-\alpha}(\hat S)\}$, and monotonicity of probability gives the bound.
+See Appendix~\ref{app:proofs}.
 \end{proof}
 
-The guarantee is one-sided by design: $\mathcal C^{M}_{1-\alpha}(\hat S)$ is \emph{conservative}, superposing the
+The widened interval $\mathcal C^{M}_{1-\alpha}(\hat S)$ is conservative. It superposes the
 exact carved interval for the reduced-form $\theta_{\hat S}$ on the worst-case additive bias $B_{\hat S}$ rather
-than folding sampling, selection, and identification uncertainty into a single length-optimal object. It is
-accordingly \emph{not} the near-optimal fixed-length interval of \citet{armstrong2018}; that construction and its
+than folding sampling, selection, and identification uncertainty into a single length-optimal object, and is
+accordingly not the near-optimal fixed-length interval of \citet{armstrong2018}. That construction and its
 optimality belong to the fixed-set case of Theorem~\ref{thm:width}, where selection does not randomize the target
-and the bias enters only through the standard error. Under data-driven selection we accept a modest excess length
-in exchange for a single interval valid against both the selection and the residual violation. Simulations confirm
-this. A scalar illustration---one retained cohort with a single pre-period, so the estimate and the selection
-statistic are jointly bivariate normal and the mechanism is transparent---makes the point: at a pre--post
-sampling correlation of $0.7$ the naive post-selection interval covers at $0.92$ and then $0.78$ as the cohort's
-population pre-trend moves one and two thresholds off center, while the carved interval holds between $0.93$ and
-$0.96$ throughout. The same construction at four pre-periods---using the box screen and the
-violating-coordinate conditioning of the proof---likewise restores near-nominal coverage where the naive
-post-selection interval undercovers by several points, confirming that the guarantee is not special to the
-scalar case. The multi-cohort, four-pre-period design of Section~\ref{sec:calib} exhibits the same
-understatement of naive uncertainty under estimated selection. The randomization also
-recovers power a split would forfeit: at the worst configuration the carved interval at $\gamma=0.5$ is
-about a quarter narrower than the fully conditional one at $\gamma=0$, at unchanged coverage.
+and the bias enters only through the standard error. Under data-driven selection the superposition buys a single
+interval valid against both the selection and the residual violation, at a modest excess length. The carved
+interval's exact coverage is the content of Theorem~\ref{thm:carve}, and the multi-cohort panel study of
+Section~\ref{sec:calib} exhibits the understatement of naive uncertainty under estimated selection that
+carving is built to correct.
 
 The second issue is that the bound $M$ must accommodate a random selected set. The FLCI at $M$ is valid
 only if the selected set's residual violation lies in $\Delta^{\mathrm{Level}}(M)$. Since that violation
 is itself random, unconditional coverage requires $M$ to dominate it with high probability.
 
-\begin{lemma}[Calibration to the random selected set]\label{lem:calib}
-Under data-driven selection the selected aggregate's residual violation is random, and the FLCI's
-unconditional coverage is governed by the joint distribution of that violation, the selection event, and
-the sampling error. When the violation's dispersion is non-negligible relative to the FLCI's sampling
-slack, setting $M$ to the mean residual violation undercovers, because the realized violation exceeds $M$
-in a nontrivial fraction of samples, and restoring nominal unconditional coverage requires $M$ to exceed
-the mean and approach an upper quantile of the residual-violation distribution, with the sampling slack
-providing a partial buffer. When the slack instead dominates the dispersion the buffer alone can suffice.
-\end{lemma}
+\begin{remark}[Calibration to the random selected set]\label{rem:calib}
+Under data-driven selection the selected aggregate's residual violation is random, so the level bound $M$
+may fail to dominate it. Write $\pi_M=\Pr\big(\delta_{\hat S,\mathrm{post}}\notin\Delta^{\mathrm{Level}}(M)\big)$
+for the probability that the realized violation escapes the bound. Then unconditional coverage is at least
+$1-\alpha-\pi_M$. The carved interval covers the reduced-form $\theta_{\hat S}$ with probability $1-\alpha$
+by Theorem~\ref{thm:carve}, and its widening covers the causal target on the event that the bound holds, so
+$\{\theta_{\hat S}\in\mathcal C_{1-\alpha}(\hat S)\}\cap\{\delta_{\hat S,\mathrm{post}}\in
+\Delta^{\mathrm{Level}}(M)\}\subseteq\{\theta_{\hat S}^{\mathrm c}\in\mathcal C^{M}_{1-\alpha}(\hat S)\}$ and a
+union bound gives the claim. Coverage thus approaches nominal only as $\pi_M\to0$. Calibrating $M$
+to the mean residual violation typically leaves $\pi_M$ bounded away from zero and undercovers. Taking $M$ at
+an upper quantile of the residual-violation distribution makes $\pi_M$ small but not zero, so it delivers
+coverage $1-\alpha-\pi_M$ rather than exactly $1-\alpha$ unless the error budget is widened to absorb
+$\pi_M$. That distribution is unidentified, which is
+why the reported object is the breakdown curve rather than a single $M$.
+\end{remark}
 
-The practical implication, in the regime where the violation's spread is the binding consideration, is that
-$M$ should be calibrated to the residual violation of a typical selected set, not to its mean.
+The practical implication is not a recipe for $M$ but a warning against one. Because the violation $M$ must
+dominate is itself random, no single $M$ is at once known and unconditionally valid. Calibrating $M$ to the
+mean residual violation undercovers, since the realized violation exceeds it in a nontrivial fraction of
+samples, while the $M$ that would deliver a target coverage sits at an upper quantile of a distribution the
+design cannot identify. This is why the reported object is the breakdown curve, the map from $M$ to its
+interval, and the value $M^\ast$, read conservatively, rather than a point calibration of $M$. Each interval
+on the curve is honest at its own $M$ by Corollary~\ref{cor:causal}, and Remark~\ref{rem:calib} adds only that
+the curve must be read as a whole, since a bound calibrated to the typical selected set would place a falsely
+narrow interval at the small-$M$ end.
 
 Finally, we caution against one otherwise-natural choice of $\Delta$. The relative-magnitudes restriction
 $\Delta^{RM}(\bar M)$ of \citet{rambachan2023}, following \citet{manski2018}, bounds post-treatment
 violations by $\bar M$ times the observed maximal pre-treatment violation, so its identified-set half-width
 is proportional to the observed pre-trend. When pre-trends are uninformative, they are small while the true
-violation need not be, so the interval width tends to zero even as the bias does not---undercoverage
-precisely where our method's value is in question. The fixed bound $\Delta^{\mathrm{Level}}(M)$, set by the
-researcher rather than by the observed pre-trends, avoids this.
+violation need not be, so the identified set narrows toward a point even as the bias does not. Coverage then
+fails not from undercoverage within the maintained class but because the truth can lie outside it, the small
+observed pre-trend implying a relative-magnitudes class that excludes the true post-treatment violation. The
+fixed bound $\Delta^{\mathrm{Level}}(M)$, set by the
+researcher rather than by the observed pre-trends, avoids tying the admissible violation to the pre-trend,
+though it too is honest only when its chosen $M$ contains the true violation.
 
 \begin{remark}[Estimated covariance]\label{rem:sigmahat}
-Proposition~\ref{prop:carve} and the half-width \eqref{eq:flci-hw} treat $\Sigma$ as known; in practice one
-plugs in a consistent estimate $\hat\Sigma$, which enters twice, in the aggregate standard error $s_S$ and
-in the selection geometry $[\mathcal V^-,\mathcal V^+]$ and carving scale, so its dependence is more delicate
-here than in a fixed-target sensitivity analysis, where $\Sigma$ enters only the standard error. Suppose
-$\hat\Sigma\xrightarrow{p}\Sigma$ and the separation condition of Proposition~\ref{prop:oracle} holds, so
-that each cohort's population pre-trend statistic lies a fixed distance from the threshold. The
-truncated-normal pivot $F_{\theta_S,s_S^2}^{[\mathcal V^-,\mathcal V^+]}(\hat\theta_S)$ is continuous in
-$(\Sigma,\mathcal V^-,\mathcal V^+)$ at the truth, its truncation limits and scale are continuous functions
-of $\hat\Sigma$, and under separation the selection event is correctly classified with probability
-approaching one; by Slutsky the pivot evaluated at $\hat\Sigma$ converges in law to $\mathrm{Uniform}[0,1]$,
-so the carved interval has asymptotic coverage $1-\alpha$. The known-$\Sigma$ exactness of
-Proposition~\ref{prop:carve} thus degrades only to first-order valid coverage under estimation, and the
-panel simulation of Section~\ref{sec:calib}, which estimates the covariance from the data rather than
-supplying it, bears this out. The separation condition is not cosmetic: within a $\hat\Sigma$-sampling
-neighbourhood of the threshold a cohort's inclusion is itself estimated, and plug-in post-selection coverage
-there carries a higher-order, non-uniform cost, the estimated-$\Sigma$ shadow of the
-Leeb--P\"otscher obstruction. A researcher unwilling to assume separation should accordingly hold the
-carving scale $\gamma$ away from its degenerate limit, or use the independent-split construction, either of
-which makes the selection insensitive to $\hat\Sigma$ at the boundary.
+Theorem~\ref{thm:carve} treats $\Sigma$ as known. In practice one plugs in a consistent $\hat\Sigma$, which
+enters twice, in the aggregate standard error $s_S$ and in the selection geometry
+$[\mathcal V^-,\mathcal V^+]$ and carving scale, so it is more consequential here than in a fixed-target
+sensitivity analysis, where $\Sigma$ enters only the standard error. If $\hat\Sigma\xrightarrow{p}\Sigma$ and
+the separation condition of Remark~\ref{rem:oracle} holds, the truncation limits and scale are continuous in
+$\hat\Sigma$ and the selection event is correctly classified with probability approaching one, so by Slutsky
+the pivot converges to $\mathrm{Uniform}[0,1]$. The known-$\Sigma$ exactness degrades to first-order valid
+coverage, which the panel simulation of Section~\ref{sec:calib}, estimating the covariance from the data,
+bears out. Separation is not cosmetic. Within a $\hat\Sigma$-sampling neighbourhood of the
+threshold a cohort's inclusion is itself estimated, the estimated-$\Sigma$ shadow of the Leeb--P\"otscher
+obstruction, so a researcher unwilling to assume it should hold the carving scale $\gamma$ away from its
+degenerate limit or use the independent split.
 \end{remark}
 
-\subsection{When the trade pays: a dominance condition}\label{sec:dominance}
+\section{When the trade pays}\label{sec:dominance}
 
-The scope condition seen in the simulations has a closed-form decision-theoretic
-counterpart. Changing the estimand is worth doing only when the bias it removes
-outweighs the variance and the change of target it costs. Three forces set the sign: the
-violation the screen removes, the variance that dropping a cohort costs, and the
-heterogeneity between the retained subpopulation and the full one. The sign turns on
-their balance---and, crucially, not on the informativeness of the pre-trends, which
-governs only how much of a fixed-sign advantage is realized.
+The deliverable of this section is a rule the practitioner reports alongside both honest intervals. Prefer
+the credible-subpopulation LATT when narrowing lowers risk, and the ATT otherwise. Three forces set whether
+narrowing helps: the violation the screen removes, the variance that dropping a cohort costs, and the
+heterogeneity between the retained subpopulation and the full one. The sign of the advantage turns on their
+balance, not on the informativeness of the pre-trends, which governs only how much of a fixed-sign
+advantage is realized. The mean-squared-error account of these forces supplies the intuition and the
+explicit thresholds, the two-cohort law $V^2>\gamma^2+2\sigma^2$, the estimable diagnostic
+$D^2>\Delta\mathrm{Var}$, and the breakdown value $\Gamma^\ast$ for the unidentified composition gap. It is
+developed in Appendix~\ref{app:mse}, whose results we cite as needed. Here we give the operative test, the
+width comparison of the honest intervals themselves, since the intervals, not the point estimators, are the
+recommended output.
 
-We state the comparison for $K$ cohorts, and then read from the two-cohort special case
-the one thing the general result leaves implicit---how the advantage scales with the
-informativeness of the pre-trends. Let each cohort $g$ carry a weight
-$w_g$ (normalized so $\sum_{g}w_g=1$), a causal effect $\theta_g=\mathrm{ATT}(g,\cdot)$,
-a post-treatment violation $V_g$ (the aggregate $a(\delta_{g,\mathrm{post}})$, zero for a
-clean cohort), and an independent sampling variance $\sigma_g^2$ for its aggregated
-post-treatment estimate. The screen retains cohort $g$ with probability $\pi_g$,
-independently across cohorts and of the post-treatment estimates. The ATT estimator is
-the fixed average $\sum_g w_g\hat\beta_{g,\mathrm{post}}$; the LATT estimator reweights
-over the retained set $\hat S$, $\sum_{g\in\hat S}w_g\hat\beta_{g,\mathrm{post}}/W_{\hat S}$
-with $W_S=\sum_{g\in S}w_g$.
+The comparison of honest intervals can be made exact in a two-cohort model, in the informative regime where
+the screen discards the confounded cohort with probability approaching one, so that the LATT selects the
+clean cohort alone. This is the regime in which the point-estimate advantage attains its ceiling
+(Appendix~\ref{app:mse}), and it is where the method is meant to help. Both procedures report the
+level-bound fixed-length interval \eqref{eq:flci-hw}. The LATT, using the clean cohort alone, is unbiased
+with standard error $\sigma$ and a residual-violation bound $M_L$, giving half-width
+$\sigma\,\mathrm{cv}_\alpha(M_L/\sigma)$. The ATT estimator, using both cohorts, has standard error
+$\sigma/\sqrt2$ but must set its bound to cover its own aggregate violation, $M_A=V/2$, giving half-width
+$(\sigma/\sqrt2)\,\mathrm{cv}_\alpha(V/(\sqrt2\,\sigma))$. Under homogeneous effects, so that the
+clean-cohort LATT and the full ATT share a common target, each interval covers that target at its
+nominal level by construction, since each bound dominates its own aggregate's violation, so the honest
+comparison is not one of coverage but of expected length at equal coverage. Under heterogeneity the two
+intervals honestly cover different objects, and the comparison is one of length only once the composition
+gap is folded into the LATT interval evaluated as inference for the ATT.
 
-\begin{proposition}[General-$K$ dominance]\label{prop:generalK}
-With the target $\theta_{\mathcal G}=\sum_g w_g\theta_g$, the ATT estimator has mean squared
-error $\mathrm{MSE}_{\mathrm{ATT}}=\big(\sum_g w_gV_g\big)^2+\sum_g w_g^2\sigma_g^2$, and the
-LATT estimator has
-\begin{equation}\label{eq:latt-exact}
-\mathrm{MSE}_{\mathrm{LATT}}=\sum_{S\subseteq\mathcal G}
-\Big(\textstyle\prod_{g\in S}\pi_g\prod_{g\notin S}(1-\pi_g)\Big)
-\Big[\big(\theta_S-\theta_{\mathcal G}+B_S\big)^2+\mathrm{Var}_S\Big],
-\end{equation}
-where $\theta_S=\sum_{g\in S}w_g\theta_g/W_S$, $B_S=\sum_{g\in S}w_gV_g/W_S$, and
-$\mathrm{Var}_S=\sum_{g\in S}w_g^2\sigma_g^2/W_S^2$, with the convention $S=\mathcal G$ when the
-screen retains no cohort. When every cohort is retained, $\pi_g=1$, the two estimators
-coincide and $\Delta=\mathrm{MSE}_{\mathrm{ATT}}-\mathrm{MSE}_{\mathrm{LATT}}=0$. Suppose instead
-the screen separates the cohorts, discarding every confounded cohort, $\pi_g\to0$ for
-$V_g\neq0$, and retaining every clean cohort, $\pi_g\to1$ for $V_g=0$, so that the retained
-set converges in probability to the clean set $\mathcal C$ and the dropped set is the
-confounded set $\mathcal F=\mathcal G\setminus\mathcal C$. Then
-\begin{equation}\label{eq:deltastar}
-\Delta\;\longrightarrow\;\Delta^\ast\;=\;B_{\mathcal F}^2-\Gamma^2-\Delta\mathrm{Var},
-\end{equation}
-where $B_{\mathcal F}=\sum_{g\in\mathcal F}w_gV_g$ is the aggregate violation removed by
-selection, $\Gamma=\theta_{\mathcal C}-\theta_{\mathcal G}$ is the composition gap between the
-retained subpopulation and the full population, and
-$\Delta\mathrm{Var}=\mathrm{Var}_{\mathcal C}-\sum_g w_g^2\sigma_g^2\ge0$ is the variance cost of
-dropping. Hence in the informative limit the LATT dominates the ATT in mean squared error if
-and only if
-\begin{equation}\label{eq:generalK-threshold}
-B_{\mathcal F}^2\;>\;\Gamma^2+\Delta\mathrm{Var}.
-\end{equation}
-With two equally weighted cohorts, one clean and one confounded with violation $V$, effect gap
-$\gamma$, and common variance $\sigma^2$, one has $B_{\mathcal F}^2=V^2/4$, $\Gamma^2=\gamma^2/4$,
-and $\Delta\mathrm{Var}=\sigma^2/2$, so \eqref{eq:generalK-threshold} becomes $V^2>\gamma^2+2\sigma^2$;
-Corollary~\ref{cor:inform} below develops this two-cohort case, where the informativeness of the
-pre-trends enters.
-\end{proposition}
-
-\begin{proof}
-The ATT estimator is a fixed linear combination with mean
-$\theta_{\mathcal G}+\sum_g w_gV_g$ and variance $\sum_g w_g^2\sigma_g^2$, giving
-$\mathrm{MSE}_{\mathrm{ATT}}$. For the LATT, condition on the retention configuration; on the
-event that the retained set is $S$, which has probability
-$\prod_{g\in S}\pi_g\prod_{g\notin S}(1-\pi_g)$, the estimator is
-$\sum_{g\in S}w_g\hat\beta_{g,\mathrm{post}}/W_S$, whose mean is $\theta_S+B_S$ and whose
-variance is $\mathrm{Var}_S$, since retention is independent of the post-treatment estimates. Its
-error relative to $\theta_{\mathcal G}$ has squared bias $(\theta_S-\theta_{\mathcal G}+B_S)^2$ and
-variance $\mathrm{Var}_S$; averaging over configurations gives \eqref{eq:latt-exact}. At
-$\pi_g=1$ only $S=\mathcal G$ has mass, where $\theta_{\mathcal G}-\theta_{\mathcal G}+B_{\mathcal G}
-=\sum_g w_gV_g$ and $\mathrm{Var}_{\mathcal G}=\sum_g w_g^2\sigma_g^2$, so
-$\mathrm{MSE}_{\mathrm{LATT}}=\mathrm{MSE}_{\mathrm{ATT}}$ and $\Delta=0$. Under separation the
-configuration $S=\mathcal C$ carries probability approaching one, so
-$\mathrm{MSE}_{\mathrm{LATT}}\to(\theta_{\mathcal C}-\theta_{\mathcal G})^2+\mathrm{Var}_{\mathcal C}$,
-using $B_{\mathcal C}=0$ because clean cohorts have $V_g=0$. Since clean cohorts contribute nothing
-to $\sum_g w_gV_g$, that sum equals $B_{\mathcal F}$, and
-$\Delta\to B_{\mathcal F}^2+\sum_g w_g^2\sigma_g^2-\Gamma^2-\mathrm{Var}_{\mathcal C}
-=B_{\mathcal F}^2-\Gamma^2-\Delta\mathrm{Var}$, which is \eqref{eq:deltastar}; the threshold
-\eqref{eq:generalK-threshold} is its positivity, and the two-cohort reduction is the displayed
-substitution.
-\end{proof}
-
-The general threshold \eqref{eq:generalK-threshold} is the two-cohort comparison written for many
-cohorts, each of its three forces now an aggregate. The reason to trade is the total violation
-$B_{\mathcal F}$ selection removes, not any single cohort's. The estimand cost is the composition gap
-$\Gamma$ between the retained subpopulation's effect and the full population's, the many-cohort form of
-$\gamma$; it vanishes under the equal-targets condition of Proposition~\ref{prop:coincide}. The variance
-cost $\Delta\mathrm{Var}$ is the extra sampling variance from reweighting onto fewer cohorts. So the
-two-cohort reading holds at any cohort count: the sign of the advantage is a
-violation-against-noise-and-heterogeneity question, settled by \eqref{eq:generalK-threshold} and
-independent of the informativeness of the pre-trends, which governs only magnitude---$\Delta$ runs from
-zero when the screen retains everyone to $\Delta^\ast$ when it separates the cohorts. Two
-qualifications attach and connect to the inference above.
-The separation that makes \eqref{eq:deltastar} exact is the mean-squared-error counterpart of the
-condition behind Proposition~\ref{prop:oracle}; near-threshold cohorts, whose population pre-trend
-sits within sampling error of $c$, are retained with interior probability and are the same
-local-to-threshold configurations that obstruct uniform post-selection inference. And a confounded
-cohort that is undetectable, flat in the pre-period yet violating parallel trends after, is retained
-in the limit rather than dropped, so its violation stays in both estimators and in the residual bound
-$B_{S^\ast}$; it enters \eqref{eq:deltastar} by replacing $B_{\mathcal F}$ with the detectable
-cohorts' violation and $\Gamma$ with $\Gamma$ augmented by that residual, which is the identification
-gap of Proposition~\ref{prop:pretest} that the honest inference of Section~\ref{sec:honest} bounds.
-
-The two-cohort case makes the three forces explicit and, uniquely, traces the advantage along the
-informativeness axis. Consider two equally weighted cohorts sharing a common sampling variance
-$\sigma^2$, observed as one pre- and one post-treatment coefficient each, with independent pre- and
-post-period sampling errors. One cohort is clean, $\delta_1=0$; the other is confounded, with a
-post-treatment violation $V>0$ and a pre-treatment violation $\phi V$, where $\phi\ge0$ is the
-informativeness of the pre-trend. Their treatment effects are $\tau_1$ and $\tau_2$, with
-$\gamma:=\tau_2-\tau_1$, so the target is the average $\bar\tau=(\tau_1+\tau_2)/2$. Taking $c$ large
-enough that the clean cohort is retained with probability approaching one, the confounded cohort
-survives the screen $\lvert\hat\beta_{2,\mathrm{pre}}\rvert\le c$ with probability
-\begin{equation}\label{eq:p2}
-p_2(\phi)\;=\;\Phi\!\Big(\tfrac{c-\phi V}{\sigma}\Big)-\Phi\!\Big(\tfrac{-c-\phi V}{\sigma}\Big),
-\end{equation}
-which decreases from near one, when the confound is invisible in the pre-period, to zero as the
-pre-trend announces it.
-
-\begin{corollary}[Informativeness scaling, two cohorts]\label{cor:inform}
-In the two-cohort model, with the clean cohort retained with probability approaching one, the
-mean-squared-error advantage of the LATT estimator over the ATT estimator is
-\begin{equation}\label{eq:delta}
-\Delta(\phi)\;=\;\mathrm{MSE}_{\mathrm{ATT}}-\mathrm{MSE}_{\mathrm{LATT}}
-\;=\;\frac{1-p_2(\phi)}{4}\,\big[\,V^2-\gamma^2-2\sigma^2\,\big],
-\end{equation}
-the general advantage \eqref{eq:deltastar} specialized by $B_{\mathcal F}^2=V^2/4$,
-$\Gamma^2=\gamma^2/4$, $\Delta\mathrm{Var}=\sigma^2/2$ and scaled by the survival factor
-$1-p_2(\phi)$. Hence the LATT dominates the ATT in mean squared error if and only if
-\begin{equation}\label{eq:threshold}
-V^2\;>\;\gamma^2+2\sigma^2 .
-\end{equation}
-The sign is fixed by \eqref{eq:threshold} and is independent of the informativeness $\phi$; $\phi$
-enters only through $1-p_2(\phi)$, nondecreasing in $\phi$, which scales a fixed-sign advantage from
-zero, when the pre-trend is uninformative, to its ceiling $\tfrac14[V^2-\gamma^2-2\sigma^2]$ as
-$\phi\to\infty$.
-\end{corollary}
-
-\begin{proof}
-Write $\tau_1=\bar\tau-\gamma/2$, $\tau_2=\bar\tau+\gamma/2$, so
-$\hat\beta_{1,\mathrm{post}}\sim\mathcal N(\bar\tau-\gamma/2,\sigma^2)$ and
-$\hat\beta_{2,\mathrm{post}}\sim\mathcal N(\bar\tau+\gamma/2+V,\sigma^2)$, independent of each other
-and of the retention indicators. The ATT estimator has
-$\mathrm{MSE}_{\mathrm{ATT}}=V^2/4+\sigma^2/2$. With the clean cohort always retained, the LATT
-estimator is the two-cohort average with probability $p_2$ and $\hat\beta_{1,\mathrm{post}}$ with
-probability $1-p_2$, so
-$\mathrm{MSE}_{\mathrm{LATT}}=p_2(V^2/4+\sigma^2/2)+(1-p_2)(\gamma^2/4+\sigma^2)$; subtracting gives
-\eqref{eq:delta}, which is \eqref{eq:deltastar} under the stated substitution. Since $1-p_2\ge0$ the
-sign is that of the bracket, giving \eqref{eq:threshold}, and $p_2(\phi)$ is nonincreasing in $\phi$
-for $\phi V\ge0$, so $1-p_2$ is nondecreasing.
-\end{proof}
-
-The bracket's three terms are the forces of \eqref{eq:generalK-threshold} in closed form: $+V^2$ the
-bias the screen removes, $-2\sigma^2$ the variance that dropping a cohort costs, and $-\gamma^2$ the
-estimand-change cost. As set out when the estimand was defined (Section~\ref{sec:approach}), the LATT
-is our target, against which the estimator is unbiased; the comparison adopts the ATT as the common
-target as a courtesy to a reader who insists on it, and $-\gamma^2$ is what that reader is charged. It
-vanishes under homogeneity, $\gamma=0$, the normalization used in the simulations, the most favorable
-case for the method. Two readings follow. First, informative pre-trends are necessary but not
-sufficient: if $V^2<\gamma^2+2\sigma^2$, no degree of informativeness rescues the LATT, since $1-p_2$
-only drives an already-negative bracket further from zero---informativeness scales the advantage, it
-does not create one. Second, when the violation is large enough to make the bracket positive, the
-advantage rises monotonically in informativeness, from zero at $\phi=0$ to the bracket's value, the
-vertical gap between the two bias curves in Figure~\ref{fig:scope}.
-
-The dominance condition can be read off the data, up to the one quantity it cannot identify, and so
-furnishes a diagnostic for whether the trade is worth making. The variance cost $\Delta\mathrm{Var}$ is a
-function of $\Sigma$ and the weights alone and is therefore estimable, and the difference between the two
-point estimators consistently estimates the violation net of the composition gap,
-\begin{equation}\label{eq:D-identified}
-\hat\theta_{\mathcal G}-\hat\theta_{\hat S}\;\xrightarrow{p}\;B_{\mathcal F}-\Gamma\;=:\;D,
-\end{equation}
-since the ATT estimator carries the dropped cohorts' violation while the LATT estimator does not. What is
-not identified is $\Gamma$ on its own, because it depends on the counterfactual effects of the very
-cohorts the screen discards. Writing $B_{\mathcal F}=D+\Gamma$ in \eqref{eq:generalK-threshold}, the
-advantage $\Delta^\ast=B_{\mathcal F}^2-\Gamma^2-\Delta\mathrm{Var}$ becomes
-$D^2+2D\Gamma-\Delta\mathrm{Var}$, linear in the unidentified $\Gamma$ because the squared composition gap
-cancels. Two readings follow. Under homogeneous effects, $\Gamma=0$, the trade pays exactly when the
-squared gap between the estimators exceeds the variance cost,
-\begin{equation}\label{eq:diagnostic}
-D^2\;>\;\Delta\mathrm{Var},
-\end{equation}
-a comparison the practitioner can compute and, using the carved standard error of
-Proposition~\ref{prop:carve} for $D$, test. In general the verdict is monotone in $\Gamma$, increasing
-when $D>0$, and flips at the breakdown value $\Gamma^\ast=(\Delta\mathrm{Var}-D^2)/(2D)$. A researcher thus
-reports $\hat D$, $\widehat{\Delta\mathrm{Var}}$, and $\Gamma^\ast$, and the trade pays unless the dropped
-cohorts' effects differ from the retained ones by more than $\Gamma^\ast$ allows---a sensitivity statement
-in the same idiom as the breakdown value $M^\ast$ for the identifying restriction, now for the estimand
-change rather than the violation.
-
-These pieces assemble into a rule the practitioner can run: report \emph{both} honest intervals---for the
-ATT and for the LATT---with the diagnostic, and let the rule advise which is more informative. Because each
-interval covers its own target whatever the data say, ranking them can misfire on efficiency but never on
-coverage---feasible up to the single quantity, the effects of the discarded cohorts, that no design can
-identify.
-
-\begin{proposition}[A feasible and honest switching rule]\label{prop:switch}
-Consider the informative limit of Proposition~\ref{prop:generalK}, and suppose the researcher reports the
-honest level-bound interval for \emph{both} the ATT and the LATT, together with the rule: prefer the LATT
-when $\hat D^2>\widehat{\Delta\mathrm{Var}}$ and the ATT otherwise, where
-$\hat D=\hat\theta_{\mathcal G}-\hat\theta_{\hat S}\xrightarrow{p}D=B_{\mathcal F}-\Gamma$ and
-$\widehat{\Delta\mathrm{Var}}$ is the variance cost, a function of $\Sigma$ and the weights alone. Then:
-\begin{enumerate}
-\item[(i)] \emph{(Honesty is unconditional.)} Each reported interval covers its own target at level
-$1-\alpha$ for every $\beta$, by the validity of the level-bound interval (carved, under data-driven
-selection, by Proposition~\ref{prop:carve}). Since both are always reported, the rule---however it
-decides---cannot affect coverage; it ranks the two honest intervals and is an efficiency device only.
-\item[(ii)] \emph{(Consistency under homogeneity.)} If treatment effects are homogeneous, so the
-composition gap $\Gamma=0$, and $D^2\neq\Delta\mathrm{Var}$, the rule prefers the mean-squared-error-dominant
-procedure with probability approaching one.
-\item[(iii)] \emph{(Sensitivity under heterogeneity.)} In general the advantage
-$\Delta^\ast=B_{\mathcal F}^2-\Gamma^2-\Delta\mathrm{Var}=D^2+2D\Gamma-\Delta\mathrm{Var}$ is monotone in the
-unidentified $\Gamma$ when $D>0$ and changes sign at the breakdown value
-$\Gamma^\ast=(\Delta\mathrm{Var}-D^2)/(2D)$. The trade pays unless the discarded cohorts' effects differ
-from the retained cohorts' by more than $\Gamma^\ast$.
-\end{enumerate}
-\end{proposition}
-
-\begin{proof}
-(i) Each interval's coverage statement is a property of that interval alone and holds for every $\beta$;
-reporting both leaves each untouched, so whichever the rule recommends, the reader is handed an interval
-that covers at $1-\alpha$. (ii) By Proposition~\ref{prop:generalK}, in the informative limit the LATT
-dominates the ATT in mean squared error iff $\Delta^\ast>0$, and under $\Gamma=0$ this is
-$D^2>\Delta\mathrm{Var}$. Since $\hat D\xrightarrow{p}D$ and $\widehat{\Delta\mathrm{Var}}\xrightarrow{p}
-\Delta\mathrm{Var}$ (indeed the latter is known given $\Sigma$), the continuous map gives
-$\mathbf{1}\{\hat D^2>\widehat{\Delta\mathrm{Var}}\}\xrightarrow{p}\mathbf 1\{D^2>\Delta\mathrm{Var}\}$
-whenever $D^2\neq\Delta\mathrm{Var}$, which is the sign of $\Delta^\ast$. (iii) Writing
-$B_{\mathcal F}=D+\Gamma$ in $\Delta^\ast=B_{\mathcal F}^2-\Gamma^2-\Delta\mathrm{Var}$ cancels the squared
-gap and leaves $\Delta^\ast=D^2+2D\Gamma-\Delta\mathrm{Var}$, linear in $\Gamma$ with slope $2D$; its root
-is $\Gamma^\ast$, and it is increasing in $\Gamma$ when $D>0$.
-\end{proof}
-
-Proposition~\ref{prop:switch} turns the informal ``report the LATT when pre-trends are informative'' into
-an estimable statistic, and separates what the data decide from what they cannot: $D$ and the variance cost
-are estimable, so under homogeneity the decision is made for the researcher, while the unidentified
-composition gap $\Gamma$ is reported as the breakdown $\Gamma^\ast$, read as $M^\ast$ is for the identifying
-restriction. The rule never suppresses an interval, so it cannot cost coverage.
-
-Three caveats keep the dominance calculation honest. The advantage \eqref{eq:delta} is an upper bound
-on what the method delivers, because it omits two channels that both work against the
-LATT: occasional false rejection of the clean cohort, which enters at order
-$1-p_1$ when the threshold is not comfortably large, and the additional variance that
-data-driven selection induces and that a standard error conditional on the realized
-set does not capture, the understatement documented in Section~\ref{sec:calib}. Both
-shrink the realized advantage without changing its sign or its shape. Finally,
-\eqref{eq:delta} is a comparison of point estimators under squared-error loss, not of
-the honest intervals that are the paper's recommended output. The interval analogue
-replaces the reason-to-trade $V$ with the residual violation net of the calibration
-buffer of Lemma~\ref{lem:calib}, and the variance cost $\sigma^2$ with a sampling
-slack inflated by the selection quantile, so that the level-bound half-width comparison
-turns on the same three forces with $V$ discounted and $\sigma$ inflated. The
-mean-squared-error threshold \eqref{eq:threshold} correctly signs that comparison and
-is the transparent summary; the interval version, to which we now turn, sharpens the
-constants.
-
-The comparison of honest intervals can be made exact in the same two-cohort model, in
-the informative regime where the screen discards the confounded cohort with
-probability approaching one, so that the LATT selects the clean cohort alone. This is
-the regime in which the point-estimate advantage of Corollary~\ref{cor:inform}
-attains its ceiling, and it is where the method is meant to help. Both procedures
-report a level-bound fixed-length confidence interval, whose half-width for a scalar
-target estimated with standard error $s$ under a worst-case bias bound $B$ is
-\begin{equation}\label{eq:flci-hw}
-h(B,s)\;=\;s\,\mathrm{cv}_\alpha\!\big(B/s\big),\qquad
-\mathrm{cv}_\alpha(t)=\text{the }(1-\alpha)\text{ quantile of }\lvert\mathcal N(t,1)\rvert,
-\end{equation}
-the near-optimal construction of \citet{armstrong2018}; $\mathrm{cv}_\alpha(0)=z_{1-\alpha/2}$
-is the pure-noise critical value and $\mathrm{cv}_\alpha(t)\uparrow t+z_{1-\alpha}$ as
-the bias comes to dominate. The LATT, using the clean cohort alone, is unbiased with
-standard error $\sigma$ and a residual-violation bound $M_L$, giving half-width
-$\sigma\,\mathrm{cv}_\alpha(M_L/\sigma)$. The ATT estimator, using both cohorts, has
-standard error $\sigma/\sqrt2$ but must set its bound to cover its own aggregate
-violation, $M_A=V/2$, giving half-width
-$(\sigma/\sqrt2)\,\mathrm{cv}_\alpha\!\big(V/(\sqrt2\,\sigma)\big)$. Each interval
-covers the common target at its nominal level by construction, since each bound
-dominates its own aggregate's violation, so the honest comparison is not one of
-coverage but of expected length at equal coverage.
-
-Before specializing to two cohorts, we state the comparison in general, since it holds at
-any cohort count and isolates the single quantity---the violation carried by the dropped
-cohorts---that decides it. Write the ATT estimator as
+We state the comparison in general, since it holds at
+any cohort count and isolates the single quantity, the violation carried by the dropped
+cohorts, that decides it. Write the ATT estimator as
 $\hat\theta_{\mathcal G}=\ell_{\mathcal G}'\hat\beta_{\mathrm{post}}$ with aggregate standard
 error $s_{\mathcal G}^2=\ell_{\mathcal G}'\Sigma_{\mathrm{post}}\ell_{\mathcal G}$ and honest
 bias bound $B_{\mathcal G}$ dominating the full set's violation
@@ -943,53 +693,63 @@ $\hat\theta_S=\ell_S'\hat\beta_{\mathrm{post}}$ with carved standard error $s_S$
 bound $B_S$. Both honest intervals are the fixed-length construction \eqref{eq:flci-hw}.
 
 \begin{theorem}[Width dominance]\label{thm:width}
-Suppose the LATT interval is the carved interval of Proposition~\ref{prop:carve} (under ex-ante
-selection, the interval of \citealp{rambachan2023}), with half-width $h_S=h(B_S,s_S)$, and let
-$h_{\mathcal G}=h(B_{\mathcal G},s_{\mathcal G})$ be the ATT interval. Then
+Suppose both honest intervals are the fixed-length construction \eqref{eq:flci-hw}, the LATT interval under
+ex-ante selection, equivalently the \citet{rambachan2023} interval on the retained set, with half-width
+$h_S=h(B_S,s_S)$, and the ATT interval $h_{\mathcal G}=h(B_{\mathcal G},s_{\mathcal G})$. Then
 \[
 h_S<h_{\mathcal G}\quad\Longleftrightarrow\quad
 s_S\,\mathrm{cv}_\alpha\!\big(B_S/s_S\big)\;<\;
 s_{\mathcal G}\,\mathrm{cv}_\alpha\!\big(B_{\mathcal G}/s_{\mathcal G}\big).
 \]
-Holding $(s_{\mathcal G},s_S,B_S)$ fixed, there is a unique threshold
+Holding $(s_{\mathcal G},s_S,B_S)$ fixed, if $s_S\ge s_{\mathcal G}$ there is a unique threshold
 \[
 B_{\mathcal G}^\ast\;=\;s_{\mathcal G}\,\mathrm{cv}_\alpha^{-1}\!\Big(\tfrac{s_S}{s_{\mathcal G}}\,
 \mathrm{cv}_\alpha\!\big(B_S/s_S\big)\Big)
 \]
 such that the credible-subpopulation interval is strictly shorter than the ATT interval if and
-only if $B_{\mathcal G}>B_{\mathcal G}^\ast$. Since $B_{\mathcal G}$ carries the dropped cohorts'
-aggregate violation $B_{\mathcal F}$ while $B_S$ does not, this is a threshold on
-$B_{\mathcal F}$; and whenever restricting to $S$ raises the aggregate variance,
+only if $B_{\mathcal G}>B_{\mathcal G}^\ast$. If instead $s_S<s_{\mathcal G}$, the LATT interval can be
+shorter already at $B_{\mathcal G}=0$ and no positive crossing threshold exists. Since $B_{\mathcal G}$
+carries the dropped cohorts' aggregate violation $B_{\mathcal F}$ while $B_S$ does not, this is a threshold
+on $B_{\mathcal F}$, and when restricting to $S$ raises the aggregate variance,
 $s_S>s_{\mathcal G}$, the threshold is strictly positive, so a minimum dropped violation is
 required before bias relief outweighs the variance cost.
 \end{theorem}
 
 \begin{proof}
-By \eqref{eq:flci-hw} each interval is the near-optimal fixed-length interval of
-\citet{armstrong2018}, with half-width $h(B,s)=s\,\mathrm{cv}_\alpha(B/s)$ and coverage at least
-$1-\alpha$ whenever the bound dominates the estimator's bias; for the ATT this gives
-$h_{\mathcal G}=h(B_{\mathcal G},s_{\mathcal G})$, and under ex-ante $S$ the same applies to the
-LATT. Under data-driven selection $\hat\theta_S\mid\{\hat S=S\}$ is truncated Gaussian, so the
-plug-in interval is not honest; Proposition~\ref{prop:carve} replaces it with the carved statistic,
-whose pivot is exactly $\mathcal N(\theta_S,s_S^2)$-calibrated unconditionally and uniformly in
-$\beta$, so the carved interval is again of the form \eqref{eq:flci-hw} with standard error $s_S$
-and bound $B_S$, giving $h_S=h(B_S,s_S)$. It is this step that licenses the comparison: without it
-$h_S$ is not an honest half-width, and it is the step the fixed-target sensitivity analysis never
-takes. Both half-widths share $\varphi(B,s)=s\,\mathrm{cv}_\alpha(B/s)$, so $h_S<h_{\mathcal G}$ is
-the displayed inequality. Fix $(s_{\mathcal G},s_S,B_S)$ and set
-$c_0=s_S\,\mathrm{cv}_\alpha(B_S/s_S)$. The map $g(B)=s_{\mathcal G}\,\mathrm{cv}_\alpha(B/s_{\mathcal G})$
-is continuous and strictly increasing, from $g(0)=s_{\mathcal G}\,z_{1-\alpha/2}$ to $\infty$; since
-$\mathrm{cv}_\alpha:[0,\infty)\to[z_{1-\alpha/2},\infty)$ is a strictly increasing bijection and
-$c_0/s_{\mathcal G}\ge (s_S/s_{\mathcal G})\,z_{1-\alpha/2}\ge z_{1-\alpha/2}$, the equation
-$g(B_{\mathcal G}^\ast)=c_0$ has the unique solution displayed, and
-$h_S<h_{\mathcal G}\iff B_{\mathcal G}>B_{\mathcal G}^\ast$. Finally $s_S\ge s_{\mathcal G}$ because
-reweighting onto the retained set cannot lower the aggregate variance below the full set's optimum
-under precision weights, so the inequality $c_0/s_{\mathcal G}\ge z_{1-\alpha/2}$ is strict, and
-$B_{\mathcal G}^\ast>0$, whenever $s_S>s_{\mathcal G}$.
+See Appendix~\ref{app:proofs}.
 \end{proof}
 
-\begin{corollary}[Explicit threshold under equal weights]\label{cor:width}
-Let $K$ equally weighted cohorts with common per-cohort post-treatment variance $\sigma^2$ and
+Under data-driven selection the LATT interval is instead the carved interval of Theorem~\ref{thm:carve},
+whose truncated-normal inversion gives a data-dependent, generally asymmetric length rather than the
+fixed half-width $h(B_S,s_S)$. Here the width comparison does not extend, and for a definite reason. The
+carved interval inverts a truncated-normal pivot, and by \citet{kivaranovicleeb2021} such an interval has
+\emph{infinite} conditional expected length, so an expected-length threshold is not merely unproven but
+ill-posed; Proposition~\ref{prop:nolength} records this. The honest data-driven comparison is therefore by
+coverage, both intervals valid by Theorem~\ref{thm:carve} and Corollary~\ref{cor:causal}, together with a
+robust length summary such as the median, which the simulation of Section~\ref{sec:calib} reports. The
+fixed-length statement of Theorem~\ref{thm:width} is accordingly stated for ex-ante selection, where the
+intervals are the fixed-length construction \eqref{eq:flci-hw} and the threshold is exact.
+
+\begin{proposition}[No expected-length dominance under data-driven selection]\label{prop:nolength}
+Maintain Assumption~\ref{ass:carve}. Under data-driven selection the carved interval
+$\mathcal C_{1-\alpha}(\hat S)$ of Theorem~\ref{thm:carve} is the polyhedral inversion of the
+truncated-normal pivot $F_{\theta_S,s_S^2}^{[\mathcal V^-,\mathcal V^+]}$, and for every $\beta$ and every
+$S\neq\varnothing$,
+\[
+\mathbb E\big[\,\lvert\mathcal C_{1-\alpha}(S)\rvert\ \big|\ \hat S=S\,\big]\;=\;\infty.
+\]
+Consequently no expected-length ordering between the carved LATT interval and the ATT interval exists, and
+the width comparison of Theorem~\ref{thm:width} is well-posed only for the ex-ante fixed-length intervals.
+The randomization scale does not remove this, since every finite $\gamma$ conditions on $\{\hat S=S\}$ and
+the active screen coordinates, leaving the pivot truncated normal.
+\end{proposition}
+
+\begin{proof}
+See Appendix~\ref{app:proofs}.
+\end{proof}
+
+Specializing to equal weights makes the threshold explicit. Let $K$ equally weighted cohorts with common
+per-cohort post-treatment variance $\sigma^2$ and
 independent estimates comprise $k$ clean cohorts ($V_g=0$), retained, and $K-k$ confounded cohorts
 (violation $V$), dropped in the informative limit, with the retained set truly flat, $B_S=0$.
 Writing $f=(K-k)/K$, so that $s_{\mathcal G}=\sigma/\sqrt K$, $s_S=\sigma/\sqrt k$, and
@@ -1004,20 +764,85 @@ V>V^\ast:=\frac{\sigma}{f\sqrt K}\,
 equivalently $B_{\mathcal F}=fV>B_{\mathcal F}^\ast=(\sigma/\sqrt K)\,
 \mathrm{cv}_\alpha^{-1}\big(\sqrt{K/k}\,z_{1-\alpha/2}\big)$. At $K=2$, $k=1$ this is $V>1.59\,\sigma$
 (at $\alpha=0.05$).
-\end{corollary}
 
 Two features carry the economics. The width threshold $V>1.59\,\sigma$ exceeds the mean-squared-error
-threshold $V>\sqrt2\,\sigma\approx1.41\,\sigma$ of Corollary~\ref{cor:inform}, because the fixed-length
-interval charges for the standard-error inflation of dropping a cohort, not only for its variance; and
-coverage is never the margin, since both procedures are honest---the ATT pays for honesty in a width that
+threshold $V>\sqrt2\,\sigma\approx1.41\,\sigma$ of Remark~\ref{rem:inform}, because the fixed-length
+interval charges for the standard-error inflation of dropping a cohort, not only for its variance, and
+coverage is never the margin, since both procedures are honest, the ATT pays for honesty in a width that
 grows linearly in $V$, whereas the LATT pays a fixed $2\sigma\,z_{1-\alpha/2}$ set by its variance alone,
 the price-of-honesty reading of Figure~\ref{fig:layer2}. Allowing the retained set a residual bound
 $M_L>0$ rather than exact flatness, the LATT interval carries standard error $\sigma$ and bound $M_L$
 against the ATT's $\sigma/\sqrt2$ and $M_A=V/2$, so by \eqref{eq:flci-hw} it is shorter if and only if
-$\mathrm{cv}_\alpha(M_L/\sigma)<\tfrac1{\sqrt2}\,\mathrm{cv}_\alpha(V/(\sqrt2\,\sigma))$; a residual
+$\mathrm{cv}_\alpha(M_L/\sigma)<\tfrac1{\sqrt2}\,\mathrm{cv}_\alpha(V/(\sqrt2\,\sigma))$. A residual
 $M_L>0$, and heterogeneity $\gamma\neq0$ when the target is the ATT (which adds $\lvert\gamma\rvert/2$ to
 the LATT's effective bias), both raise the threshold, in the direction the point analysis already
 indicated.
+
+The width comparison assembles into a rule the practitioner can run. Report both honest
+intervals, for the ATT and for the LATT, and prefer whichever is shorter. Because each interval covers its
+own target whatever the data say, ranking them can misfire on efficiency but never on coverage.
+
+\begin{proposition}[A feasible and honest switching rule]\label{prop:switch}
+Suppose the researcher reports the honest level-bound interval for both the ATT and the LATT, with
+half-widths $h_{\mathcal G}=h(B_{\mathcal G},s_{\mathcal G})$ and $h_S=h(B_S,s_S)$ of \eqref{eq:flci-hw},
+together with the rule. Prefer the LATT when its honest interval is strictly shorter, $h_S<h_{\mathcal G}$,
+and the ATT otherwise. Then the following hold.
+\begin{enumerate}
+\item[(i)] (Honesty is unconditional.) Each reported interval covers its own target at level
+$1-\alpha$ for every $\beta$, by the validity of the level-bound interval (carved, under data-driven
+selection, by Theorem~\ref{thm:carve}). Since both are always reported, the rule, however it
+decides, cannot affect coverage. It ranks the two honest intervals and is an efficiency device only.
+\item[(ii)] (Feasibility.) The rule is computable from $\hat\Sigma$ and the chosen bounds alone. By
+Theorem~\ref{thm:width}, $h_S<h_{\mathcal G}$ if and only if the ATT's honest bound $B_{\mathcal G}$, which
+carries the dropped cohorts' aggregate violation $B_{\mathcal F}$, exceeds the threshold
+$B_{\mathcal G}^\ast$, so a minimum dropped violation is required before the LATT interval is the shorter
+one. The gap between the two point estimators $\hat D=\hat\theta_{\mathcal G}-\hat\theta_{\hat S}$, testable
+with the carved standard error of Theorem~\ref{thm:carve} applied to the contrast
+$(\ell_{\mathcal G}-\ell_S)'\hat\beta_{\mathrm{post}}$, consistently estimates that dropped violation net
+of the composition gap in the informative limit, when the retained set's own residual violation is
+negligible.
+\item[(iii)] (Sensitivity under heterogeneity.) The two intervals target different objects when the
+retained and discarded cohorts differ in effect, so the ranking can misfire on efficiency but never on
+coverage. The one quantity the data cannot identify is the composition gap
+$\Gamma=\theta_{\hat S}-\theta_{\mathcal G}$. We report it as a breakdown $\Gamma^\ast$ in the same idiom as
+$M^\ast$, the amount by which the discarded cohorts' effects must differ from the retained cohorts' to
+overturn the reading, with its explicit form $\Gamma^\ast=(\Delta\mathrm{Var}-D^2)/(2D)$ derived in
+Appendix~\ref{app:mse}. This is a signed threshold defined for $D\neq0$, with dominance requiring
+$\Gamma>\Gamma^\ast$ when $D>0$ and $\Gamma<\Gamma^\ast$ when $D<0$. At $D=0$ the advantage is
+$-\Delta\mathrm{Var}\le0$, so no finite breakdown exists, and the plug-in $\hat\Gamma^\ast$ is unstable when
+$\hat D$ is near zero.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+See Appendix~\ref{app:proofs}.
+\end{proof}
+
+Proposition~\ref{prop:switch} turns the informal ``report the LATT when pre-trends are informative'' into a
+rule the data can run, and separates what they decide from what they cannot. The width comparison and $\hat
+D$ are estimable, while the unidentified composition gap is reported as the breakdown $\Gamma^\ast$, read as
+$M^\ast$ is for the identifying restriction. The rule never suppresses an interval, so it cannot cost
+coverage.
+
+Assembled in one place, the procedure is given in Algorithm~\ref{alg:procedure}.
+
+\begin{algorithm}[H]
+\caption{The credible-subpopulation procedure}
+\label{alg:procedure}
+\begin{enumerate}\setlength\itemsep{2pt}
+\item Estimate cohort-level (group-time) event studies with any heterogeneity-robust estimator
+\citep{callaway2021, sun2021, borusyak2024, dechaisemartin2020}.
+\item Select the credible cohorts, from institutional knowledge or a covariate split (ex ante), or
+by screening the pre-trends for flatness (data-driven).
+\item Estimate the LATT by reweighting the retained cohorts' post-treatment effects.
+\item Report honest inference, the level-bound sensitivity interval on the retained set, carved for
+the selection when it is data-driven (Theorem~\ref{thm:carve}), together with the breakdown violation
+$M^\ast$.
+\item Report the trade, both honest intervals (LATT and ATT), preferring whichever is shorter by the
+width comparison (Theorem~\ref{thm:width}), with the breakdown value $\Gamma^\ast$ for the unidentified
+composition gap (Proposition~\ref{prop:switch}).
+\end{enumerate}
+\end{algorithm}
 
 \section{Simulation study}\label{sec:sim}
 
@@ -1076,12 +901,12 @@ covariance from the data.}
 & Estimand & Scope & Honest cov.\ & Panel \\
 & (Table~\ref{tab:tier1}) & (Fig.~\ref{fig:scope}) & (Table~\ref{tab:flci}, Fig.~\ref{fig:layer2}) & (Sec.~\ref{sec:calib}) \\
 \midrule
-Cohorts (clean/confounded) & $6$ ($4/2$) & $12$ ($6/6$) & --- & $6$ ($3/3$) \\
+Cohorts (clean/confounded) & $6$ ($4/2$) & $12$ ($6/6$) &, & $6$ ($3/3$) \\
 Post-treatment violation $V$ & $0.8$ & $0.6$ & $0.3,\ 0.6$ & $0.6$ \\
-Informativeness $\phi$ & $1.0$ & $[0,1.5]$ & --- & $[0,1.5]$ \\
-Screen threshold $c$ & $0.40$ & $0.40$ & --- & $0.40$ \\
+Informativeness $\phi$ & $1.0$ & $[0,1.5]$ &, & $[0,1.5]$ \\
+Screen threshold $c$ & $0.40$ & $0.40$ &, & $0.40$ \\
 Noise & $s{=}0.03\text{--}0.40$ & $\sigma{=}0.20$ & $\sigma_{\mathrm{agg}}{=}0.10$ & $\sigma_\epsilon{=}0.5$ \\
-Pre/post correlation $\rho$ & $0.5$ & $0.5$ & --- & estimated \\
+Pre/post correlation $\rho$ & $0.5$ & $0.5$ &, & estimated \\
 Replications & $20{,}000$ & $8{,}000$ & $4{,}000$ & $2000\text{--}3000$ \\
 \bottomrule
 \end{tabular}
@@ -1098,14 +923,16 @@ enter the estimand at all.
 
 The lower panel of the table sweeps the sampling noise $s$.
 As precision improves the LATT's bias falls monotonically from $+0.013$ to zero, and this residual is the
-pre-test bias of Proposition~\ref{prop:pretest}, which vanishes as the selection rule becomes reliable.
+selection-induced bias of Proposition~\ref{prop:pretest}, which vanishes as the selection rule becomes reliable.
 Two sources could in principle generate it, a noisy screen that admits genuinely confounded cohorts, which
 would persist even under independent selection, and the correlation between a cohort's pre- and
 post-treatment sampling errors, which distorts the retained cohorts' estimates only under same-sample
 selection. The final column isolates the two by selecting on an independent pre-trend draw. It tracks the
 full-sample column almost exactly, so the residual is the first source, admission of confounded cohorts,
 and the second is negligible here because the two-sided flatness screen conditions the retained estimates
-symmetrically. The ATT estimator's bias, by contrast, is frozen at $+0.267$ regardless of precision. The
+symmetrically. The persistent component is thus a residual identification bias, present even under
+independent selection and addressed by the sensitivity widening of the next section, rather than the strict
+post-selection bias that carving removes. The ATT estimator's bias, by contrast, is frozen at $+0.267$ regardless of precision. The
 LATT faces a noise problem, which more data cures, whereas the ATT estimator faces a wrong-target problem,
 which no amount of data cures.
 
@@ -1121,8 +948,8 @@ same-sample conditioning.}
 & ATT & LATT & LATT \\
 & & (full) & (split) \\
 \midrule
-Point estimate & $1.267$ & $1.000$ & \\
-Bias vs.\ truth & $+0.267$ & $+0.000$ & \\
+Point estimate & $1.267$ & $1.000$ &, \\
+Bias vs.\ truth & $+0.267$ & $+0.000$ &, \\
 \midrule
 \multicolumn{4}{l}{Residual LATT bias as sampling noise $s$ falls}\\
 $s=0.40$ & $+0.265$ & $+0.013$ & $+0.014$ \\
@@ -1146,8 +973,8 @@ method's advantage, and reading it off from left to right gives the scope condit
 nil when pre-trends carry no information about post-treatment violations and maximal when they carry a
 great deal.
 
-That the two curves coincide at the left edge is not a defect but an honest reflection of
-the fact, argued in Section~\ref{sec:approach}, that selecting on uninformative pre-trends buys nothing.
+The two curves coincide at the left edge because selecting on uninformative pre-trends buys nothing, as
+Section~\ref{sec:approach} argues.
 
 The upper-right panel explains why the LATT's bias falls, by plotting the identification gap of
 the selected set, the average post-treatment violation among the cohorts that survive selection. It
@@ -1187,15 +1014,10 @@ We now validate the level-bound FLCI of Section~\ref{sec:approach} applied to th
 aggregate, using the level violation of Section~\ref{sec:design} whose size $V$ is directly comparable
 to the assumed bound $M$.
 
-Table~\ref{tab:flci} is the validity check. When the assumed bound equals the true
-violation ($V=M$) the FLCI covers at $95.0\%$, that is, at its nominal level. When the bound is generous
-($M>V$) it covers conservatively at $100\%$. When the bound is violated ($M<V$) coverage collapses. This
-is the behavior an honest sensitivity interval should display. It is valid on the range
-of violations it claims to accommodate, and it fails visibly outside it, rather than failing silently.
-
-The final column records that the naive point interval collapses to near-zero coverage the instant any
-violation is present, because it is centered on a biased estimate with a width reflecting sampling noise
-alone.
+Table~\ref{tab:flci} is the validity check. The FLCI is honest exactly on the range it claims, nominal at
+$V=M$, conservative when $M>V$, collapsing when $M<V$, failing visibly outside its bound rather than
+silently. The naive point interval, by contrast, collapses to near-zero coverage the instant any violation
+is present, since it is centered on a biased estimate with a width reflecting sampling noise alone.
 
 Figure~\ref{fig:layer2} repeats the exercise across a continuum of violation sizes and adds the practical
 output. In the left panel the point interval falls away rapidly as the violation grows, while each FLCI
@@ -1205,13 +1027,17 @@ governed by the assumed $M$ rather than by the realized violation, so honesty ab
 violations is paid for in width, immediately and proportionately.
 
 The right panel is what a practitioner would actually report. Holding the data fixed, it traces the
-confidence band as the assumed bound is relaxed and identifies the breakdown value $M^\ast$ at which the
-band first admits the truth. Because $M$ is in the outcome's own units, this quantity answers the
+confidence band as the assumed bound is relaxed and identifies the breakdown value $M^\ast$. In this
+simulation, where the truth is known, $M^\ast$ is the bound at which the band first admits the true effect.
+In an application, where it is not, the operative breakdown is the smallest $M$ at which the band no longer
+supports the stated conclusion, for instance first includes zero, and the two need not coincide. Because $M$
+is in the outcome's own units, this quantity answers the
 question a reader of a DiD paper wants answered directly, how large a post-treatment parallel-trends
 violation one must be willing to countenance before the stated conclusion no longer follows. And because
 the bound is fixed by the researcher rather than read off the pre-trends, the exercise remains
 informative even when pre-trends are uninformative, in direct contrast to the relative-magnitudes
-restriction, whose bounds would shrink toward zero in exactly that case and deliver false precision.
+restriction, whose identified set would shrink toward zero in exactly that case, leaving the truth able to
+fall outside the maintained class.
 
 \begin{table}[t]
 \centering
@@ -1239,6 +1065,65 @@ panel is the sensitivity/breakdown curve, with $M^\ast$ in outcome units.}
 \label{fig:layer2}
 \end{figure}
 
+\subsection{Width dominance and the shorter honest interval}\label{sec:width}
+
+Having confirmed that the honest interval covers, we return to the decision of Section~\ref{sec:dominance}.
+when is it actually shorter than the ATT's? Theorem~\ref{thm:width} answered this analytically, with the
+explicit equal-weights threshold $V>1.59\,\sigma$ at $K=2$, $k=1$. We confirm it directly and check the point
+that makes the comparison meaningful. The width gain is between two valid intervals, not an artifact
+of undercoverage.
+
+The design is the informative limit of Section~\ref{sec:dominance}. Each of $K$ equally weighted cohorts
+contributes an independent post-treatment aggregate $\hat\beta_g\sim\mathcal N(\tau_g+V_g,\sigma^2)$, with
+$\tau_g=1$ so that the ATT and the LATT are both one and any width difference is attributable to the
+violation alone. The $k$ clean cohorts ($V_g=0$) are retained and the $K-k$ confounded ones ($V_g=V$) are
+dropped, ex ante, so both intervals are ordinary level-bound FLCIs \citep{armstrong2018}. The LATT's, on the
+flat retained set, carries bound $B_S=0$ and standard error $\sigma/\sqrt k$. The ATT's must bound the
+full-set violation, $B_{\mathcal G}=fV$ with $f=(K-k)/K$, at standard error $\sigma/\sqrt K$.
+
+Figure~\ref{fig:width} reports the result at $K=2$, $k=1$. Panel (a) plots the two honest half-widths. The
+LATT's is flat in $V$, since its retained set is clean, while the ATT's rises as it widens to cover the
+growing violation, the two crossing at $V^\ast=1.59\,\sigma$ exactly as Section~\ref{sec:dominance} predicts.
+Panel (b) is the check that matters. Across the whole range both honest intervals cover the target at $95\%$,
+so past $V^\ast$ the LATT interval is strictly shorter at equal, nominal coverage. The naive ATT
+interval, which ignores the violation, is narrower still but collapses in coverage, from $95\%$ to below
+$60\%$, and is the interval honest inference is meant to replace. Table~\ref{tab:width} records the
+crossing. At $V=2\sigma$ the LATT half-width $1.96\,\sigma$ undercuts the ATT's $2.16\,\sigma$ with both
+covering, while the naive interval covers only $71\%$. Panel (c) traces $V^\ast$ across designs. In each
+design the width threshold exceeds the corresponding mean-squared-error threshold,
+$V/\sigma>\sqrt{1/k-1/K}\,/f$ with $f=(K-k)/K$, which equals $\sqrt2$ at $K=2$, $k=1$, since the
+fixed-length interval charges for the standard-error inflation of dropping cohorts and not only for their
+variance.
+
+\begin{table}[t]
+\centering
+\caption{Width dominance ($K=2$, $k=1$, $\sigma=1$, $40{,}000$ replications). Both honest intervals cover the
+target at the nominal $95\%$. Past $V^\ast=1.59$ the LATT half-width $h_S$ undercuts the ATT's
+$h_{\mathcal G}$ at equal coverage, while the naive ATT interval is narrower only by undercovering.}
+\label{tab:width}
+\begin{tabular}{cccccc}
+\toprule
+$V/\sigma$ & $h_S$ & $h_{\mathcal G}$ & LATT cov.\ & ATT cov.\ & naive cov.\ \\
+\midrule
+$0.80$ & $1.96$ & $1.58$ & $94.9\%$ & $94.9\%$ & $91.2\%$ \\
+$1.59$ & $1.96$ & $1.96$ & $94.9\%$ & $95.0\%$ & $79.6\%$ \\
+$2.00$ & $1.96$ & $2.16$ & $94.9\%$ & $95.0\%$ & $70.9\%$ \\
+$2.50$ & $1.96$ & $2.41$ & $94.9\%$ & $95.0\%$ & $57.8\%$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{width_dominance.png}
+\caption{Width dominance (Theorem~\ref{thm:width}). (a) The honest LATT and ATT half-widths cross at
+$V^\ast=1.59\,\sigma$. Beyond it the LATT interval is shorter. (b) Both honest intervals cover the target at
+$95\%$ throughout, so the width gain is not bought by undercoverage, while the naive ATT interval collapses.
+(c) The threshold $V^\ast$ across designs, above the design-specific mean-squared-error threshold
+($\sqrt2\,\sigma$ at $K=2$, $k=1$).}
+\label{fig:width}
+\end{figure}
+
 \subsection{Selection, calibration, and panel confirmation}\label{sec:calib}
 
 Two questions remain for the data-driven regime, whether choosing the selected set from the same data
@@ -1249,15 +1134,55 @@ the same for the full-data and sample-splitting procedures ($M\approx0.048$ and 
 are well separated from $c$ selection is effectively deterministic, naive inference suffices, and splitting
 buys little, consistent with the pointwise reading of \citet{leeb2005}. That near-equality of crossing
 points understates the cost, however, because selection distorts the standard error rather than the
-crossing bound---the local-to-threshold regime the carving of Proposition~\ref{prop:carve} is built for,
+crossing bound, the local-to-threshold regime the carving of Theorem~\ref{thm:carve} is built for,
 which the panel model below makes precise. On the second, the residual violation of the selected aggregate is
 not a constant but a spread, multi-modal random variable across replications, running from zero to about
 $0.06$ with a thin tail to $0.11$, each mode a different number of borderline cohorts surviving the
-screen, which is the content of Lemma~\ref{lem:calib}. A fixed $M$ must dominate it, and setting $M$ at
+screen, which is the content of Remark~\ref{rem:calib}. A fixed $M$ must dominate it, and setting $M$ at
 the mean residual violation ($0.043$) undercovers, while nominal coverage is reached near the
-ninety-fifth percentile ($0.057$) and well below the maximum ($0.112$). The recommendation follows, to
-calibrate $M$ to the residual violation of a typical selected set, not its average, and treat it as a
-floor.
+ninety-fifth percentile ($0.057$) and well below the maximum ($0.112$). The lesson is not a value at which
+to set $M$, the quantile that would deliver a target coverage depends on the unidentified violation
+distribution, but a direction in which to read the breakdown curve. A bound drawn from the typical selected
+set falls at the undercovering end, so the curve should be read conservatively, with $M^\ast$ weighed against
+a violation one is willing to countenance rather than against the set's own average.
+
+We next report the carved interval itself, the object Theorem~\ref{thm:carve} constructs, across the
+randomization scale $\gamma$. In a selection-isolation design where every cohort is clean in the
+post-period, so the causal target is one for any selected set and the identification widening is held out,
+cohorts sit near the flatness threshold and the pre- and post-period estimation errors are correlated, so
+the naive interval on the selected aggregate undercovers. Table~\ref{tab:carve} traces the sweep. The
+carved interval covers at the nominal level for every $\gamma$, where the naive interval undercovers,
+confirming the exact conditional coverage of Theorem~\ref{thm:carve} on the selected set. Its length is
+summarized by the median rather than the mean, because the carved interval has infinite expected length
+(Proposition~\ref{prop:nolength}): the mean is dominated by the rare near-boundary replications where the
+truncation collapses, a heavy tail visible in the ninety-fifth percentile, while the median is stable.
+On the median the carved interval is comparable to a proper $\sqrt2$ sample-split, not uniformly shorter,
+and its median length grows with $\gamma$ as the noised screen shrinks the retained set and the
+empty-selection event, on which the procedure reports the ATT interval, becomes non-negligible. The carved
+interval's advantage over splitting is thus not width but that it uses the whole sample deterministically,
+with the randomization $\gamma$ trading the length tail against the empty-selection rate; the useful
+regime is a small $\gamma$.
+
+\begin{table}[t]
+\centering
+\caption{The carved interval across the randomization scale $\gamma$ (reduced-form model,
+selection-isolation design, causal target $=1$). Coverage is over non-empty selections; length is the
+median, since the carved interval has infinite expected length (Proposition~\ref{prop:nolength}). The
+carved interval covers where the naive interval undercovers, at a median length comparable to a proper
+$\sqrt2$ sample-split.}
+\begin{tabular}{cccccccc}
+\hline
+ & \multicolumn{3}{c}{coverage (\%)} & \multicolumn{3}{c}{length} & \\
+$\gamma$ & carved & naive & split & med.\ carved & med.\ split & p90 carved & empty (\%) \\
+\hline
+$0.0$ & $95.4$ & $90.6$ & $94.6$ & $0.545$ & $0.444$ & $2.47$ & $0.0$ \\
+$0.5$ & $95.8$ & $92.2$ & $95.1$ & $0.555$ & $0.444$ & $2.24$ & $0.0$ \\
+$2.0$ & $95.1$ & $94.1$ & $95.2$ & $0.621$ & $0.512$ & $2.52$ & $0.7$ \\
+$8.0$ & $95.3$ & $94.8$ & $94.5$ & $0.855$ & $0.627$ & $3.17$ & $10.6$ \\
+\hline
+\end{tabular}
+\label{tab:carve}
+\end{table}
 
 Finally, we repeat the estimand demonstration on generated panel data, where individual outcomes are
 simulated for a staggered design with a level confound and idiosyncratic noise, cohort event-study
@@ -1268,7 +1193,7 @@ across the informativeness axis the ATT estimator's bias stays flat near $+0.30$
 toward zero, reproducing Figure~\ref{fig:scope} with estimated quantities, and the estimated standard
 error matches its Monte Carlo counterpart where selection is effectively deterministic. One discrepancy
 is informative, and it is the payoff promised above. At intermediate informativeness, where selection is
-stochastic---the local-to-threshold regime the carved interval targets---the estimated standard error
+stochastic, the local-to-threshold regime the carved interval targets, the estimated standard error
 understates its Monte Carlo counterpart ($0.016$ against $0.024$ at $\phi=0.75$), the missing
 component being the variance induced by the randomness of selection, which a standard error conditional
 on the realized set does not capture. This confirms, from the panel side, that conditioning on a
@@ -1299,20 +1224,86 @@ credible subpopulation, the three cohorts whose pre-trends are essentially flat 
 $c\approx0.03$), the event study is flat both before and after onset, and the LATT is $-0.2$ log points,
 indistinguishable from zero. The gap between the two, $+6.9$ log points, is itself sharply
 estimated ($t=5$). Honest inference confirms the reading rather than resting on the point estimate.
-Applying the level bound of Section~\ref{sec:approach} to the credible aggregate at $M$ equal to the screen
-tolerance $c\approx0.03$, the largest residual post-treatment violation the screen leaves room for, the
-LATT's fixed-length interval runs from $-5.9$ to $+5.5$ log points, which contains zero and excludes the
-pooled $+6.7$. The breakdown value is $M^\ast\approx4.2$ log points, so reconciling the credible near-zero
+Applying the level bound of Section~\ref{sec:approach} to the credible aggregate at the illustrative value $M$
+equal to the screen tolerance $c\approx0.03$, one point on the breakdown curve, the LATT's fixed-length
+interval runs from $-5.9$ to $+5.5$ log points, which contains zero and excludes the pooled $+6.7$. The
+choice $M=c$ is a benchmark rather than a consequence of the screen, since $c$ bounds the pre-treatment
+coefficients while $M$ bounds the unobserved post-treatment violation, so the interval is honest only under
+the maintained level bound at that $M$. The breakdown value is $M^\ast\approx4.2$ log points, so reconciling the credible near-zero
 reading with the pooled effect would require countenancing a post-treatment violation about $1.4$ times the
-screen tolerance and larger than any retained cohort's own pre-trend. The near-zero reading is not an artifact of a
-hand-picked threshold. Panel (c) traces
-the estimate along the credibility path of Section~\ref{sec:select}, and it stays flat and close to zero
+screen tolerance and larger than any retained cohort's own pre-trend. Panel (c) traces
+the estimate along the credibility path of Section~\ref{sec:select}. It stays flat and close to zero
 across the whole range of genuinely flat pre-trends, cohorts with $\max_e|\hat\beta_{g,\mathrm{pre}}(e)|$
 below about $0.03$, and climbs toward the pooled $+6.7$ only once the threshold is loosened enough to
 readmit cohorts whose own pre-trends, around $0.07$--$0.08$, are as large as the effect in question.
 Reading the LATT at that lax end simply rebuilds the pooled estimate out of its least credible cohorts,
 and the positive figure survives only by abandoning the credibility standard, not by tolerating a
 residual violation of the credible set.
+
+Because the credible set is read from the same estimated pre-trends, we run the carved procedure of
+Theorem~\ref{thm:carve} on the data, estimating the covariance of the stacked cohort event-study
+coefficients by a cluster bootstrap over counties, the estimated-$\Sigma$ case of
+Remark~\ref{rem:sigmahat}. The screen boundary is genuinely uncertain here, which is what makes carving
+operative rather than cosmetic. Only the 2003 cohort is retained by a wide margin, and 2007, 2008, and
+2011 are dropped by one, while four of the nine cohorts sit within about one bootstrap standard error of
+the threshold, 2004 and 2005 retained and 2006 and 2009 dropped. Carrying that selection uncertainty, the
+carved interval for the credible LATT at $\gamma=0$ is $[-4.3,+3.3]$ log points, tracking the naive
+interval because the retained aggregate stays near zero across the plausible selected sets. Composing it
+with the level bound at $M=c$, the fully honest data-driven object of Corollary~\ref{cor:causal}, gives
+$[-7.3,+6.3]$ log points, which still contains zero with its upper edge below the pooled $+6.7$; the
+near-optimal fixed-length interval $[-5.9,+5.5]$ is its counterpart valid under separation
+(Remark~\ref{rem:oracle}). The carved machinery thus confirms that the near-zero credible reading is robust
+to the selection uncertainty the pre-trend screen introduces, and not an artifact of conditioning on the
+realized selected set.
+
+We checked this against the sensitivity analysis a fixed-target approach would actually run, the HonestDiD
+implementation of \citet{rambachan2023} applied to the pooled event study. We use their relative-magnitudes
+restriction $\Delta^{RM}(\bar M)$, the ``post bounded by pre'' restriction, which
+bounds post-treatment trend changes by $\bar M$ times the largest
+pre-treatment one, because it reads robustness directly off the observed pre-trend, the mechanism at issue
+here. The honest ATT confidence set is $[+1.0,+13.3]$ log points at $\bar M=1$, wider than the
+naive interval $[+5.1,+8.4]$, but still excluding zero, and first admits zero only at a breakdown of
+$\bar M^\ast=1.2$. The relative-magnitudes restriction thus reports the $+6.7$
+effect as robust, surviving post-treatment violations larger than the entire visible pre-trend. That
+robustness is an artifact of aggregation. The pooled pre-trend is nearly flat, its largest pre-treatment
+coefficient is under one log point, because the confounded cohorts are a minority whose large,
+differently-timed pre-trends wash out in the all-cohort average, even as their own pre-trends reach eleven log
+points. Reading only the aggregate, the restriction cannot detect this and certifies the effect, the false
+precision that Section~\ref{sec:flci} anticipated for a bound read off an uninformative pre-trend, here on
+real data.
+
+The complementary smoothness restriction $\Delta^{SD}(M)$ fails in the opposite direction, for a reason
+specific to this confound. Run on the same pooled event study through the same conditional--hybrid procedure,
+its honest confidence set admits zero once the post-treatment differential trend is allowed to curve by
+$M\approx0.001$, a fifth of the $\approx\!0.005$ curvature the pooled pre-trend itself displays, so it
+neither certifies the $+6.7$ effect nor localizes it, but widens to include both zero and the full
+effect.\footnote{We report $\Delta^{SD}$ through the same conditional least-favourable hybrid used for
+$\Delta^{RM}$, so the two restrictions are compared under one inference procedure. The smoothness class also
+admits the near-optimal fixed-length interval of \citet{armstrong2018}, which is tighter but leaves the
+comparison unchanged. Near the breakdown the identified set is small and the hybrid is close to optimal.}
+The housing bubble is a smooth secular appreciation, and a smoothness restriction cannot separate it from a
+treatment effect on the aggregate. The two standard restrictions thus fail in opposite ways, relative
+magnitudes falsely precise, smoothness uninformative, and neither recovers the near-zero reading the
+cohort-level screen delivers.
+
+The credible-subpopulation screen, reading pre-trends cohort by cohort, drops exactly the bubble cohorts and
+returns the near-zero LATT. It is the only one of the three analyses that both shows no effect for the
+credible cohorts and locates the pooled positive in the dropped ones, because the information distinguishing
+bubble from effect lives in the cross-cohort composition that every aggregate analysis first averages away.
+Whether the dropped cohorts' excess is differential trend or genuine heterogeneous effect is the unidentified
+composition gap, so the analysis concentrates the pooled positive in cohorts with nonflat pre-trends rather
+than proving the full-population effect zero.
+
+The report of Section~\ref{sec:dominance} makes this quantitative. The estimable divergence between the
+two point estimators is $\hat D=\hat\theta_{\mathcal G}-\hat\theta_{\hat S}=+6.9$ log points ($t=5.4$,
+carved standard error), and it splits as $\hat D=B_{\mathcal F}-\Gamma$ into the dropped cohorts'
+differential trend $B_{\mathcal F}$, a pre-trend violation, and the composition gap $\Gamma$, a difference
+in true effects, which the data cannot separate. The breakdown value is $\Gamma^\ast\approx-3.3$ log
+points, so the credible reading is overturned only if more than about half of the divergence, $3.3$ of the
+$6.9$ log points, reflects genuine treatment-effect heterogeneity rather than differential pre-trend.
+Reporting both honest intervals with $\Gamma^\ast$ completes the standing rule; the width comparison of the
+switching rule is an efficiency question, demonstrated in Section~\ref{sec:width}, and here the two honest
+intervals disagree on substance rather than width.
 
 \begin{figure}[t]
 \centering
@@ -1346,31 +1337,33 @@ accompanied by honest sensitivity bounds on the residual violation that the pre-
 out. This is a specific instance of the general principle, familiar from instrumental
 variables and limited overlap, of retreating to a credibly-identified subpopulation.
 
-The method delivers a sharp answer where the ATT estimator is biased and its sensitivity set is wide,
-at the price of a narrower, subpopulation target whose composition must be described rather than
-assumed. Its advantage is contingent on pre-trends being informative about post-treatment violations.
+The method delivers a sharp answer where the ATT estimator is biased and a fixed-target sensitivity
+analysis on the aggregate is uninformative, wide when the aggregate pre-trend reveals the violation, and
+falsely precise when the offending cohorts wash out of it, at the price of a narrower, subpopulation target
+whose composition must be described rather than assumed. Its advantage is contingent on pre-trends being informative about post-treatment violations.
 Where they are not, only economic context can carry the assumption. Under data-driven selection the
-estimator carries a pre-test bias that vanishes as pre-trends grow informative; the inference we
+estimator carries a pre-test bias that vanishes as pre-trends grow informative. The inference we
 recommend is honest regardless, combining the post-selection carving of \citet{lee2016} with the
 sensitivity bounds of \citet{rambachan2023} into an interval uniformly valid against both the selection and
-the residual violation, so that the pre-test problem the selection revives is met head-on rather than
-assumed away. We also make the scope condition operational: a feasible rule, reported alongside both honest
+the residual violation. We also make the scope condition operational. A feasible rule, reported alongside both honest
 intervals, signals when narrowing the target lowers risk, with a breakdown value $\Gamma^\ast$ standing in
-for the one quantity---the effects of the discarded cohorts---that the data cannot identify.
+for the one quantity, the effects of the discarded cohorts, that the data cannot identify.
 
-An appendix characterizes the optimal credible weighting (Proposition~\ref{prop:optimal}): minimizing
+An appendix characterizes the optimal credible weighting (Proposition~\ref{prop:optimal}). Minimizing
 worst-case risk yields a soft-thresholded weighting of cohorts by credibility net of noise, of which the
 flatness screen with size weights is a special case, which completes the analogy to the variance-minimizing
 overlap weights of \citet{crump2009} that the approach borrows from.
 
-Two questions we characterize empirically and leave to future theory. The first is the finite-sample
-behaviour of the feasible optimal weighting, in which the credibility levels $m_g$ are estimated from the
-pre-trends rather than known: Appendix~\ref{sec:optimal} reports its typical gain in simulation, and a full
-account of the noise it inherits from the pre-trends is open. The second is the finite-sample coverage of a
-\emph{single} interval chosen by a hard-thresholded switching rule; the both-intervals report we recommend
-is honest by Proposition~\ref{prop:switch} regardless of the choice, and Section~\ref{sec:calib} shows the
-selection itself introduces no gross coverage distortion, so what remains open is only the coverage of the
-single reported interval near the switching boundary.
+Two directions remain for future work. One is the finite-sample behaviour of the feasible optimal weighting
+of Appendix~\ref{sec:optimal}, where the credibility levels $m_g$ are estimated from the pre-trends rather
+than known, and the noise this inherits awaits a full account. The other is the coverage of a single
+interval selected by a hard-thresholded switching rule. The recommended report of both intervals is honest
+whatever the rule decides (Proposition~\ref{prop:switch}), so the question is confined to the coverage of one
+interval at the switching boundary.
+
+\clearpage
+\bibliographystyle{aer}
+\bibliography{refs}
 
 \clearpage
 \appendix
@@ -1381,20 +1374,20 @@ single reported interval near the switching boundary.
 The flatness screen and the cohort weights $w_g$ have so far been taken as given, the screen retaining a
 cohort outright and the weights fixed at, say, cohort size. Both are choices, and the sensitivity class
 that governs the honest inference also pins down their optimal form, in the decision-theoretic sense in
-which \citet{crump2009} derive the optimal-overlap subpopulation and \citet{li2018} the overlap weights:
-there, variance is minimized where positivity is scarce; here, worst-case mean squared error is minimized
+which \citet{crump2009} derive the optimal-overlap subpopulation and \citet{li2018} the overlap weights.
+There, variance is minimized where positivity is scarce. Here, worst-case mean squared error is minimized
 where credibility is scarce.
 
 Let the estimator be a weighted average $\hat\theta(\lambda)=\sum_g\lambda_g\hat\beta_{g,\mathrm{post}}$
-with $\lambda_g\ge0$ and $\sum_g\lambda_g=1$, and---following the overlap-weighting logic that the weights
-define the estimand as well as the estimator---let the target be the $\lambda$-weighted causal effect
+with $\lambda_g\ge0$ and $\sum_g\lambda_g=1$, and, following the overlap-weighting logic that the weights
+define the estimand as well as the estimator, let the target be the $\lambda$-weighted causal effect
 $\theta(\lambda)=\sum_g\lambda_g\theta_g$, whose interpretation is reported through the weights themselves.
 Since $\hat\beta_{g,\mathrm{post}}\sim\mathcal N(\theta_g+V_g,\sigma_g^2)$ independently, the estimator has
 identification bias $\sum_g\lambda_g V_g$ and variance $\sum_g\lambda_g^2\sigma_g^2$. The pre-trends enter
-through the sensitivity class: a cohort's post-treatment violation is bounded by a credibility level
+through the sensitivity class. A cohort's post-treatment violation is bounded by a credibility level
 $m_g\ge0$, $\lvert V_g\rvert\le m_g$, with $m_g$ small for a cohort whose pre-trend is flat and large for
 one whose pre-trend is steep. The hard flatness screen is the coarsening $m_g\in\{0,\infty\}$, retaining
-the $m_g=0$ cohorts and discarding the rest; the level bound $M$ of Section~\ref{sec:honest} is the common
+the $m_g=0$ cohorts and discarding the rest. The level bound $M$ of Section~\ref{sec:honest} is the common
 value $m_g\equiv M$ on the retained set. The worst-case mean squared error over this class is
 \[
 \mathcal R(\lambda)=\Big(\sum_g\lambda_g m_g\Big)^2+\sum_g\lambda_g^2\sigma_g^2,
@@ -1408,10 +1401,11 @@ scalars $\mu$ and $B=\sum_g\lambda_g^\ast m_g$, the worst-case bias at the optim
 \[
 \lambda_g^\ast=\frac{1}{\sigma_g^2}\Big[\tfrac{\mu}{2}-B\,m_g\Big]_+,\qquad [x]_+=\max(x,0),
 \]
-with $\mu$ fixed by $\sum_g\lambda_g^\ast=1$. Consequently there is an endogenous credibility cutoff
-$m^\ast=\mu/(2B)$: cohorts with $m_g\ge m^\ast$ receive zero weight, and among the retained cohorts the
+with $\mu$ fixed by $\sum_g\lambda_g^\ast=1$. When $B>0$ there is an endogenous credibility cutoff
+$m^\ast=\mu/(2B)$. Cohorts with $m_g\ge m^\ast$ receive zero weight, and among the retained cohorts the
 weight is $\lambda_g^\ast\propto(m^\ast-m_g)/\sigma_g^2$, decreasing in the credibility bound $m_g$ and in
-the sampling variance $\sigma_g^2$.
+the sampling variance $\sigma_g^2$. When $B=0$, as under the benchmark $m_g\equiv0$, the cutoff is vacuous
+and $\lambda_g^\ast\propto1/\sigma_g^2$, inverse-variance weights with no thresholding.
 \end{proposition}
 
 \begin{proof}
@@ -1419,71 +1413,88 @@ $\sum_g\lambda_g^2\sigma_g^2$ is strictly convex for $\sigma_g^2>0$ and $(\sum_g
 convex, so $\mathcal R$ is strictly convex and its minimizer over the compact convex simplex is unique. The
 worst-case bias is $\sup_{\lvert V_g\rvert\le m_g}\lvert\sum_g\lambda_g V_g\rvert=\sum_g\lambda_g m_g$
 since $\lambda_g\ge0$, giving the displayed $\mathcal R$. Form the Lagrangian
-$\mathcal R(\lambda)-\mu(\sum_g\lambda_g-1)-\sum_g\nu_g\lambda_g$ with $\nu_g\ge0$; stationarity gives
+$\mathcal R(\lambda)-\mu(\sum_g\lambda_g-1)-\sum_g\nu_g\lambda_g$ with $\nu_g\ge0$. Stationarity gives
 $2Bm_g+2\lambda_g\sigma_g^2-\mu-\nu_g=0$ with $B=\sum_g\lambda_g m_g$. For $\lambda_g>0$ complementary
-slackness sets $\nu_g=0$ and $\lambda_g=(\mu/2-Bm_g)/\sigma_g^2$; for $\lambda_g=0$ it requires
+slackness sets $\nu_g=0$ and $\lambda_g=(\mu/2-Bm_g)/\sigma_g^2$. For $\lambda_g=0$ it requires
 $\mu/2-Bm_g\le0$, i.e.\ $m_g\ge\mu/(2B)$. Combining the two cases gives the truncated form and the cutoff
 $m^\ast=\mu/(2B)$, with $\mu$ determined by the budget constraint and $B$ by its own definition at the
 resulting $\lambda^\ast$.
 \end{proof}
 
-Three readings connect the result to the rest of the paper. First, the optimal rule is a \emph{soft}
-flatness screen. It reproduces the hard screen's qualitative content---cohorts whose pre-trends are too
-steep are dropped---but with an endogenous threshold set by the bias--variance trade-off rather than a
+Three readings connect the result to the rest of the paper. First, the optimal rule is a soft
+flatness screen. It reproduces the hard screen's qualitative content, cohorts whose pre-trends are too
+steep are dropped, but with an endogenous threshold set by the bias--variance trade-off rather than a
 researcher's $c$, and with the surviving cohorts weighted continuously by how credible and how precise they
 are, rather than equally. A marginally less credible but large and precisely estimated cohort is retained
 where the hard screen would discard it, because the variance its inclusion saves outweighs the bias it
-admits---the same calculus as the dominance condition of Proposition~\ref{prop:generalK}, now internal to
+admits, the same calculus as the dominance condition of Proposition~\ref{prop:generalK}, now internal to
 the weighting. Second, the result justifies the paper's default. Among equally credible cohorts,
 $m_g\equiv0$, the weights collapse to inverse-variance, $\lambda_g^\ast\propto1/\sigma_g^2$, and when
 sampling variance scales inversely with cohort size, $\sigma_g^2\propto1/n_g$, inverse-variance weighting
-is size weighting; the fixed $w_g$ of the definition is thus optimal precisely under homoskedastic-per-unit
+is size weighting. The fixed $w_g$ of the definition is thus optimal precisely under homoskedastic-per-unit
 noise and equal credibility, and the proposition says what to do when either fails. Third, it completes the
 analogy to limited overlap. \citet{crump2009} trim and \citet{li2018} weight to minimize variance where
-positivity is the binding scarcity; here credibility is the scarcity, and the optimal response is to weight
+positivity is the binding scarcity. Here credibility is the scarcity, and the optimal response is to weight
 cohorts by credibility net of noise, with trimming emerging as the corner solution for cohorts past
 $m^\ast$.
 
-The credibility levels $m_g$ are reported, not assumed, in the same currency as everything else: a natural
+The credibility levels $m_g$ are reported, not assumed, in the same currency as everything else. A natural
 choice sets $m_g$ to the cohort's own maximal pre-trend, $m_g=\max_{e<0}\lvert\hat\beta_{g,\mathrm{pre}}(e)
 \rvert$, so that the weighting is read off the observed pre-trends. This makes the weights data-driven, a
-refinement of the selection already treated, and---as there---validity does not rest on it: the honest
+refinement of the selection already treated, and, as there, validity does not rest on it. The honest
 interval of Section~\ref{sec:honest} takes its coverage from the researcher-set level bound $M$, while the
 estimated $m_g$ only orders and weights the cohorts. Using $m_g$ to weight but $M$ to cover keeps efficiency
-and honesty on separate instruments, as the carved inference of Proposition~\ref{prop:carve} keeps
-selection and identification on separate instruments.
+and honesty on separate instruments, as the carved inference of Theorem~\ref{thm:carve} keeps
+selection and identification on separate instruments. One caveat separates the feasible rule from
+Proposition~\ref{prop:optimal}. That optimality is minimax over the class $\lvert V_g\rvert\le m_g$, so it
+holds for the feasible weights only if the observed pre-trend $m_g$ bounds the post-treatment violation
+$V_g$. Absent such a pre-to-post link, the feasible $m_g$ is a credibility ranking rather than the bound
+defining the optimized class, and the weighting is a heuristic that need not inherit the minimax
+interpretation. A second caveat concerns coverage. Because the estimated weights make the contrast $\ell_S$
+and the causal target random functions of the pre-trends, the discrete-selection guarantee of
+Theorem~\ref{thm:carve}, which conditions on a fixed contrast, does not extend to the continuously weighted
+interval. The level bound $M$ absorbs the residual identification bias, but the sampling and selection
+uncertainty from estimating the weights requires a separate argument, which we leave to future work.
+A practitioner wanting the feasible weighting with valid inference today can estimate the weights on an
+independent split and invert on the other, at the usual efficiency cost; honest inference that carves the
+continuous weighting without that split is the open question.
 
-\subsection{Simulation: the optimal weighting improves on the hard screen}\label{sec:optsim}
+\subsection{The optimal weighting improves on the hard screen}\label{sec:optsim}
 
 Proposition~\ref{prop:optimal} predicts that the soft, credibility-and-precision weighting lowers risk
 relative to the hard flatness screen. We confirm this and measure the gain. The design has $K=12$ cohorts
 with homogeneous effects, so every weighting targets the same value and mean squared error is a fair
-comparison. Cohorts come in pairs at six violation levels $V_g\in\{0,0.08,\dots,0.40\}$; within each pair
-one member is precise (a large sample) and one noisy (a small one). A hard screen keeps or drops a pair as a
+comparison. Cohorts come in pairs at six violation levels $V_g\in\{0,0.08,\dots,0.40\}$. Within each pair
+one member is precise ($n=6400$) and one noisy ($n=800$), with per-cohort post-treatment standard deviation
+$\sigma_g\propto1/\sqrt{n_g}$ from a common unit scale, so the pair shares a violation level but not a
+variance. A hard screen keeps or drops a pair as a
 whole, since both members share the credibility $m_g$, whereas the optimal weighting can separate them. The
 design is deliberately constructed to exhibit this precision channel, and a random-DGP average below reports
 the typical gain.
 
-We compare three procedures for the common target: the ATT, equal weights on all cohorts; the hard screen,
-equal weights on $\{g:m_g\le c\}$ at its best threshold $c$; and the optimal weighting $\lambda^\ast$ of
+We compare three procedures for the common target, the ATT (equal weights on all cohorts), the hard screen
+(equal weights on $\{g:m_g\le c\}$ at its best threshold $c$), and the optimal weighting $\lambda^\ast$ of
 Proposition~\ref{prop:optimal}, in an oracle version with $m_g=V_g$ known and a feasible version with
-$\hat m_g=\max_e\lvert\hat\beta_{g,\mathrm{pre}}(e)\rvert$ estimated from informative pre-trends.
+$\hat m_g=\max_e\lvert\hat\beta_{g,\mathrm{pre}}(e)\rvert$ estimated from pre-trends at informativeness
+$\phi=1.5$. The hard-screen threshold $c$ is chosen to minimize MSE, and the $500$-DGP average draws random
+violation levels and sample sizes from the same family.
 
 Table~\ref{tab:prop11} and Figure~\ref{fig:prop11} report the result. The left panel plots MSE against the
-hard-screen threshold: the optimal weighting lies below the hard-screen curve at every $c$, including its
-minimum. Against the best hard screen, the optimal weighting lowers MSE by $63\%$ when credibility is known.
-The feasible version, which estimates $m_g$ from the pre-trends and is compared to the best hard screen doing
-the same, lowers it by $28\%$; across $500$ random DGPs the average reduction over the best hard screen is
-$14\%$. The right panel shows the mechanism. At a common credibility level the optimal weighting loads on the
-precise member and down-weights the noisy one, where the hard screen weights them equally; and it retains
+hard-screen threshold. The optimal weighting lies below the hard-screen curve at every $c$, including its
+minimum. Against the best hard screen, the oracle optimal weighting ($m_g=V_g$) lowers MSE from $0.00104$ to
+$0.00039$, by $63\%$. The feasible weighting, estimating $\hat m_g$ from the pre-trends, attains $0.00048$, a
+$54\%$ reduction against the same tabulated hard screen. Measured instead against a feasible hard screen that
+also estimates $\hat m_g$, not shown in Table~\ref{tab:prop11}, the reduction is $28\%$. Across $500$ random
+DGPs the average reduction over the best hard screen is $14\%$. The right panel shows the mechanism. At a common credibility level the optimal weighting loads on the
+precise member and down-weights the noisy one, where the hard screen weights them equally, and it retains
 marginally less credible cohorts at reduced weight rather than dropping them at a cutoff. The gap between the
 oracle and feasible lines is the price of estimating $m_g$ from noisy pre-trends, the open question the
-conclusion notes; even so, the feasible weighting improves on the hard screen.
+conclusion notes. Even so, the feasible weighting improves on the hard screen.
 
 \begin{table}[t]
 \centering
 \caption{Optimal weighting versus the hard screen (reduced-form model, homogeneous effects, so all
-procedures target the same value). RMSE and MSE for that target; the optimal weighting minimizes worst-case
+procedures target the same value). RMSE and MSE for that target. The optimal weighting minimizes worst-case
 MSE by Proposition~\ref{prop:optimal}.}
 \label{tab:prop11}
 \begin{tabular}{lcc}
@@ -1502,14 +1513,289 @@ Optimal weighting, oracle ($m_g=V_g$) & $0.020$ & $0.00039$ \\
 \centering
 \includegraphics[width=\textwidth]{prop11.png}
 \caption{Optimal credible weighting (Proposition~\ref{prop:optimal}) versus the hard flatness screen,
-homogeneous effects so every procedure targets the same value. Left: MSE against the hard-screen threshold
-$c$; the optimal weighting, oracle and feasible, lies below the hard-screen curve at every $c$ and below the
-ATT. Right: weights at each violation level; the optimal weighting loads on the precise member of each pair
+homogeneous effects so every procedure targets the same value. Left, MSE against the hard-screen threshold
+$c$. The optimal weighting, oracle and feasible, lies below the hard-screen curve at every $c$ and below the
+ATT. Right, weights at each violation level, the optimal weighting loads on the precise member of each pair
 and soft-thresholds the credibility gradient, where the hard screen weights retained cohorts equally.}
 \label{fig:prop11}
 \end{figure}
 
-\bibliographystyle{aer}
-\bibliography{refs}
+\section{Mean-squared-error dominance}\label{app:mse}
+
+This appendix develops the point-estimator account behind the width comparison of
+Section~\ref{sec:dominance}, identifying which three forces set the sign of the advantage and the explicit
+thresholds they imply. Changing the estimand is worth doing only when the bias it removes outweighs the variance and
+the change of target it costs. Three forces set the sign, the violation the screen removes, the variance
+that dropping a cohort costs, and the heterogeneity between the retained subpopulation and the full
+one, and the sign turns on their balance, not on the informativeness of the pre-trends, which governs only
+how much of a fixed-sign advantage is realized.
+
+We state the comparison for $K$ cohorts, and then read from the two-cohort special case
+the one thing the general result leaves implicit, how the advantage scales with the
+informativeness of the pre-trends. Let each cohort $g$ carry a weight
+$w_g$ (normalized so $\sum_{g}w_g=1$), a causal effect $\theta_g=\mathrm{ATT}(g,\cdot)$,
+a post-treatment violation $V_g$ (the aggregate $a(\delta_{g,\mathrm{post}})$, zero for a
+clean cohort), and an independent sampling variance $\sigma_g^2$ for its aggregated
+post-treatment estimate. The screen retains cohort $g$ with probability $\pi_g$,
+independently across cohorts and of the post-treatment estimates. The ATT estimator is
+the fixed average $\sum_g w_g\hat\beta_{g,\mathrm{post}}$. The LATT estimator reweights
+over the retained set $\hat S$, $\sum_{g\in\hat S}w_g\hat\beta_{g,\mathrm{post}}/W_{\hat S}$
+with $W_S=\sum_{g\in S}w_g$.
+
+\begin{proposition}[General-$K$ dominance]\label{prop:generalK}
+With the target $\theta_{\mathcal G}=\sum_g w_g\theta_g$, the ATT estimator has mean squared
+error $\mathrm{MSE}_{\mathrm{ATT}}=\big(\sum_g w_gV_g\big)^2+\sum_g w_g^2\sigma_g^2$, and the
+LATT estimator has
+\begin{equation}\label{eq:latt-exact}
+\mathrm{MSE}_{\mathrm{LATT}}=\sum_{S\subseteq\mathcal G}
+\Big(\textstyle\prod_{g\in S}\pi_g\prod_{g\notin S}(1-\pi_g)\Big)
+\Big[\big(\theta_S-\theta_{\mathcal G}+B_S\big)^2+\mathrm{Var}_S\Big],
+\end{equation}
+where $\theta_S=\sum_{g\in S}w_g\theta_g/W_S$, $B_S=\sum_{g\in S}w_gV_g/W_S$, and
+$\mathrm{Var}_S=\sum_{g\in S}w_g^2\sigma_g^2/W_S^2$, with the convention $S=\mathcal G$ when the
+screen retains no cohort. When every cohort is retained, $\pi_g=1$, the two estimators
+coincide and $\mathcal{A}=\mathrm{MSE}_{\mathrm{ATT}}-\mathrm{MSE}_{\mathrm{LATT}}=0$. Suppose instead
+the screen separates the cohorts, discarding every confounded cohort, $\pi_g\to0$ for
+$V_g\neq0$, and retaining every clean cohort, $\pi_g\to1$ for $V_g=0$, so that the retained
+set converges in probability to the clean set $\mathcal C$ and the dropped set is the
+confounded set $\mathcal F=\mathcal G\setminus\mathcal C$. Then
+\begin{equation}\label{eq:deltastar}
+\mathcal{A}\;\longrightarrow\;\mathcal{A}^\ast\;=\;B_{\mathcal F}^2-\Gamma^2-\Delta\mathrm{Var},
+\end{equation}
+where $B_{\mathcal F}=\sum_{g\in\mathcal F}w_gV_g$ is the aggregate violation removed by
+selection (a realized quantity, unlike the worst-case level bound $B_{\hat S}$ of
+Corollary~\ref{cor:causal} that widens the honest interval), $\Gamma=\theta_{\mathcal C}-\theta_{\mathcal G}$
+is the composition gap between the
+retained subpopulation and the full population, and
+$\Delta\mathrm{Var}=\mathrm{Var}_{\mathcal C}-\sum_g w_g^2\sigma_g^2\ge0$ is the variance cost of
+dropping. Hence in the informative limit the LATT dominates the ATT in mean squared error if
+and only if
+\begin{equation}\label{eq:generalK-threshold}
+B_{\mathcal F}^2\;>\;\Gamma^2+\Delta\mathrm{Var}.
+\end{equation}
+With two equally weighted cohorts, one clean and one confounded with violation $V$, effect gap
+$\gamma$, and common variance $\sigma^2$, one has $B_{\mathcal F}^2=V^2/4$, $\Gamma^2=\gamma^2/4$,
+and $\Delta\mathrm{Var}=\sigma^2/2$, so \eqref{eq:generalK-threshold} becomes $V^2>\gamma^2+2\sigma^2$.
+Remark~\ref{rem:inform} below develops this two-cohort case, where the informativeness of the
+pre-trends enters.
+\end{proposition}
+
+\begin{proof}
+See Appendix~\ref{app:proofs}.
+\end{proof}
+
+The general threshold \eqref{eq:generalK-threshold} is the two-cohort comparison written for many
+cohorts, each of its three forces now an aggregate. The reason to trade is the total violation
+$B_{\mathcal F}$ selection removes, not any single cohort's. The estimand cost is the composition gap
+$\Gamma$ between the retained subpopulation's effect and the full population's, the many-cohort form of
+$\gamma$. It vanishes under the equal-targets condition, that the retained and dropped cohorts share the
+same average effect. The variance
+cost $\Delta\mathrm{Var}$ is the extra sampling variance from reweighting onto fewer cohorts. The sign of
+the advantage is a violation-against-noise-and-heterogeneity question, settled by
+\eqref{eq:generalK-threshold} at the endpoints where the screen retains everyone ($\mathcal{A}=0$) or fully
+separates the cohorts ($\mathcal{A}=\mathcal{A}^\ast$). Between them the path need not be monotone. With more
+than two cohorts, partial selection can retain a subset of the confounded cohorts, and when their violations
+cancel in the full ATT this can raise the LATT's bias, sending $\mathcal{A}$ negative before it recovers to
+$\mathcal{A}^\ast$ at separation, so the monotone reading of $\mathcal{A}$ running from zero to
+$\mathcal{A}^\ast$ as informativeness grows is specific to the two-type clean-versus-confounded case. Two
+qualifications connect this to the inference in the main text. The separation that makes
+\eqref{eq:deltastar} exact is the mean-squared-error counterpart of the condition behind
+Remark~\ref{rem:oracle}. Near-threshold cohorts are retained with interior probability, the same
+local-to-threshold configurations that obstruct uniform post-selection inference. And an undetectable
+confounded cohort, flat before treatment yet violating parallel trends after, stays in both estimators, so
+it enters \eqref{eq:deltastar} through the residual of Proposition~\ref{prop:pretest} that the honest
+inference of Section~\ref{sec:honest} bounds.
+
+The two-cohort case makes the three forces explicit and, uniquely, traces the advantage along the
+informativeness axis. Consider two equally weighted cohorts sharing a common sampling variance
+$\sigma^2$, observed as one pre- and one post-treatment coefficient each, with independent pre- and
+post-period sampling errors. One cohort is clean, $\delta_1=0$. The other is confounded, with a
+post-treatment violation $V>0$ and a pre-treatment violation $\phi V$, where $\phi\ge0$ is the
+informativeness of the pre-trend. Their treatment effects are $\tau_1$ and $\tau_2$, with
+$\gamma:=\tau_2-\tau_1$, so the target is the average $\bar\tau=(\tau_1+\tau_2)/2$. Taking $c$ large
+enough that the clean cohort is retained with probability approaching one, the confounded cohort
+survives the screen $\lvert\hat\beta_{2,\mathrm{pre}}\rvert\le c$ with probability
+\begin{equation}\label{eq:p2}
+p_2(\phi)\;=\;\Phi\!\Big(\tfrac{c-\phi V}{\sigma}\Big)-\Phi\!\Big(\tfrac{-c-\phi V}{\sigma}\Big),
+\end{equation}
+which decreases from near one, when the confound is invisible in the pre-period, to zero as the
+pre-trend announces it.
+
+\begin{remark}[Informativeness scaling, two cohorts]\label{rem:inform}
+In the two-cohort model, with the clean cohort retained with probability approaching one, the
+mean-squared-error advantage of the LATT estimator over the ATT estimator is
+\begin{equation}\label{eq:delta}
+\mathcal{A}(\phi)\;=\;\mathrm{MSE}_{\mathrm{ATT}}-\mathrm{MSE}_{\mathrm{LATT}}
+\;=\;\frac{1-p_2(\phi)}{4}\,\big[\,V^2-\gamma^2-2\sigma^2\,\big],
+\end{equation}
+the general advantage \eqref{eq:deltastar} specialized by $B_{\mathcal F}^2=V^2/4$, $\Gamma^2=\gamma^2/4$,
+$\Delta\mathrm{Var}=\sigma^2/2$ and scaled by the survival factor $1-p_2(\phi)$ (derivation in
+Appendix~\ref{app:proofs}). The bracket's three terms are the forces of \eqref{eq:generalK-threshold} in
+closed form, $+V^2$ the bias the screen removes, $-2\sigma^2$ the variance that dropping a cohort costs,
+and $-\gamma^2$ the estimand-change cost, charged only to a reader who insists on the ATT as the common
+target and vanishing under homogeneity $\gamma=0$. Hence the LATT dominates the ATT in mean squared error
+if and only if
+\begin{equation}\label{eq:threshold}
+V^2\;>\;\gamma^2+2\sigma^2 ,
+\end{equation}
+a sign fixed independently of the informativeness $\phi$, which enters only through the nondecreasing
+factor $1-p_2(\phi)$. Two readings follow. Informative pre-trends are necessary but not sufficient. If
+$V^2<\gamma^2+2\sigma^2$ no degree of informativeness rescues the LATT, since $1-p_2$ only drives an
+already-negative bracket further from zero, informativeness scales the advantage, it does not create one.
+And when the bracket is positive the advantage rises monotonically in informativeness, from zero at
+$\phi=0$ to its ceiling $\tfrac14[V^2-\gamma^2-2\sigma^2]$ as $\phi\to\infty$, the vertical gap between the
+two bias curves in Figure~\ref{fig:scope}.
+\end{remark}
+
+The dominance condition can be read off the data, up to the one quantity it cannot identify, and so
+furnishes the diagnostic reported in the switching rule (Proposition~\ref{prop:switch}). The variance cost
+$\Delta\mathrm{Var}$ is a
+function of $\Sigma$ and the weights alone and is therefore estimable, and the difference between the two
+point estimators consistently estimates the violation net of the composition gap,
+\begin{equation}\label{eq:D-identified}
+\hat\theta_{\mathcal G}-\hat\theta_{\hat S}\;\xrightarrow{p}\;B_{\mathcal F}-\Gamma\;=:\;D,
+\end{equation}
+since the ATT estimator carries the dropped cohorts' violation while the LATT estimator does not. What is
+not identified is $\Gamma$ on its own, because it depends on the counterfactual effects of the very
+cohorts the screen discards. Writing $B_{\mathcal F}=D+\Gamma$ in \eqref{eq:generalK-threshold}, the
+advantage $\mathcal{A}^\ast=B_{\mathcal F}^2-\Gamma^2-\Delta\mathrm{Var}$ becomes
+$D^2+2D\Gamma-\Delta\mathrm{Var}$, linear in the unidentified $\Gamma$ because the squared composition gap
+cancels. Two readings follow. Under homogeneous effects, $\Gamma=0$, the trade pays exactly when the
+squared gap between the estimators exceeds the variance cost,
+\begin{equation}\label{eq:diagnostic}
+D^2\;>\;\Delta\mathrm{Var},
+\end{equation}
+a comparison the practitioner can compute and, using the carved standard error of
+Theorem~\ref{thm:carve} for $D$, test. In general the verdict is monotone in $\Gamma$, increasing
+when $D>0$, and flips at the breakdown value $\Gamma^\ast=(\Delta\mathrm{Var}-D^2)/(2D)$, the quantity
+Proposition~\ref{prop:switch}(iii) reports. The trade pays unless the dropped
+cohorts' effects differ from the retained ones by more than $\Gamma^\ast$ allows, a sensitivity statement
+in the same idiom as the breakdown value $M^\ast$ for the identifying restriction, now for the estimand
+change rather than the violation.
+
+Three qualifications sharpen the dominance calculation. The advantage \eqref{eq:delta} is an upper bound
+on what the method delivers, because it omits two channels that both work against the
+LATT, occasional false rejection of the clean cohort, which enters at order
+$1-p_1$ when the threshold is not comfortably large, and the additional variance that
+data-driven selection induces and that a standard error conditional on the realized
+set does not capture, the understatement documented in Section~\ref{sec:calib}. Both
+shrink the realized advantage toward zero, and near the threshold, where the dominance margin
+$V^2-\gamma^2-2\sigma^2$ is small, a positive omitted cost can reverse the ranking, so the sign is
+guaranteed only when that margin exceeds these costs. Finally,
+\eqref{eq:delta} is a comparison of point estimators under squared-error loss, not of
+the honest intervals that are the paper's recommended output. The interval analogue
+replaces the reason-to-trade $V$ with the residual violation net of the calibration
+buffer of Remark~\ref{rem:calib}, and the variance cost $\sigma^2$ with a sampling
+slack inflated by the selection quantile, so that the level-bound half-width comparison
+turns on the same three forces with $V$ discounted and $\sigma$ inflated. The
+mean-squared-error threshold \eqref{eq:threshold} correctly signs that comparison and
+is the transparent summary. The width comparison of Section~\ref{sec:dominance} sharpens the
+constants.
+
+\section{Omitted proofs}\label{app:proofs}
+
+\begin{proof}[Proof of Proposition~\ref{prop:id}]
+For $g\in S$, $\beta_{g,\mathrm{post}} = \tau_{g,\mathrm{post}}+\delta_{g,\mathrm{post}}
+= \tau_{g,\mathrm{post}}$ by the hypothesis and \eqref{eq:decomp}, so $a(\beta_{g,\mathrm{post}})
+= a(\tau_{g,\mathrm{post}}) = \mathrm{ATT}(g,\cdot)$ by linearity of $a$. The reweighted sum over $S$
+therefore equals the weighted average of the aggregated causal effects, which is $\theta_S$ by definition.
+Cohorts outside $S$ receive zero weight, so their differential trends do not enter.
+\end{proof}
+
+\begin{proof}[Proof of Corollary~\ref{cor:causal}]
+Theorem~\ref{thm:carve} gives $\theta_{\hat S}\in\mathcal C_{1-\alpha}(\hat S)$ with probability $1-\alpha$.
+The maintained restriction places $\theta_{\hat S}^{\mathrm c}$ within $B_{\hat S}$ of $\theta_{\hat S}$
+deterministically, so $\{\theta_{\hat S}\in\mathcal C_{1-\alpha}(\hat S)\}\subseteq\{\theta_{\hat S}^{\mathrm c}\in
+\mathcal C^{M}_{1-\alpha}(\hat S)\}$, and monotonicity of probability gives the bound.
+\end{proof}
+
+\begin{proof}[Proof of Proposition~\ref{prop:nolength}]
+By Theorem~\ref{thm:carve}, conditional on $\{\hat S=S\}$ and the orthogonal remainder $r$,
+$\hat\theta_S\sim\mathcal{TN}(\theta_S,s_S^2,[\mathcal V^-,\mathcal V^+])$, and $\mathcal C_{1-\alpha}(S)$
+inverts the truncated-normal pivot in $\theta_S$, which is exactly the confidence set of \citet{lee2016}
+for a normal mean under a polyhedral, hence after conditioning on $r$ interval, truncation.
+\citet{kivaranovicleeb2021} show this set has infinite expected length whenever the truncation is one-sided
+with positive probability. Under the flatness screen a retained cohort's binding constraint is two-sided
+only when both faces $\lvert\hat\beta_{g,\mathrm{pre}}(e)+\omega_g\rvert\le c$ are active; generically one
+face binds and the induced bound on $\hat\theta_S$ is one-sided, an event of positive probability, so the
+hypothesis holds. Averaging over $S$ preserves the conclusion. That only $\gamma\to\infty$ escapes is
+immediate, since it empties the selection.
+\end{proof}
+
+\begin{proof}[Proof of Proposition~\ref{prop:switch}]
+(i) Each interval's coverage is a property of that interval alone and holds for every $\beta$. Reporting
+both leaves each untouched, so whichever the rule recommends, the reader is handed an interval that covers
+at $1-\alpha$. (ii) By Theorem~\ref{thm:width}, $h_S<h_{\mathcal G}\iff B_{\mathcal G}>B_{\mathcal G}^\ast$,
+and both half-widths are functions of $\hat\Sigma$ and the chosen bounds. For a fixed retained set
+$\hat D\xrightarrow{p}-\Gamma+(\delta_{\mathcal G}-\delta_S)$, which equals $B_{\mathcal F}-\Gamma$ in the
+informative limit where the retained aggregate violation vanishes and the full aggregate violation is
+carried by the dropped cohorts. Its standard error is that of the contrast
+$(\ell_{\mathcal G}-\ell_S)'\hat\beta_{\mathrm{post}}$, carved for the selection. (iii) The composition gap
+$\Gamma=\theta_{\hat S}-\theta_{\mathcal G}$ depends only on
+the discarded cohorts' effects and is therefore unidentified. The explicit $\Gamma^\ast$ follows from the
+mean-squared-error advantage of Appendix~\ref{app:mse}.
+\end{proof}
+
+\begin{proof}[Proof of Proposition~\ref{prop:generalK}]
+The ATT estimator is a fixed linear combination with mean
+$\theta_{\mathcal G}+\sum_g w_gV_g$ and variance $\sum_g w_g^2\sigma_g^2$, giving
+$\mathrm{MSE}_{\mathrm{ATT}}$. For the LATT, condition on the retention configuration. On the
+event that the retained set is $S$, which has probability
+$\prod_{g\in S}\pi_g\prod_{g\notin S}(1-\pi_g)$, the estimator is
+$\sum_{g\in S}w_g\hat\beta_{g,\mathrm{post}}/W_S$, whose mean is $\theta_S+B_S$ and whose
+variance is $\mathrm{Var}_S$, since retention is independent of the post-treatment estimates. Its
+error relative to $\theta_{\mathcal G}$ has squared bias $(\theta_S-\theta_{\mathcal G}+B_S)^2$ and
+variance $\mathrm{Var}_S$. Averaging over configurations gives \eqref{eq:latt-exact}. At
+$\pi_g=1$ only $S=\mathcal G$ has mass, where $\theta_{\mathcal G}-\theta_{\mathcal G}+B_{\mathcal G}
+=\sum_g w_gV_g$ and $\mathrm{Var}_{\mathcal G}=\sum_g w_g^2\sigma_g^2$, so
+$\mathrm{MSE}_{\mathrm{LATT}}=\mathrm{MSE}_{\mathrm{ATT}}$ and $\mathcal{A}=0$. Under separation the
+configuration $S=\mathcal C$ carries probability approaching one, so
+$\mathrm{MSE}_{\mathrm{LATT}}\to(\theta_{\mathcal C}-\theta_{\mathcal G})^2+\mathrm{Var}_{\mathcal C}$,
+using $B_{\mathcal C}=0$ because clean cohorts have $V_g=0$. Since clean cohorts contribute nothing
+to $\sum_g w_gV_g$, that sum equals $B_{\mathcal F}$, and
+$\mathcal{A}\to B_{\mathcal F}^2+\sum_g w_g^2\sigma_g^2-\Gamma^2-\mathrm{Var}_{\mathcal C}
+=B_{\mathcal F}^2-\Gamma^2-\Delta\mathrm{Var}$, which is \eqref{eq:deltastar}. The threshold
+\eqref{eq:generalK-threshold} is its positivity, and the two-cohort reduction is the displayed
+substitution.
+\end{proof}
+
+\begin{proof}[Proof of Remark~\ref{rem:inform}]
+Write $\tau_1=\bar\tau-\gamma/2$, $\tau_2=\bar\tau+\gamma/2$, so
+$\hat\beta_{1,\mathrm{post}}\sim\mathcal N(\bar\tau-\gamma/2,\sigma^2)$ and
+$\hat\beta_{2,\mathrm{post}}\sim\mathcal N(\bar\tau+\gamma/2+V,\sigma^2)$, independent of each other
+and of the retention indicators. The ATT estimator has
+$\mathrm{MSE}_{\mathrm{ATT}}=V^2/4+\sigma^2/2$. With the clean cohort always retained, the LATT
+estimator is the two-cohort average with probability $p_2$ and $\hat\beta_{1,\mathrm{post}}$ with
+probability $1-p_2$, so
+$\mathrm{MSE}_{\mathrm{LATT}}=p_2(V^2/4+\sigma^2/2)+(1-p_2)(\gamma^2/4+\sigma^2)$. Subtracting gives
+\eqref{eq:delta}, which is \eqref{eq:deltastar} under the stated substitution. Since $1-p_2\ge0$ the
+sign is that of the bracket, giving \eqref{eq:threshold}, and $p_2(\phi)$ is nonincreasing in $\phi$
+for $\phi V\ge0$, so $1-p_2$ is nondecreasing.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:width}]
+By \eqref{eq:flci-hw} each interval is the near-optimal fixed-length interval of
+\citet{armstrong2018}, with half-width $h(B,s)=s\,\mathrm{cv}_\alpha(B/s)$ and coverage at least
+$1-\alpha$ whenever the bound dominates the estimator's bias. For the ATT this gives
+$h_{\mathcal G}=h(B_{\mathcal G},s_{\mathcal G})$, and under ex-ante $S$ the same applies to the
+LATT, so $h_S=h(B_S,s_S)$. Both half-widths then share $\varphi(B,s)=s\,\mathrm{cv}_\alpha(B/s)$, so
+$h_S<h_{\mathcal G}$ is the displayed inequality. Under data-driven selection
+$\hat\theta_S\mid\{\hat S=S\}$ is truncated Gaussian, so the honest LATT interval is the carved interval of
+Theorem~\ref{thm:carve} rather than the fixed-length \eqref{eq:flci-hw}. Its length is data-dependent and
+generally asymmetric, and its conditional expected length is infinite by
+Proposition~\ref{prop:nolength}, so no expected-length ordering is well-posed; the displayed threshold is
+therefore stated for the fixed-length intervals of ex-ante selection only.
+Fix $(s_{\mathcal G},s_S,B_S)$ and set
+$c_0=s_S\,\mathrm{cv}_\alpha(B_S/s_S)$. The map $g(B)=s_{\mathcal G}\,\mathrm{cv}_\alpha(B/s_{\mathcal G})$
+is continuous and strictly increasing, from $g(0)=s_{\mathcal G}\,z_{1-\alpha/2}$ to $\infty$. Since
+$\mathrm{cv}_\alpha:[0,\infty)\to[z_{1-\alpha/2},\infty)$ is a strictly increasing bijection and
+when $s_S\ge s_{\mathcal G}$ we have $c_0/s_{\mathcal G}\ge (s_S/s_{\mathcal G})\,z_{1-\alpha/2}\ge
+z_{1-\alpha/2}$, so the equation $g(B_{\mathcal G}^\ast)=c_0$ has the unique solution displayed and
+$h_S<h_{\mathcal G}\iff B_{\mathcal G}>B_{\mathcal G}^\ast$. When $s_S<s_{\mathcal G}$ the argument
+$c_0/s_{\mathcal G}$ can fall below $z_{1-\alpha/2}$, $g(B_{\mathcal G}^\ast)=c_0$ has no nonnegative
+solution, and $h_S<h_{\mathcal G}$ already at $B_{\mathcal G}=0$. Under precision weights, reweighting onto
+the retained set cannot lower the aggregate variance below the full set's optimum, so $s_S\ge s_{\mathcal G}$
+and $B_{\mathcal G}^\ast>0$ whenever $s_S>s_{\mathcal G}$. Under other weightings the ordering must be checked.
+\end{proof}
 
 \end{document}

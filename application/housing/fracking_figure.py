@@ -109,6 +109,25 @@ print(f"[level] sigma_LATT={sig_latt:.4f}")
 print(f"[level] LATT FLCI at M=c={C}: [{lo_c:.3f},{hi_c:.3f}]  (contains 0, pooled ATT={att0:.3f} outside)")
 print(f"[level] breakdown M*={Mstar:.3f} log pts ({Mstar/C:.1f}x the screen c) to reconcile LATT with pooled ATT")
 
+# ---- honest ATT interval under the SAME level bound (the wide fixed-target set, RR-style) ----
+sig_att=attse
+pooled_maxpre=max(abs(pooled[e]) for e in range(-5,-1) if not np.isnan(pooled[e]))
+M_att_worst=max(mps.values())                         # ATT must accommodate the worst cohort's pre-trend
+half_att_c=_flci_half(C,sig_att)                      # (understates: M=c < the ATT's own pre-trends)
+half_att_w=_flci_half(M_att_worst,sig_att)            # honest bound for the full set
+reach_att=[M for M in np.linspace(0,0.3,6001) if att0-_flci_half(M,sig_att)<=0]
+Mstar_att=reach_att[0] if reach_att else float('nan') # violation at which the ATT's +finding breaks
+print(f"[ATT] sigma_ATT={sig_att:.4f}, pooled max pre-trend={pooled_maxpre:.3f}, worst-cohort pre-trend={M_att_worst:.3f}")
+print(f"[ATT] honest FLCI at M=c={C}: [{att0-half_att_c:.3f},{att0+half_att_c:.3f}]  (M<pre-trends: not honest for ATT)")
+print(f"[ATT] honest FLCI at M={M_att_worst:.2f} (worst pre-trend): [{att0-half_att_w:.3f},{att0+half_att_w:.3f}]  (WIDE, contains 0)")
+print(f"[ATT] breakdown M*_ATT={Mstar_att:.3f} log pts vs its own {M_att_worst:.3f} pre-trends "
+      f"-> {'FRAGILE (breaks below visible pre-trends)' if Mstar_att<M_att_worst else 'robust'}")
+half_att_pool=_flci_half(pooled_maxpre,sig_att)
+print(f"[ATT] RR-on-pooled FLCI at M=pooled pre-trend {pooled_maxpre:.3f}: "
+      f"[{att0-half_att_pool:.3f},{att0+half_att_pool:.3f}]  (tight, excludes 0 -> would certify +effect)")
+print(f"[ATT] RR-on-pooled: robust to {Mstar_att/pooled_maxpre:.0f}x the pooled pre-trend, "
+      f"but cohort pre-trends reach {M_att_worst/pooled_maxpre:.0f}x it")
+
 # ---------- FIGURE ----------
 plt.rcParams.update({'font.size':10,'axes.spines.top':False,'axes.spines.right':False})
 fig,ax=plt.subplots(1,3,figsize=(13,3.9))

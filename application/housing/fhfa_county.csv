@@ -1,0 +1,2364 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" prefix="og: https://ogp.me/ns#">
+  <head>
+    <meta charset="utf-8" />
+<meta name="description" content="We&#039;re sorry — the page you&#039;re looking for cannot be found." />
+<meta name="robots" content="index" />
+<link rel="canonical" href="https://www.fhfa.gov/404" />
+<meta name="author" content="FHFA" />
+<meta property="og:site_name" content="U.S. FEDERAL HOUSING" />
+<meta property="og:url" content="https://www.fhfa.gov/hpi/download/annually/hpi_at_bdl_county.csv" />
+<meta property="og:title" content="Page Not Found | FHFA" />
+<meta property="og:description" content="We&#039;re sorry — the page you&#039;re looking for cannot be found." />
+<meta property="og:image" content="https://www.fhfa.gov/sites/default/files/2023-11/homepage%20hero%20banner%20image.jpg" />
+<meta property="og:image:type" content="image/jpeg" />
+<meta property="og:image:alt" content="Street view of the FHFA logo on the front of the FHFA headquarters building." />
+<meta property="article:modified_time" content="2025-03-27" />
+<meta name="Generator" content="Drupal 11 (https://www.drupal.org)" />
+<meta name="MobileOptimized" content="width" />
+<meta name="HandheldFriendly" content="true" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<script type="application/ld+json">{
+    "@context": "https://schema.org",
+    "@graph": [
+        {
+            "@type": "Article",
+            "@id": "https://www.fhfa.gov/hpi/download/annually/hpi_at_bdl_county.csv",
+            "headline": "Page Not Found",
+            "name": "Page Not Found"
+        },
+        {
+            "@type": "WebPage",
+            "@id": "https://www.fhfa.gov/hpi/download/annually/hpi_at_bdl_county.csv",
+            "isAccessibleForFree": "True"
+        },
+        {
+            "@type": "WebSite",
+            "@id": "https://www.fhfa.gov",
+            "name": "U.S. FEDERAL HOUSING",
+            "url": "https://www.fhfa.gov",
+            "inLanguage": "en"
+        }
+    ]
+}</script>
+<link rel="icon" href="/themes/custom/fhfa/favicon.ico" type="image/vnd.microsoft.icon" />
+
+    <title>Page Not Found | FHFA</title>
+    <link rel="stylesheet" media="all" href="/sites/default/files/css/css_XkI5xO14wxbXBHas_9y4Um-mPge9bR8yLdY8MAmI_uM.css?delta=0&amp;language=en&amp;theme=fhfa&amp;include=eJx1jmsOAyEIhC_k40gNumjNohhh23r7uun-a5uQmcB8yRB5oI9cOzdsKi7dE1gbIO5WeU038SeRmBWHwZdSabvfxtGB3LWak_FYoZCVI0gcpWvh9rln4gAr0LnYbAgmH3rbikR-4Jh-9UQmI1MUqw8gaJ4YEo_qL3dIWNczbkNdHeKUc6b_WEURyN_5KW-pxGM1" />
+<link rel="stylesheet" media="all" href="/sites/default/files/css/css_E8ta8SY9IIaHXJnziCVvdsyBFCxgF5z3kjZXtqD0eFQ.css?delta=1&amp;language=en&amp;theme=fhfa&amp;include=eJx1jmsOAyEIhC_k40gNumjNohhh23r7uun-a5uQmcB8yRB5oI9cOzdsKi7dE1gbIO5WeU038SeRmBWHwZdSabvfxtGB3LWak_FYoZCVI0gcpWvh9rln4gAr0LnYbAgmH3rbikR-4Jh-9UQmI1MUqw8gaJ4YEo_qL3dIWNczbkNdHeKUc6b_WEURyN_5KW-pxGM1" />
+
+    <!-- Google Tag Manager -->
+    <script>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({'gtm.start': new Date().getTime(), event: 'gtm.js'});
+        var f = d.getElementsByTagName(s)[0],
+        j = d.createElement(s),
+        dl = l != 'dataLayer' ? '&l=' + l : '';
+        j.async = true;
+        j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, 'script', 'dataLayer', 'GTM-P4TN8LD2');
+    </script>
+    <!-- End Google Tag Manager -->
+    
+  </head>
+  <body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript>
+      <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P4TN8LD2" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <!-- End Google Tag Manager (noscript) -->
+        <a href="#main-content" class="usa-sr-only focusable">
+      Skip to main content
+    </a>
+    
+      <div class="dialog-off-canvas-main-canvas" data-off-canvas-main-canvas>
+          <section class="usa-banner">
+      
+<div class="usa-banner">
+  <div class="usa-accordion">
+    <header class="usa-banner__header">
+      <div class="usa-banner__inner">
+        <div class="grid-col-auto">
+          <img width="16" height="11" class="usa-banner__header-flag" aria-hidden="true" src="/themes/custom/fhfa/assets/uswds/images/us_flag_small.png" alt="">
+        </div>
+        <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="true">
+          <p class="usa-banner__header-text">An official website of the United States government</p>
+          <p class="usa-banner__header-action" aria-hidden="true">Here's how you know</p>
+        </div>
+        <button type="button" class="usa-accordion__button usa-banner__button" aria-expanded="false" aria-controls="gov-banner">
+          <span class="usa-banner__button-text">Here's how you know</span>
+        </button>
+      </div>
+    </header>
+    <div class="usa-banner__content usa-accordion__content" id="gov-banner" hidden="">
+      <div class="grid-row grid-gap-lg">
+        <div class="usa-banner__guidance tablet:grid-col-6">
+          <img width="40" height="40" class="usa-banner__icon usa-media-block__img" src="/themes/custom/fhfa/assets/uswds/images/icon-dot-gov.svg" alt="Dot gov">
+          <div class="usa-media-block__body">
+            <p>
+              <strong>Official websites use .gov</strong>
+              <br>
+              A <strong>.gov</strong> website belongs to an official government organization in the United States.
+            </p>
+          </div>
+        </div>
+        <div class="usa-banner__guidance tablet:grid-col-6">
+          <img width="40" height="40" class="usa-banner__icon usa-media-block__img" src="/themes/custom/fhfa/assets/uswds/images/icon-https.svg" alt="Https">
+          <div class="usa-media-block__body">
+            <p>
+              <strong>Secure .gov websites use HTTPS</strong>
+              <br>
+              A <strong>lock</strong> (   <span class="icon-lock">
+    <svg xmlns="http://www.w3.org/2000/svg" width="52" height="64" viewBox="0 0 52 64" class="usa-banner__lock-image" role="img" aria-labelledby="banner-lock-description" focusable="false">
+      <title id="banner-lock-title">Lock</title>
+      <desc id="banner-lock-description">Locked padlock</desc>
+      <path fill="#000000" fill-rule="evenodd" d="M26 0c10.493 0 19 8.507 19 19v9h3a4 4 0 0 1 4 4v28a4 4 0 0 1-4 4H4a4 4 0 0 1-4-4V32a4 4 0 0 1 4-4h3v-9C7 8.507 15.507 0 26 0zm0 8c-5.979 0-10.843 4.77-10.996 10.712L15 19v9h22v-9c0-6.075-4.925-11-11-11z"/>
+    </svg>
+  </span>
+ ) or <strong>https://</strong> means you’ve safely connected to the .gov website. Share sensitive information only on official, secure websites.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    </section>
+  
+<div class="usa-overlay"></div>
+
+  <header class="usa-header usa-header--basic usa-header--basic-megamenu" id="header" role="banner">
+
+    
+          <div class="usa-nav-container">
+    
+    <div class="region region-header usa-navbar">
+    <div class="usa-logo site-logo" id="logo">
+  <em class="usa-logo__text">
+          <a class="logo-img" href="/" title="FHFA logo" aria-label="FHFA logo">
+        <img width="93" height="80" src="/themes/custom/fhfa/fhfa-logo.svg" alt="FHFA logo" />
+      </a>
+    
+          <a class="site-name" href="/" title="U.S. Federal Housing" aria-label="U.S. Federal Housing">
+        U.S. FEDERAL HOUSING
+      </a>
+    
+      </em>
+</div>
+
+</div>
+
+
+      <nav class="usa-nav" role="navigation">
+        
+          <button type="button" class="usa-nav__close">
+            <img width="24" height="24" src="/themes/custom/fhfa/assets/uswds/images/usa-icons/close.svg" alt="close"/>
+          </button>
+
+          
+          
+                            
+        
+        
+  
+  
+          <ul class="usa-nav__primary usa-accordion">
+
+    
+                        
+                    
+      
+              <li class="usa-nav__primary-item">
+      
+              <button type="button" class="usa-accordion__button usa-nav__link " aria-expanded="false" aria-controls="extended-mega-nav-section-1">
+          <span>About</span>
+        </button>
+      
+                
+        
+        
+  
+  
+          <div id="extended-mega-nav-section-1" class="usa-nav__submenu usa-megamenu" hidden="">
+        <div class="grid-row grid-gap-4">
+                
+      <div class="desktop:grid-col-12 links-wrapper">
+    
+                        
+                    
+      
+              <div class="desktop:grid-col-12">
+                  <div class="usa-nav__submenu-item">
+                       <div class="no-link-container"> <a href="/about" class="link" data-drupal-link-system-path="node/711">              <span class="usa-nav__submenu-heading">About FHFA</span>
+            </a></div>
+           </div>
+              
+      
+                
+        
+        
+  
+  
+          <ul id="basic-nav-section-1" class="usa-nav__submenu-list">
+
+          
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/about" class="link" data-drupal-link-system-path="node/711">          <span>Mission &amp; Core Values</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/about/leadership/william-j-pulte" class="link" data-drupal-link-system-path="node/901">          <span>Leadership</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/conservatorship" class="link" data-drupal-link-system-path="node/661">          <span>Conservatorship</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/about/fannie-mae-freddie-mac" class="link" data-drupal-link-system-path="node/786">          <span>About Fannie Mae &amp; Freddie Mac</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/about/federal-home-loan-bank-system" class="link" data-drupal-link-system-path="node/13951">          <span>About the Federal Home Loan Bank System</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/about/budget-finances-and-performance" class="link" data-drupal-link-system-path="node/851">          <span>Budget, Finances, and Performance</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/about/fhfa-policies" class="link" data-drupal-link-system-path="node/761">          <span>FHFA Policies</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/about/foia-privacy" class="link" data-drupal-link-system-path="node/736">          <span>FOIA &amp; Privacy</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/about/information-quality" class="link" data-drupal-link-system-path="node/856">          <span>Information Quality</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/about/do-business-with-us" class="link" data-drupal-link-system-path="node/731">          <span>Do Business with Us</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/about/ombudsman" class="link" data-drupal-link-system-path="node/846">          <span>Ombudsman</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/about/fhfa-policies/equal-employment-opportunity-no-fear-act" class="link" data-drupal-link-system-path="node/1116">          <span>Equal Employment Opportunity</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/about/careers" class="link" data-drupal-link-system-path="node/691">          <span>Careers</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/contact" class="link" data-drupal-link-system-path="node/14121">          <span>Contact Us</span>
+        </a>
+                       
+              </li>
+      
+    
+          </ul>
+    
+  
+
+      
+              </div>
+      
+                        
+                    
+      
+              <div class="desktop:grid-col-12">
+                  <div class="usa-nav__submenu-item">
+                       <div class="no-link-container"> <span class="nolink">              <span class="usa-nav__submenu-heading">Supervision &amp; Regulation</span>
+            </span></div>
+           </div>
+              
+      
+                
+        
+        
+  
+  
+          <ul id="basic-nav-section-2" class="usa-nav__submenu-list">
+
+          
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/advisory-bulletin" class="link" data-drupal-link-system-path="node/34911">          <span>Advisory Bulletins</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/supervision/dodd-frank-act-stress-tests" class="link" data-drupal-link-system-path="node/1061">          <span>Dodd-Frank Act Stress Tests (DFAST)</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/supervision/fhfa-examinations" class="link" data-drupal-link-system-path="node/35726">          <span>FHFA Examinations</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/supervision/legal-documents" class="link" data-drupal-link-system-path="node/1001">          <span>Legal Documents &amp; Suspensions</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/regulation/rulemaking" class="link" data-drupal-link-system-path="node/811">          <span>Rulemaking and Federal Register</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/regulation/suspended-counterparty-program" class="link" data-drupal-link-system-path="node/11506">          <span>Suspended Counterparty Program</span>
+        </a>
+                       
+              </li>
+      
+    
+          </ul>
+    
+  
+
+      
+              </div>
+      
+    
+          </div>
+      </div>
+      </div>
+    
+  
+
+      
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__primary-item">
+      
+              <button type="button" class="usa-accordion__button usa-nav__link " aria-expanded="false" aria-controls="extended-mega-nav-section-2">
+          <span>Policy &amp; Programs</span>
+        </button>
+      
+                
+        
+        
+  
+  
+          <div id="extended-mega-nav-section-2" class="usa-nav__submenu usa-megamenu" hidden="">
+        <div class="grid-row grid-gap-4">
+                
+      <div class="desktop:grid-col-12 links-wrapper">
+    
+                        
+                    
+      
+              <div class="desktop:grid-col-12">
+                  <div class="usa-nav__submenu-item">
+                       <div class="no-link-container"> <a href="/policy" class="link" data-drupal-link-system-path="node/34966">              <span class="usa-nav__submenu-heading">Policy</span>
+            </a></div>
+           </div>
+              
+      
+                
+        
+        
+  
+  
+          <ul id="basic-nav-section-1" class="usa-nav__submenu-list">
+
+          
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/policy/enterprise-affordable-housing-allocations" class="link" data-drupal-link-system-path="node/12656">          <span>Affordable Housing Allocations</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/policy/single-security-initiative-and-common-securitization-platform" class="link" data-drupal-link-system-path="node/13711">          <span>Common Securitization Platform</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/policy/credit-risk-transfer" class="link" data-drupal-link-system-path="node/2486">          <span>Credit Risk Transfer</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/policy/credit-scores" class="link" data-drupal-link-system-path="node/2536">          <span>Credit Scores</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/policy/deemed-issuance-ratio" class="link" data-drupal-link-system-path="node/2541">          <span>Deemed-Issuance Ratio</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/policy/executive-compensation" class="link" data-drupal-link-system-path="node/12711">          <span>Executive Compensation</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/policy/guarantee-fees" class="link" data-drupal-link-system-path="node/13701">          <span>Guarantee Fees</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/policy/language-access" class="link" data-drupal-link-system-path="node/12706">          <span>Language Access</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/policy/mortgage-servicing" class="link" data-drupal-link-system-path="node/13621">          <span>Mortgage Servicing</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/policy/enterprise-multifamily-businesses" class="link" data-drupal-link-system-path="node/12716">          <span>Multifamily Businesses</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/policy/non-performing-re-performing-loan-sales" class="link" data-drupal-link-system-path="node/27256">          <span>Non-Performing and Re-Performing Loan Sales</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/policy/pilot-transparency" class="link" data-drupal-link-system-path="node/12701">          <span>Pilot Transparency</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/policy/pmiers" class="link" data-drupal-link-system-path="node/671">          <span>Private Mortgage Insurer Eligibility Requirements</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/policy/representation-and-warranty-framework" class="link" data-drupal-link-system-path="node/13616">          <span>Representation and Warranty Framework</span>
+        </a>
+                       
+              </li>
+      
+    
+          </ul>
+    
+  
+
+      
+              </div>
+      
+                        
+                    
+      
+              <div class="desktop:grid-col-12">
+                  <div class="usa-nav__submenu-item">
+                       <div class="no-link-container"> <a href="/programs" class="link" data-drupal-link-system-path="node/34971">              <span class="usa-nav__submenu-heading">Programs</span>
+            </a></div>
+           </div>
+              
+      
+                
+        
+        
+  
+  
+          <ul id="basic-nav-section-2" class="usa-nav__submenu-list">
+
+          
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/programs/affordable-housing" class="link" data-drupal-link-system-path="node/2581">          <span>Affordable Housing &amp; Community Investment</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/programs/duty-to-serve" class="link" data-drupal-link-system-path="node/13746">          <span>Duty to Serve</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/programs/enterprise-affordable-housing-goals" class="link" data-drupal-link-system-path="node/12596">          <span>Enterprise Housing Goals</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/programs/fraud-prevention" class="link" data-drupal-link-system-path="node/13426">          <span>Fraud Prevention</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/programs/loss-mitigation" class="link" data-drupal-link-system-path="node/12271">          <span>Loss Mitigation</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/programs/nmdb" class="link" data-drupal-link-system-path="node/13736">          <span>National Mortgage Database</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/programs/natural-disaster-risk" class="link" data-drupal-link-system-path="node/831">          <span>Natural Disaster Risk</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/regulation/suspended-counterparty-program" class="link" data-drupal-link-system-path="node/11506">          <span>Suspended Counterparty Program</span>
+        </a>
+                       
+              </li>
+      
+    
+          </ul>
+    
+  
+
+      
+              </div>
+      
+    
+          </div>
+      </div>
+      </div>
+    
+  
+
+      
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__primary-item">
+      
+              <button type="button" class="usa-accordion__button usa-nav__link " aria-expanded="false" aria-controls="extended-mega-nav-section-3">
+          <span>Data &amp; Research</span>
+        </button>
+      
+                
+        
+        
+  
+  
+          <div id="extended-mega-nav-section-3" class="usa-nav__submenu usa-megamenu" hidden="">
+        <div class="grid-row grid-gap-4">
+                
+      <div class="desktop:grid-col-12 links-wrapper">
+    
+                        
+                    
+      
+              <div class="desktop:grid-col-12">
+                  <div class="usa-nav__submenu-item">
+                       <div class="no-link-container"> <a href="/data" class="link" data-drupal-link-system-path="node/33916">              <span class="usa-nav__submenu-heading">Data</span>
+            </a></div>
+           </div>
+              
+      
+                
+        
+        
+  
+  
+          <ul id="basic-nav-section-1" class="usa-nav__submenu-list">
+
+          
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/data/dashboard/borrower-assistance-map" class="link" data-drupal-link-system-path="node/13771">          <span>Borrower Assistance Map</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/data/conforming-loan-limit" class="link" data-drupal-link-system-path="node/14401">          <span>Conforming Loan Limit</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/data/dashboard" class="link" data-drupal-link-system-path="node/13751">          <span>Dashboards</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/data/data-governance-resources" class="link" data-drupal-link-system-path="node/27411">          <span>Data Governance</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/data/duty-to-serve/eligibility-data" class="link" data-drupal-link-system-path="node/16971">          <span>Duty to Serve Eligibility Data</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/data/duty-to-serve/performance-data" class="link" data-drupal-link-system-path="node/16976">          <span>Duty to Serve Performance Data</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/data/enterprise-housing-goals" class="link" data-drupal-link-system-path="node/20001">          <span>​Enterprise Housing Goals</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/data/hpi" class="link" data-drupal-link-system-path="node/14316">          <span>FHFA House Price Index®</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/data/fhlb-membership" class="link" data-drupal-link-system-path="node/14396">          <span>FHLB Membership Data</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/data/nmdb" class="link" data-drupal-link-system-path="node/17656">          <span>NMDB® Aggregate Statistics</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/data/nsmo" class="link" data-drupal-link-system-path="node/17641">          <span>NSMO Public Use File</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/data/pudb" class="link" data-drupal-link-system-path="node/27551">          <span>Public Use Databases</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/data/fhlb-stress-tests" class="link" data-drupal-link-system-path="node/16966">          <span>FHLB Stress Tests</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/data/market-data" class="link" data-drupal-link-system-path="node/651">          <span>Market Data</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/data/fhlb-stress-tests/market-risk-scenarios" class="link" data-drupal-link-system-path="node/16951">          <span>Market Risk Scenarios</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/data/mirs" class="link" data-drupal-link-system-path="node/14361">          <span>MIRS Transition Index</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/data/uad/puf" class="link" data-drupal-link-system-path="node/17681">          <span>UAD Appraisal-Level Public Use File</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/data/uad" class="link" data-drupal-link-system-path="node/17691">          <span>UAD Aggregate Statistics</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/data/underserved-areas" class="link" data-drupal-link-system-path="node/16931">          <span>Underserved Areas Data</span>
+        </a>
+                       
+              </li>
+      
+    
+          </ul>
+    
+  
+
+      
+              </div>
+      
+                        
+                    
+      
+              <div class="desktop:grid-col-12">
+                  <div class="usa-nav__submenu-item">
+                       <div class="no-link-container"> <a href="/research" class="link" data-drupal-link-system-path="node/34906">              <span class="usa-nav__submenu-heading">Research</span>
+            </a></div>
+           </div>
+              
+      
+                
+        
+        
+  
+  
+          <ul id="basic-nav-section-2" class="usa-nav__submenu-list">
+
+          
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/research?category%5B176%5D=176" class="link" data-drupal-link-query="{&quot;category&quot;:{&quot;176&quot;:&quot;176&quot;}}" data-drupal-link-system-path="node/34906">          <span>Briefs, Notes &amp; White Papers</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/research?category%5B941%5D=941" class="link" data-drupal-link-query="{&quot;category&quot;:{&quot;941&quot;:&quot;941&quot;}}" data-drupal-link-system-path="node/34906">          <span>NMDB Staff Working Papers</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/research?category%5B961%5D=961" class="link" data-drupal-link-query="{&quot;category&quot;:{&quot;961&quot;:&quot;961&quot;}}" data-drupal-link-system-path="node/34906">          <span>Staff Working Papers</span>
+        </a>
+                       
+              </li>
+      
+    
+          </ul>
+    
+  
+
+      
+              </div>
+      
+    
+          </div>
+      </div>
+      </div>
+    
+  
+
+      
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__primary-item">
+      
+              <button type="button" class="usa-accordion__button usa-nav__link " aria-expanded="false" aria-controls="extended-mega-nav-section-4">
+          <span>Resources</span>
+        </button>
+      
+                
+        
+        
+  
+  
+          <div id="extended-mega-nav-section-4" class="usa-nav__submenu usa-megamenu" hidden="">
+        <div class="grid-row grid-gap-4">
+                
+      <div class="desktop:grid-col-12 links-wrapper">
+    
+                        
+                    
+      
+              <div class="desktop:grid-col-12">
+                  <div class="usa-nav__submenu-item">
+                       <div class="no-link-container"> <a href="/reports" class="link" data-drupal-link-system-path="node/991">              <span class="usa-nav__submenu-heading">Reports</span>
+            </a></div>
+           </div>
+              
+      
+                
+        
+        
+  
+  
+          <ul id="basic-nav-section-1" class="usa-nav__submenu-list">
+
+          
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/reports" class="link" data-drupal-link-system-path="node/991">          <span>All Reports</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/reports/annual-housing-report" class="link" data-drupal-link-system-path="taxonomy/term/166">          <span>Annual Housing Report</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/reports/annual-report-to-congress" class="link" data-drupal-link-system-path="taxonomy/term/181">          <span>Annual Report to Congress</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/reports/chief-foia-officer-report" class="link" data-drupal-link-system-path="taxonomy/term/201">          <span>Chief FOIA Officer Report</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/reports/collateral-pledged-to-fhlbanks" class="link" data-drupal-link-system-path="taxonomy/term/206">          <span>Collateral Pledged to FHLBanks</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/reports/conservatorships-performance-goals-scorecard" class="link" data-drupal-link-system-path="taxonomy/term/211">          <span>Conservatorship Scorecard</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/reports/credit-risk-transfer-progress-report" class="link" data-drupal-link-system-path="taxonomy/term/226">          <span>Credit Risk Transfer Progress Report</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/reports/enterprise-non-performing-loan-sales-report" class="link" data-drupal-link-system-path="taxonomy/term/241">          <span>Enterprise Non-Performing Loan Sales Report</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/reports/fair-act-inventory" class="link" data-drupal-link-system-path="taxonomy/term/246">          <span>FAIR Act Inventory</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/reports/fhfa-ai-compliance-plan" class="link" data-drupal-link-system-path="taxonomy/term/13486">          <span>FHFA AI Compliance Plan</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/reports/fhfa-annual-performance-plan" class="link" data-drupal-link-system-path="taxonomy/term/251">          <span>FHFA Annual Performance Plan</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/reports/house-price-index" class="link" data-drupal-link-system-path="taxonomy/term/301">          <span>FHFA House Price Index®</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/reports/fhfa-performance-and-accountability-report" class="link" data-drupal-link-system-path="taxonomy/term/256">          <span>FHFA Performance and Accountability Report</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/reports/fhlbank-system-at-100" class="link" data-drupal-link-system-path="node/27706">          <span>FHLBank System at 100</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/reports/fhlbank-mission-activities" class="link" data-drupal-link-system-path="taxonomy/term/13411">          <span>FHLBank Targeted Mission Activities</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/reports/foia-annual-report" class="link" data-drupal-link-system-path="taxonomy/term/271">          <span>FOIA Annual Report</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/reports/foreclosure-prevention-refinance-and-fpm" class="link" data-drupal-link-system-path="taxonomy/term/296">          <span>Foreclosure Prevention, Refinance, and FPM Report</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/reports/mission-report" class="link" data-drupal-link-system-path="taxonomy/term/321">          <span>Housing Mission Report</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/reports/information-resources-management-strategic-plan" class="link" data-drupal-link-system-path="taxonomy/term/13451">          <span>Information Resources Management Strategic Plan</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/reports/no-fear-act" class="link" data-drupal-link-system-path="taxonomy/term/326">          <span>No FEAR Report</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/reports/plain-language-report" class="link" data-drupal-link-system-path="taxonomy/term/346">          <span>Plain Language Report</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/reports/prepayment-monitoring-report" class="link" data-drupal-link-system-path="taxonomy/term/351">          <span>Prepayment Monitoring Report</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/reports/single-family-guarantee-fees" class="link" data-drupal-link-system-path="taxonomy/term/366">          <span>Single-Family Guarantee Fees Report</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/reports/stress-tests-report" class="link" data-drupal-link-system-path="taxonomy/term/376">          <span>Stress Tests Reports</span>
+        </a>
+                       
+              </li>
+      
+    
+          </ul>
+    
+  
+
+      
+              </div>
+      
+                        
+                    
+      
+              <div class="desktop:grid-col-12">
+                  <div class="usa-nav__submenu-item">
+                       <div class="no-link-container"> <a href="/mortgage-translations" class="link" data-drupal-link-system-path="node/17661">              <span class="usa-nav__submenu-heading">Mortgage Translations</span>
+            </a></div>
+           </div>
+              
+      
+                
+        
+        
+  
+  
+          <ul id="basic-nav-section-2" class="usa-nav__submenu-list">
+
+          
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/mortgage-translations" class="link" data-drupal-link-system-path="node/17661">          <span>About Mortgage Translations</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/mortgage-translations/borrower-education-materials" class="link" data-drupal-link-system-path="node/17716">          <span>Borrower Education Materials</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/mortgage-translations/covid-19-resources" class="link" data-drupal-link-system-path="node/17776">          <span>COVID-19 Resources</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/mortgage-translations/interpretive-services" class="link" data-drupal-link-system-path="node/17711">          <span>Interpretive Services</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/mortgage-translations/language-translation-disclosure" class="link" data-drupal-link-system-path="node/17706">          <span>Language Translation Disclosure</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/mortgage-translations/search" class="link" data-drupal-link-system-path="node/20006">          <span>Search Documents</span>
+        </a>
+                       
+              </li>
+      
+    
+          </ul>
+    
+  
+
+      
+              </div>
+      
+    
+          </div>
+      </div>
+      </div>
+    
+  
+
+      
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__primary-item">
+      
+              <button type="button" class="usa-accordion__button usa-nav__link " aria-expanded="false" aria-controls="extended-mega-nav-section-5">
+          <span>News</span>
+        </button>
+      
+                
+        
+        
+  
+  
+          <div id="extended-mega-nav-section-5" class="usa-nav__submenu usa-megamenu" hidden="">
+        <div class="grid-row grid-gap-4">
+                
+      <div class="desktop:grid-col-12 links-wrapper">
+    
+                        
+                    
+      
+              <div class="desktop:grid-col-12">
+                  <div class="usa-nav__submenu-item">
+                       <div class="no-link-container"> <span class="nolink">              <span class="usa-nav__submenu-heading">Public Affairs</span>
+            </span></div>
+           </div>
+              
+      
+                
+        
+        
+  
+  
+          <ul id="basic-nav-section-1" class="usa-nav__submenu-list">
+
+          
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/news/news-release" class="link" data-drupal-link-system-path="node/34871">          <span>News Releases</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/news/statement" class="link" data-drupal-link-system-path="node/34881">          <span>Statements</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/news/speech" class="link" data-drupal-link-system-path="node/34876">          <span>Speeches</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/news/testimony" class="link" data-drupal-link-system-path="node/34886">          <span>Testimonies</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/public-input" class="link" data-drupal-link-system-path="node/13906">          <span>Public Input</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/blog" class="link" data-drupal-link-system-path="node/34861">          <span>Blogs</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/news/fact-sheet" class="link" data-drupal-link-system-path="node/34891">          <span>Fact Sheets</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/faqs" class="link" data-drupal-link-system-path="node/16826">          <span>FAQs</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/news/partner-agency-engagements" class="link" data-drupal-link-system-path="node/27771">          <span>Partner Agency Engagements</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/news/public-engagements" class="link" data-drupal-link-system-path="node/27846">          <span>Public Engagements</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="/media" class="link" data-drupal-link-system-path="node/34866">          <span>Videos</span>
+        </a>
+                       
+              </li>
+      
+    
+          </ul>
+    
+  
+
+      
+              </div>
+      
+                        
+                    
+      
+              <div class="desktop:grid-col-12">
+                  <div class="usa-nav__submenu-item">
+                       <div class="no-link-container"> <span class="nolink">              <span class="usa-nav__submenu-heading">Social Media</span>
+            </span></div>
+           </div>
+              
+      
+                
+        
+        
+  
+  
+          <ul id="basic-nav-section-2" class="usa-nav__submenu-list">
+
+          
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="https://www.facebook.com/FHFA" class="link">          <span>Facebook</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="https://www.linkedin.com/company/354523" class="link">          <span>LinkedIn</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="https://www.youtube.com/channel/UCoKP7Om6nsRkEav9yInFekw" class="link">          <span>YouTube</span>
+        </a>
+                       
+              </li>
+      
+                        
+                    
+      
+              <li class="usa-nav__submenu-item">
+      
+      
+              
+        
+                                     <a href="https://twitter.com/FHFA" class="link">          <span>X (formerly Twitter)</span>
+        </a>
+                       
+              </li>
+      
+    
+          </ul>
+    
+  
+
+      
+              </div>
+      
+    
+          </div>
+      </div>
+      </div>
+    
+  
+
+      
+              </li>
+      
+    
+          </ul>
+    
+  
+
+
+<style>
+  .usa-header--basic .usa-nav__link:hover::after {
+    height: 0;
+  }
+</style>
+
+
+<div id="block-fhfa-headersearchblock" class="block block-fhfa-search block-header-search-block">
+  
+    
+      <form class="usa-search usa-search--small" data-env="prod" action="/search" method="get" id="search-block-form" accept-charset="UTF-8">
+  <div role="search">
+    <label for="extended-search-field-small" class="usa-sr-only">Search site content.</label>
+      <button class="usa-button nav-search" type="submit">
+        <p class="usa-search__submit-icon">Search</p>
+      </button>
+    <div class="dropdown-search-container fhfa-mobile-visible">
+      <input class="usa-input" id="extended-search-field-small" type="search" name="keys" placeholder="What are you looking for?">
+      <button class="usa-button" type="submit">
+        <img width="24" height="24" src="/themes/custom/fhfa/assets/uswds/images/usa-icons-bg/search--white.svg" class="usa-search__submit-icon" alt="Search">
+      </button>
+    </div>
+  </div>
+</form>
+
+  </div>
+
+
+            
+            
+            
+                </nav>
+              <button type="button" class="usa-menu-btn">
+          <span class="visually-hidden">Menu</span>
+          <svg class="usa-icon usa-icon--size-4" height="32" width="32" role="img" fill="#fff">
+            <use href="/themes/custom/fhfa/assets/uswds/images/sprite.svg#menu"></use>
+          </svg>
+        </button>
+      </div>
+      </header>
+
+
+        
+  
+  <main class="main-content usa-layout-docs usa-section bundle-basic page  " role="main" id="main-content">
+
+    <div class="grid-container">
+
+                        <div class="grid-row">
+              <div class="region--breadcrumb">
+    
+  </div>
+
+          </div>
+        
+                  <div class="">
+            
+
+
+          </div>
+        
+                      
+      <div class="grid-row grid-gap">
+        
+                  <div class="usa-layout-docs__main desktop:grid-col-fill">
+                  
+
+
+
+  
+
+
+<h1 data-component-id="fhfa:page-title" class="page-title margin-0">
+  
+Page Not Found
+
+</h1>
+
+
+<div id="block-fhfa-content" class="block block-system block-system-main-block">
+  
+    
+      <article>
+
+  
+    
+
+  <div>
+      <div class="layout layout--onecol">
+    <div  class="layout__region layout__region--content">
+      <div class="block block-layout-builder block-field-blocknodepagebody">
+  
+    
+      
+
+            <div class="field field--name-body field--type-text-with-summary field--label-hidden field__item"><p>We're sorry — the page you're looking for cannot be found.</p></div>
+      
+  </div>
+
+    </div>
+  </div>
+
+  </div>
+
+</article>
+
+  </div>
+
+
+          </div>
+                  
+              </div>
+    </div>
+  </main>
+
+  
+<footer data-component-id="fhfa:footer" class="fhfa-footer">
+      <div class="fhfa-footer__email-subscription">
+        <div>
+    <div id="block-fhfa-webform" class="block block-webform block-webform-block">
+  
+    
+      <form class="webform-submission-form webform-submission-add-form webform-submission-email-subscription-form webform-submission-email-subscription-add-form webform-submission-email-subscription-node-34986-form webform-submission-email-subscription-node-34986-add-form js-webform-details-toggle webform-details-toggle" data-drupal-selector="webform-submission-email-subscription-node-34986-add-form" action="/hpi/download/annually/hpi_at_bdl_county.csv" method="post" id="webform-submission-email-subscription-node-34986-add-form" accept-charset="UTF-8">
+  
+  
+
+<div class="email-subscription__container">
+  <label for="edit-email" class="usa-input-required usa-label control-label js-form-required form-required">
+    Sign up for email updates
+    <svg width="54" height="54" class="usa-icon" aria-hidden="true" focusable="false" role="img">
+      <use href="/themes/custom/fhfa/assets/uswds/images/sprite.svg#send"></use>
+    </svg>
+  </label>
+  <div class="webform-element--title-inline js-webform-type-email webform-type-email form-item js-form-item form-type-email js-form-type-email form-item-email js-form-item-email form-no-label">
+          
+
+  <input class="font-sans-2xs tablet:font-sans-md form-email required usa-input" data-webform-required-error="An email address is required" data-drupal-selector="edit-email" type="email" id="edit-email" name="email" value="" size="60" maxlength="254" placeholder="example@website.com" required="required" />
+
+
+
+
+
+        
+  
+  </div>
+
+  <div data-drupal-selector="edit-actions" class="form-actions webform-actions js-form-wrapper form-wrapper" id="edit-actions">
+
+  <input class="webform-button--submit button button--primary js-form-submit form-submit usa-button" data-drupal-selector="edit-actions-submit" type="submit" id="edit-actions-submit" name="op" value="Subscribe" />
+
+
+
+
+
+</div>
+
+</div>
+
+
+  <input autocomplete="off" data-drupal-selector="form-ld11usv8zw4rukzpgk647mqqeimjrztzfn8mua-h07m" type="hidden" name="form_build_id" value="form-Ld11USv8zW4RukZpgK647MQqeiMJrZtzFn8muA_H07M" class="usa-input" />
+
+
+
+
+
+
+  <input data-drupal-selector="edit-webform-submission-email-subscription-node-34986-add-form" type="hidden" name="form_id" value="webform_submission_email_subscription_node_34986_add_form" class="usa-input" />
+
+
+
+
+<div class="url-textfield js-form-wrapper form-wrapper" style="display: none !important;"><div class="form-item js-form-item form-type-textfield js-form-type-textfield form-item-url js-form-item-url">
+      <label for="edit-url" class="usa-label control-label">Leave this field blank</label>
+          
+
+  <input autocomplete="off" data-drupal-selector="edit-url" type="text" id="edit-url" name="url" value="" size="20" maxlength="128" class="form-text usa-input" />
+
+
+
+
+
+        
+  
+  </div>
+</div>
+
+
+  
+</form>
+
+  </div>
+
+  </div>
+
+    </div>
+  
+  <div class="fhfa-footer__container">
+    <div class="fhfa-footer__logo">
+              <div class="usa-logo site-logo" id="logo">
+  <em class="usa-logo__text">
+          <a class="logo-img" href="/" title="FHFA logo" aria-label="FHFA logo">
+        <img width="93" height="80" src="/themes/custom/fhfa/fhfa-logo.svg" alt="FHFA logo" />
+      </a>
+    
+          <a class="site-name" href="/" title="U.S. Federal Housing" aria-label="U.S. Federal Housing">
+        U.S. FEDERAL HOUSING
+      </a>
+    
+      </em>
+</div>
+
+          </div>
+
+    <div class="fhfa-footer__highlighed">
+              <nav role="navigation" aria-labelledby="block-fhfa-footerhighlighted-menu" id="block-fhfa-footerhighlighted">
+            
+  <h2 class="usa-sr-only" id="block-fhfa-footerhighlighted-menu">Footer Highlighted</h2>
+  
+
+        
+      <ul class="usa-list--unstyled">
+                              <li class="first fhfa-footer-links">
+                                        <a href="/about" class="first fhfa-footer-links" data-drupal-link-system-path="node/711">About</a>
+        </li>
+                              <li class="fhfa-footer-links">
+                                        <a href="/about/careers" class="fhfa-footer-links" data-drupal-link-system-path="node/691">Careers</a>
+        </li>
+                              <li class="fhfa-footer-links">
+                                        <a href="/sitemap" class="fhfa-footer-links" data-drupal-link-system-path="node/29501">Sitemap</a>
+        </li>
+                              <li class="last fhfa-footer-links">
+                                        <a href="/contact" class="last fhfa-footer-links" data-drupal-link-system-path="node/14121">Contact Us</a>
+        </li>
+          </ul>
+  
+
+
+  </nav>
+
+          </div>
+
+    <hr>
+
+    <div class="fhfa-footer__social">
+              <ul class="footer-social__links">
+  <li class="footer-social__item">
+    <a class="footer-social__link" href="https://www.facebook.com/FHFA" target="_blank">
+      <img width="24" height="24" class="footer-social__icon" src="/themes/custom/fhfa/assets/uswds/images/usa-icons/facebook.svg" alt="Facebook"/>
+    </a>
+  </li>
+  <li class="footer-social__item">
+    <a class="footer-social__link" href="https://www.x.com/FHFA" target="_blank">
+      <img width="24" height="24" class="footer-social__icon" src="/themes/custom/fhfa/assets/uswds/images/usa-icons/x.svg" alt="X logo"/>
+    </a>
+  </li>
+  <li class="footer-social__item">
+    <a class="footer-social__link" href="https://www.youtube.com/channel/UCoKP7Om6nsRkEav9yInFekw" target="_blank">
+      <img width="24" height="24" class="footer-social__icon" src="/themes/custom/fhfa/assets/uswds/images/usa-icons/youtube.svg" alt="YouTube"/>
+    </a>
+  </li>
+  <li class="footer-social__item">
+    <a class="footer-social__link" href="https://www.linkedin.com/company/fhfa/" target="_blank">
+      <img width="24" height="24" class="footer-social__icon" src="/themes/custom/fhfa/assets/uswds/images/usa-icons/linkedin.svg" alt="linkedin"/>
+    </a>
+  </li>
+</ul>
+
+          </div>
+
+    <div class="fhfa-footer__menu">
+                <div class="region--footer-third">
+    <nav role="navigation" aria-labelledby="block-fhfa-footer-2-menu" id="block-fhfa-footer-2">
+            
+  <h2 class="usa-sr-only" id="block-fhfa-footer-2-menu">Footer</h2>
+  
+
+        
+      <ul class="usa-list--unstyled">
+                              <li class="first fhfa-footer-links">
+                                        <a href="/about/fhfa-policies/accessibility" class="first fhfa-footer-links" data-drupal-link-system-path="node/766">Accessibility</a>
+        </li>
+                              <li class="fhfa-footer-links">
+                                        <a href="/about/budget-finances-and-performance" class="fhfa-footer-links" data-drupal-link-system-path="node/851">Budget, Finances, and Performance​</a>
+        </li>
+                              <li class="fhfa-footer-links">
+                                        <a href="/about/foia-privacy" class="fhfa-footer-links" data-drupal-link-system-path="node/736">FOIA</a>
+        </li>
+                              <li class="fhfa-footer-links">
+                                        <a href="/about/fhfa-policies/equal-employment-opportunity-no-fear-act" class="fhfa-footer-links" data-drupal-link-system-path="node/1116">No FEAR Act Data</a>
+        </li>
+                              <li class="fhfa-footer-links">
+                                        <a href="https://www.fhfaoig.gov/" class="fhfa-footer-links">Office of the Inspector General</a>
+        </li>
+                              <li class="fhfa-footer-links">
+                                        <a href="/about/fhfa-policies/website-privacy-policy" class="fhfa-footer-links" data-drupal-link-system-path="node/1096">Privacy Policy</a>
+        </li>
+                              <li class="last fhfa-footer-links">
+                                        <a href="https://www.usa.gov/" class="last fhfa-footer-links">USA.gov</a>
+        </li>
+          </ul>
+  
+
+  </nav>
+
+  </div>
+
+          </div>
+  </div>
+</footer>
+  
+<div data-component-id="fhfa:back-to-top" class="back-to-top">
+  <button type="button">
+    <i><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <path d="m4 12 1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z" fill="currentColor" />
+</svg>
+</i>
+    <span>Back to top</span>
+  </button>
+</div>
+
+  </div>
+
+    
+    <script type="application/json" data-drupal-selector="drupal-settings-json">{"path":{"baseUrl":"\/","pathPrefix":"","currentPath":"hpi\/download\/annually\/hpi_at_bdl_county.csv","currentPathIsAdmin":false,"isFront":false,"currentLanguage":"en"},"pluralDelimiter":"\u0003","suppressDeprecationErrors":true,"data":{"extlink":{"extTarget":false,"extTargetAppendNewWindowDisplay":false,"extTargetAppendNewWindowLabel":"(opens in a new window)","extTargetNoOverride":false,"extNofollow":false,"extTitleNoOverride":false,"extNoreferrer":true,"extFollowNoOverride":false,"extClass":"ext","extLabel":"(link is external)","extImgClass":false,"extSubdomains":true,"extExclude":".*\\.gov","extInclude":"","extCssExclude":"","extCssInclude":"","extCssExplicit":"main.main-content","extAlert":false,"extAlertText":"This link will take you to an external web site. We are not responsible for their content.","extHideIcons":true,"mailtoClass":"0","telClass":"0","mailtoLabel":"(link sends email)","telLabel":"(link is a phone number)","extUseFontAwesome":false,"extIconPlacement":"append","extPreventOrphan":false,"extPreventOrphanTextLike":true,"extFaLinkClasses":"fa fa-external-link","extFaMailtoClasses":"fa fa-envelope-o","extUseIcon":false,"extLinkIcon":"","extMailIcon":"","extTelIcon":"","extAdditionalLinkClasses":"","extAdditionalMailtoClasses":"","extAdditionalTelClasses":"","extFaTelClasses":"fa fa-phone","allowedDomains":null,"extExcludeNoreferrer":""}},"ajaxTrustedUrl":{"form_action_p_pvdeGsVG5zNF_XLGPTvYSKCf43t8qZYSwcfZl2uzM":true},"user":{"uid":0,"permissionsHash":"5f430734dcea95bed567f23332580bd66362d9be4ff222ace2e7a05a2f7cc5a0"}}</script>
+<script src="/core/assets/vendor/jquery/jquery.min.js?v=4.0.0"></script>
+<script src="/sites/default/files/js/js_tpsKecTYPyVwe86ozuAE6laA9mYB-Kmbj3dK-OMmgCg.js?scope=footer&amp;delta=1&amp;language=en&amp;theme=fhfa&amp;include=eJyFjWsOAyEIhC_k40zoojWLYoTt4_Zl0_3XNE3IkJn5CJkXxsx98sChEsqtgPcJ8u6VbabDp1Ibe9zWMYHCZd0JRuzQyMuRJK82tfH45JU4gRX6Mra6B6bCq8drByTs9i1sqHYvQeCOfyHlWuk31lEE6nd_yhtvQVg8"></script>
+
+    <script>
+      (function () {
+        var s = document.createElement('script');
+        var h = document.querySelector('head') || document.body;
+        s.src = 'https://acsbapp.com/apps/app/dist/js/app.js';
+        s.async = true;
+        s.onload = function () {
+        acsbJS.init({
+        statementLink: '',
+        footerHtml: '',
+        hideMobile: false,
+        hideTrigger: false,
+        disableBgProcess: false,
+        language: 'en',
+        position: 'right',
+        leadColor: '#146FF8',
+        triggerColor: '#146FF8',
+        triggerRadius: '50%',
+        triggerPositionX: 'right',
+        triggerPositionY: 'bottom',
+        triggerIcon: 'people',
+        triggerSize: 'bottom',
+        triggerOffsetX: 20,
+        triggerOffsetY: 20,
+        mobile: {
+        triggerSize: 'small',
+        triggerPositionX: 'right',
+        triggerPositionY: 'bottom',
+        triggerOffsetX: 10,
+        triggerOffsetY: 10,
+        triggerRadius: '20'
+        }
+        });
+        };
+        h.appendChild(s);
+      })();
+    </script>
+  </body>
+</html>
