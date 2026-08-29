@@ -31,26 +31,21 @@
 
 \begin{abstract}
 \noindent In staggered difference-in-differences, parallel trends may hold for some treated cohorts and
-fail for others. The standard estimator is then biased for the average treatment effect on the treated
-(ATT), which averages over all cohorts including the offenders. Honest inference that keeps the ATT as the
-target does not repair this: it reads a pooled pre-trend that the cohort-level violations can wash out of,
-leaving its confidence set either wide or, when the maintained sensitivity class is calibrated on that
-washed-out aggregate, misleadingly narrow. We take a different route. We drop the offending cohorts and
-target the effect for the credible ones, the difference-in-differences analogue of the local average
-treatment effect and of overlap weighting. This credible-subpopulation effect is point-identified under a
-weaker parallel-trends requirement that can hold when the ATT's fails. When the credible cohorts are read
-off the observed pre-trends, however, selection reintroduces the pre-test problem the honest-DiD literature
-was built to avoid, and existing honest methods do not cover it because they never select. Our
-contributions are to formalize this change of estimand for staggered designs and to supply honest inference
-for it. We compose the post-selection carving of \citet{lee2016} with the sensitivity bounds of
-\citet{rambachan2023}: the carving makes inference for the selected reduced-form aggregate uniformly valid
-against the data-driven selection, with no separation or consistent-selection condition when the
-event-study covariance is known, and the sensitivity bounds carry it to the causal target at each level of
-the residual violation the screen cannot rule out. We characterize in closed form when narrowing the target
-lowers risk, a feasible rule that can cost efficiency but never coverage. In an application to the shale
+fail for others, so the standard estimator is biased for the average treatment effect on the treated (ATT).
+Honest inference that keeps the ATT as the target does not repair this, reading a pooled pre-trend that the
+cohort-level violations can wash out of, so its confidence set is either wide or falsely narrow. We take a
+different route: drop the offending cohorts and target the effect for the credible ones, the
+difference-in-differences analogue of the local average treatment effect. This credible-subpopulation
+effect is point-identified under a weaker parallel-trends requirement that can hold when the ATT's fails.
+But reading the credible cohorts off the observed pre-trends revives the pre-test problem the honest-DiD
+literature was built to avoid, which existing methods do not cover because they never select. We formalize
+this change of estimand and supply honest inference for it, composing randomized selective inference
+\citep{fithian2014, tiantaylor2018} with the sensitivity bounds of \citet{rambachan2023} into an interval
+uniformly valid against both the data-driven selection and the residual violation of parallel trends the
+screen cannot rule out. We characterize in closed form when narrowing the target lowers risk. In an application to the shale
 boom, a relative-magnitudes analysis certifies a significantly positive pooled effect on house prices, but
-the credible subpopulation, the counties whose oil-and-gas onset did not coincide with the mid-2000s
-housing run-up, shows no effect, locating the pooled positive in cohorts already trending before onset.
+the credible subpopulation shows no effect, locating the pooled positive in cohorts already trending before
+onset.
 \end{abstract}
 
 \medskip
@@ -73,8 +68,8 @@ remains valid, if conservative, when parallel trends holds \citep{dechaisemartin
 does not guarantee a clean post-period, since nothing prevents a confound from arriving at the moment of
 treatment \citep{kahnlang2020}.
 
-A growing literature, surveyed in \citet{roth2023trending}, responds by relaxing parallel trends while
-holding the ATT fixed as the target. Building on \citet{manski2018}, \citet{rambachan2023} bound how far
+A growing literature, surveyed in \citet{roth2023trending}, responds by relaxing parallel trends. Building
+on \citet{manski2018}, \citet{rambachan2023} bound how far
 post-treatment violations can depart from the observed pre-trends and report a uniformly valid confidence
 set for the ATT. \citet{kwonroth2024} sharpen the set with an empirical-Bayes prior on the violation, and
 \citet{dechaisemartin2026} rank the post-treatment differences against the pre-treatment ones. All keep
@@ -122,19 +117,20 @@ the work lies, is to make the data-driven selection honest, with inference for t
 valid against both the selection and the residual violation of parallel trends that a pre-trend screen
 cannot rule out.
 
-That the LATT is point-identified under parallel trends on the selected cohorts alone, a weaker
-requirement that can hold when the ATT's fails, is immediate. Because the
+The LATT is point-identified under parallel trends on the selected cohorts alone, a weaker requirement that
+can hold when the ATT's fails, and this identification is immediate. The work is inference. Because the
 screen selects on pre-trends, and a flat pre-trend does not certify the flat post-trend that identification
 requires, the honest interval, not the point, is the object we carry. This second contribution, the
 inference a data-driven selection demands, has three parts. First, and centrally, honest post-selection
-inference. We combine the post-selection
-``carving'' of \citet{lee2016} with the sensitivity bounds of \citet{rambachan2023} into a single interval
+inference. We combine randomized selective inference \citep{tiantaylor2018}, in the data-carving framework
+of \citet{fithian2014} and implemented through the polyhedral lemma of \citet{lee2016}, with the
+sensitivity bounds of \citet{rambachan2023} into a single interval
 for the LATT that is uniformly valid in the data-generating parameter, with no separation or
 consistent-selection condition when the event-study covariance is known, and to first order when it is
 consistently estimated. The carved component absorbs the data-driven
 selection and the level bound absorbs the residual identification failure, and the two compose. Neither
-ingredient suffices alone. Post-selection carving \citep{lee2016} delivers valid inference when the target
-is point-identified conditional on the selected set. Here it is not, because a flat pre-trend does not
+ingredient suffices alone. Selective inference \citep{fithian2014, lee2016, tiantaylor2018} delivers valid
+inference when the target is point-identified conditional on the selected set. Here it is not, because a flat pre-trend does not
 certify the flat post-trend that identification requires, so carving alone leaves a residual violation it
 cannot touch, and composing it with a sensitivity class is what restores honesty. This is the step the
 fixed-target sensitivity analysis never takes, because it never selects, and it carries selection and
@@ -160,20 +156,11 @@ subpopulation, the counties whose onset did not coincide with the housing run-up
 locating the pooled effect in the cohorts already trending before onset. An appendix develops the optimal credible
 weighting that the same sensitivity class implies, a soft-thresholded
 weighting of cohorts by credibility net of noise, of which the flatness screen is a special case,
-completing the analogy to the variance-minimizing overlap weights of \citet{crump2009}.
-
-Among existing robust-DiD methods, which hold the ATT fixed and use pre-trends to bound or extrapolate the
-post-treatment violation, none selects, so none confronts selection in its inference. We instead change the
-target and treat the resulting selection as the object requiring inference, producing an interval uniformly
-valid against both the data-driven selection and the residual violation, a guarantee the fixed-target
-methods have no need for. We nest the sensitivity analysis of
-\citet{rambachan2023} by applying it to the retained sub-aggregate, and we connect to the post-selection
-inference literature \citep{lee2016, leeb2005, leeb2008} that the honest-DiD papers, by never selecting,
-did not need. The most closely related work is \citet{dechaisemartin2026}, which also brings the pre-trends into
-the inference rather than leaving them to a pre-test, but keeps the ATT and bounds it by ranking the
-post-treatment differences against the pre-treatment ones. We instead change the target to the credible
-subpopulation, so the object inference must be valid against is the data-driven cohort selection, not the
-extrapolation across periods.
+completing the analogy to the variance-minimizing overlap weights of \citet{crump2009}. The most closely
+related prior work is \citet{dechaisemartin2026}, which also brings the pre-trends into the inference rather
+than leaving them to a pre-test, but keeps the ATT and bounds it by ranking the post-treatment differences
+against the pre-treatment ones; we instead change the target to the credible subpopulation, so the object
+inference must be valid against is the data-driven cohort selection, not the extrapolation across periods.
 
 The remainder of the paper is organized as follows. Section~\ref{sec:approach} fixes the staggered-DiD
 setup, defines the credible-subpopulation LATT, and develops its identification and estimation.
@@ -491,7 +478,12 @@ $\mathrm{Uniform}[0,1]$ conditional on the event and $r$, and, since this holds 
 conditional on the event alone by iterated expectations.
 \end{lemma}
 
-The construction randomizes the screen and conditions on its outcome. In the reduced-form model
+The construction randomizes the screen and conditions on its outcome, the randomized selective inference of
+\citet{tiantaylor2018} in the data-carving framework of \citet{fithian2014}, with the exact truncation of
+each realized selection computed by the polyhedral lemma of \citet{lee2016}. The non-randomized limit
+$\gamma=0$ is the exact polyhedral method of \citet{lee2016}; the randomization scale $\gamma>0$ is the
+device of \citet{tiantaylor2018}, and an approximate-likelihood alternative is \citet{panigrahi2023}. In
+the reduced-form model
 $\hat\beta\sim\mathcal N(\beta,\Sigma)$ with $\Sigma$ known, draw independent noise
 $\omega\sim\mathcal N(0,\gamma\,\Sigma_{\mathrm{pre}})$ for a scale $\gamma\ge0$, and select on the noised
 pre-trends, $\hat S=\{g:\max_e\lvert\hat\beta_{g,\mathrm{pre}}(e)+\omega_{g}(e)\rvert\le c\}$, while
@@ -647,11 +639,53 @@ the separation condition of Remark~\ref{rem:oracle} holds, the truncation limits
 $\hat\Sigma$ and the selection event is correctly classified with probability approaching one, so by Slutsky
 the pivot converges to $\mathrm{Uniform}[0,1]$. The known-$\Sigma$ exactness degrades to first-order valid
 coverage, which the panel simulation of Section~\ref{sec:calib}, estimating the covariance from the data,
-bears out. Separation is not cosmetic. Within a $\hat\Sigma$-sampling neighbourhood of the
-threshold a cohort's inclusion is itself estimated, the estimated-$\Sigma$ shadow of the Leeb--P\"otscher
-obstruction, so a researcher unwilling to assume it should hold the carving scale $\gamma$ away from its
-degenerate limit or use the independent split.
+bears out. This is the same feasibility standard the honest-DiD benchmark itself meets: the
+fixed-length interval of \citet{rambachan2023} likewise plugs in $\hat\Sigma$ and is uniformly valid only
+to first order. Under a separation condition the degradation is asymptotically inconsequential, and plug-in
+selective inference is uniformly asymptotically valid, so that the bootstrap may be used to calibrate it
+\citep{tibshirani2018}. What separation buys, and what its absence costs, is worth stating precisely,
+because it marks the boundary of what any feasible procedure can deliver.
 \end{remark}
+
+Fix a cohort whose population screening statistic sits local to the threshold, $\beta_g=c+h\,(s_g/\sqrt n)$,
+so that the standardized distance $h$ governs its retention probability, its truncation limits, and, through
+its inclusion, the identity of the estimand $\theta_{\hat S}$ itself. The whole difficulty of feasible
+inference is carried by this one scalar, which no estimator resolves.
+
+\begin{proposition}[Ceiling on feasible inference]\label{prop:sigmahat-ceiling}
+Consider the local parametrization above with $\hat\Sigma\xrightarrow{p}\Sigma$.
+\begin{enumerate}
+\item[(i)] (\emph{Separation suffices.}) If $\lvert h\rvert$ is bounded away from zero uniformly, the
+selection event is classified correctly with probability approaching one, the plug-in truncation limits and
+scale converge, and the carved interval of Theorem~\ref{thm:carve} is uniformly asymptotically valid and
+first-order efficient \citep{tibshirani2018}.
+\item[(ii)] (\emph{Without separation, exact efficiency is unattainable.}) If $h$ is left free, no feasible
+interval is simultaneously (a) uniformly asymptotically valid, (b) separation-free, and (c) asymptotically
+equal in expected length to the known-selection oracle. Near the threshold every uniformly valid feasible
+interval is strictly longer than the oracle; the excess length is irreducible.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}[Sketch]
+The local parameter $h$ is not consistently estimable: $\hat h=h+O_p(1)$, since $\hat\beta_g$ is
+$\sqrt n$-consistent for $\beta_g$ and $\beta_g$ approaches $c$ at rate $1/\sqrt n$. The post-selection law
+is a discontinuous function of $h$ at $h=0$, so by \citet{leeb2005,leeb2008} it admits no uniformly
+consistent estimator; a feasible plug-in is therefore pointwise but not uniformly exact. Part~(i) removes the
+discontinuity by keeping $h$ bounded away from it, restoring uniform Slutsky continuity. Part~(ii) is the
+oracle-length lower bound: recovering the known-selection length uniformly would require consistent
+classification of $\{\hat S=S\}$, hence consistent $h$, which is impossible; any uniformly valid feasible
+interval must instead hedge over the range of $h$ consistent with the data, and this hedge has strictly
+positive length at $h=0$.
+\end{proof}
+
+The proposition delimits, rather than diminishes, what precedes it. The exact guarantee of
+Theorem~\ref{thm:carve} is a known-$\Sigma$ benchmark; feasibly, separation recovers it asymptotically, and
+without separation one keeps uniform validity at a characterized cost in length. Only the single corner that
+is exact, efficient, uniform, and separation-free at once is closed off, and it is closed by a theorem, not
+by an unfinished derivation. A researcher unwilling to assume separation should therefore accept the
+near-threshold length inflation, hold the carving scale $\gamma$ away from its degenerate limit, or use the
+independent split, whose validity rests on independence rather than on classifying the selection event and so
+survives estimated $\hat\Sigma$ without a separation condition, at a cost in power.
 
 \section{When the trade pays}\label{sec:dominance}
 
@@ -726,7 +760,9 @@ carved interval inverts a truncated-normal pivot, and by \citet{kivaranovicleeb2
 \emph{infinite} conditional expected length, so an expected-length threshold is not merely unproven but
 ill-posed; Proposition~\ref{prop:nolength} records this. The honest data-driven comparison is therefore by
 coverage, both intervals valid by Theorem~\ref{thm:carve} and Corollary~\ref{cor:causal}, together with a
-robust length summary such as the median, which the simulation of Section~\ref{sec:calib} reports. The
+robust length summary such as the median, which the simulation of Section~\ref{sec:calib} reports. An
+approximate-likelihood construction \citep{panigrahi2023} would trade the exactness of the truncated-normal
+pivot for finite expected length; we retain the exact interval and summarize its length by the median. The
 fixed-length statement of Theorem~\ref{thm:width} is accordingly stated for ex-ante selection, where the
 intervals are the fixed-length construction \eqref{eq:flci-hw} and the threshold is exact.
 
@@ -1343,9 +1379,9 @@ falsely precise when the offending cohorts wash out of it, at the price of a nar
 whose composition must be described rather than assumed. Its advantage is contingent on pre-trends being informative about post-treatment violations.
 Where they are not, only economic context can carry the assumption. Under data-driven selection the
 estimator carries a pre-test bias that vanishes as pre-trends grow informative. The inference we
-recommend is honest regardless, combining the post-selection carving of \citet{lee2016} with the
-sensitivity bounds of \citet{rambachan2023} into an interval uniformly valid against both the selection and
-the residual violation. We also make the scope condition operational. A feasible rule, reported alongside both honest
+recommend is honest regardless, combining randomized selective inference \citep{fithian2014, tiantaylor2018}
+with the sensitivity bounds of \citet{rambachan2023} into an interval uniformly valid against both the
+selection and the residual violation. We also make the scope condition operational. A feasible rule, reported alongside both honest
 intervals, signals when narrowing the target lowers risk, with a breakdown value $\Gamma^\ast$ standing in
 for the one quantity, the effects of the discarded cohorts, that the data cannot identify.
 
