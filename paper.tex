@@ -160,6 +160,10 @@ related prior work is \citet{dechaisemartin2026}, which also brings the pre-tren
 than leaving them to a pre-test, but keeps the ATT and bounds it by ranking the post-treatment differences
 against the pre-treatment ones; we instead change the target to the credible subpopulation, so the object
 inference must be valid against is the data-driven cohort selection, not the extrapolation across periods.
+A related strategy of trading applicability for credibility is that of \citet{callaway2025beyond}, who
+select comparison groups matching the treated group's pre-treatment outcomes to recover the ATT robustly
+across identification strategies, where we select among the treated cohorts and change the target, so the
+selection our inference must address is of the credible subpopulation itself.
 
 The remainder of the paper is organized as follows. Section~\ref{sec:approach} fixes the staggered-DiD
 setup, defines the credible-subpopulation LATT, and develops its identification and estimation.
