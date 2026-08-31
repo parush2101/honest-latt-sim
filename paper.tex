@@ -130,8 +130,7 @@ consistent-selection condition when the event-study covariance is known, and to 
 consistently estimated. The carved component absorbs the data-driven
 selection and the level bound absorbs the residual identification failure, and the two compose. Neither
 ingredient suffices alone. Selective inference \citep{fithian2014, lee2016, tiantaylor2018} delivers valid
-inference when the target is point-identified conditional on the selected set. Here it is not, because a flat pre-trend does not
-certify the flat post-trend that identification requires, so carving alone leaves a residual violation it
+inference when the target is point-identified conditional on the selected set. Here it is not, so carving alone leaves a residual violation it
 cannot touch, and composing it with a sensitivity class is what restores honesty. This is the step the
 fixed-target sensitivity analysis never takes, because it never selects, and it carries selection and
 identification uncertainty on separate instruments. Second, a feasible
@@ -446,9 +445,8 @@ estimated set $\hat S$ inherits the oracle coverage of the interval on the popul
 by the fixed-set validity noted above. This oracle guarantee has two limitations, both removed by the carved construction
 below. The separation condition is untestable
 and nearly restates the parallel-trends question, relocating the identifying content rather than supplying
-it, and the coverage is only pointwise, since a post-selection distribution cannot be estimated uniformly
-consistently \citep{leeb2005,leeb2008}, the obstruction confined to the local-to-threshold configurations
-where the selection statistic drifts toward the boundary at the sampling rate.
+it, and the coverage is only pointwise rather than uniform, the local-to-threshold obstruction that
+Proposition~\ref{prop:sigmahat-ceiling} makes precise.
 \end{remark}
 
 A researcher unwilling to assume separation has two options. One secures validity through independence,
@@ -606,18 +604,10 @@ to the mean residual violation typically leaves $\pi_M$ bounded away from zero a
 an upper quantile of the residual-violation distribution makes $\pi_M$ small but not zero, so it delivers
 coverage $1-\alpha-\pi_M$ rather than exactly $1-\alpha$ unless the error budget is widened to absorb
 $\pi_M$. That distribution is unidentified, which is
-why the reported object is the breakdown curve rather than a single $M$.
+why the reported object is the breakdown curve rather than a single $M$, read as a whole and with the
+breakdown value $M^\ast$ read conservatively: a bound calibrated to the typical selected set would place a
+falsely narrow interval at the small-$M$ end.
 \end{remark}
-
-The practical implication is not a recipe for $M$ but a warning against one. Because the violation $M$ must
-dominate is itself random, no single $M$ is at once known and unconditionally valid. Calibrating $M$ to the
-mean residual violation undercovers, since the realized violation exceeds it in a nontrivial fraction of
-samples, while the $M$ that would deliver a target coverage sits at an upper quantile of a distribution the
-design cannot identify. This is why the reported object is the breakdown curve, the map from $M$ to its
-interval, and the value $M^\ast$, read conservatively, rather than a point calibration of $M$. Each interval
-on the curve is honest at its own $M$ by Corollary~\ref{cor:causal}, and Remark~\ref{rem:calib} adds only that
-the curve must be read as a whole, since a bound calibrated to the typical selected set would place a falsely
-narrow interval at the small-$M$ end.
 
 Finally, we caution against one otherwise-natural choice of $\Delta$. The relative-magnitudes restriction
 $\Delta^{RM}(\bar M)$ of \citet{rambachan2023}, following \citet{manski2018}, bounds post-treatment
@@ -1497,35 +1487,20 @@ continuous weighting without that split is the open question.
 
 \subsection{The optimal weighting improves on the hard screen}\label{sec:optsim}
 
-Proposition~\ref{prop:optimal} predicts that the soft, credibility-and-precision weighting lowers risk
-relative to the hard flatness screen. We confirm this and measure the gain. The design has $K=12$ cohorts
-with homogeneous effects, so every weighting targets the same value and mean squared error is a fair
-comparison. Cohorts come in pairs at six violation levels $V_g\in\{0,0.08,\dots,0.40\}$. Within each pair
-one member is precise ($n=6400$) and one noisy ($n=800$), with per-cohort post-treatment standard deviation
-$\sigma_g\propto1/\sqrt{n_g}$ from a common unit scale, so the pair shares a violation level but not a
-variance. A hard screen keeps or drops a pair as a
-whole, since both members share the credibility $m_g$, whereas the optimal weighting can separate them. The
-design is deliberately constructed to exhibit this precision channel, and a random-DGP average below reports
-the typical gain.
-
-We compare three procedures for the common target, the ATT (equal weights on all cohorts), the hard screen
-(equal weights on $\{g:m_g\le c\}$ at its best threshold $c$), and the optimal weighting $\lambda^\ast$ of
-Proposition~\ref{prop:optimal}, in an oracle version with $m_g=V_g$ known and a feasible version with
-$\hat m_g=\max_e\lvert\hat\beta_{g,\mathrm{pre}}(e)\rvert$ estimated from pre-trends at informativeness
-$\phi=1.5$. The hard-screen threshold $c$ is chosen to minimize MSE, and the $500$-DGP average draws random
-violation levels and sample sizes from the same family.
-
-Table~\ref{tab:prop11} and Figure~\ref{fig:prop11} report the result. The left panel plots MSE against the
-hard-screen threshold. The optimal weighting lies below the hard-screen curve at every $c$, including its
-minimum. Against the best hard screen, the oracle optimal weighting ($m_g=V_g$) lowers MSE from $0.00104$ to
-$0.00039$, by $63\%$. The feasible weighting, estimating $\hat m_g$ from the pre-trends, attains $0.00048$, a
-$54\%$ reduction against the same tabulated hard screen. Measured instead against a feasible hard screen that
-also estimates $\hat m_g$, not shown in Table~\ref{tab:prop11}, the reduction is $28\%$. Across $500$ random
-DGPs the average reduction over the best hard screen is $14\%$. The right panel shows the mechanism. At a common credibility level the optimal weighting loads on the
-precise member and down-weights the noisy one, where the hard screen weights them equally, and it retains
-marginally less credible cohorts at reduced weight rather than dropping them at a cutoff. The gap between the
-oracle and feasible lines is the price of estimating $m_g$ from noisy pre-trends, the open question the
-conclusion notes. Even so, the feasible weighting improves on the hard screen.
+Proposition~\ref{prop:optimal} makes the soft weighting weakly dominant over the hard screen by
+construction, the screen being the coarsening $m_g\in\{0,\infty\}$ of the same objective, so the only
+empirical question is how large the gain is. We measure it in a homogeneous-effects design ($K=12$ cohorts
+in precise/noisy pairs across six violation levels $V_g\in\{0,0.08,\dots,0.40\}$, so every weighting targets
+the same value and mean squared error is comparable), against the ATT, the best-threshold hard screen, and
+the optimal weighting in an oracle form ($m_g=V_g$ known) and a feasible form
+($\hat m_g=\max_e\lvert\hat\beta_{g,\mathrm{pre}}(e)\rvert$ estimated at informativeness $\phi=1.5$).
+Table~\ref{tab:prop11} reports the result. Against the best tabulated hard screen the oracle weighting lowers
+MSE by $63\%$ and the feasible weighting by $54\%$; against a feasible hard screen that also estimates
+$\hat m_g$ the reduction is $28\%$, and across $500$ random DGPs the typical gain is $14\%$. The mechanism is
+the precision channel the proposition predicts: at a common credibility level the optimal weighting loads on
+the precisely estimated cohort and soft-thresholds the credibility gradient where the hard screen weights
+retained cohorts equally. The gap between the oracle and feasible numbers is the price of estimating $m_g$
+from noisy pre-trends, the open question the conclusion notes.
 
 \begin{table}[t]
 \centering
@@ -1544,17 +1519,6 @@ Optimal weighting, oracle ($m_g=V_g$) & $0.020$ & $0.00039$ \\
 \bottomrule
 \end{tabular}
 \end{table}
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=\textwidth]{prop11.png}
-\caption{Optimal credible weighting (Proposition~\ref{prop:optimal}) versus the hard flatness screen,
-homogeneous effects so every procedure targets the same value. Left, MSE against the hard-screen threshold
-$c$. The optimal weighting, oracle and feasible, lies below the hard-screen curve at every $c$ and below the
-ATT. Right, weights at each violation level, the optimal weighting loads on the precise member of each pair
-and soft-thresholds the credibility gradient, where the hard screen weights retained cohorts equally.}
-\label{fig:prop11}
-\end{figure}
 
 \section{Mean-squared-error dominance}\label{app:mse}
 
